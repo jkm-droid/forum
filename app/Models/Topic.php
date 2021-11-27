@@ -31,4 +31,13 @@ class Topic extends Model
     public function messages(){
         return $this->hasMany(Message::class);
     }
+
+    /**
+     * get the tags that belongs to the topic
+     */
+
+    public function tags(){
+        return $this->belongsToMany(Tag::class, 'topic_tags', 'topic_id', 'tag_id')
+            ->withTimestamps();
+    }
 }

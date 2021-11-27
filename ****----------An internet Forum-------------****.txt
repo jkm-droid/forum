@@ -66,6 +66,12 @@ Posts(topics)
     tags
     likes
 
+Tags
+    id(pk)
+    title
+    slug
+    timestamps
+
 Messages
     id(pk)
     body
