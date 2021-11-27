@@ -23,4 +23,12 @@ class Topic extends Model
     public function category(){
         return $this->belongsTo(Category::class);
     }
+
+    /**
+     * get the messages owned by topic
+     */
+
+    public function messages(){
+        return $this->hasMany(Message::class);
+    }
 }
