@@ -1,0 +1,81 @@
+
+a{
+    text-decoration: none;
+}
+
+.auth-box{
+    padding-top: 25vh;
+}
+
+.auth-box .card, .auth-box .card-footer {
+    border: none;
+    background-color: #eeeaea;
+}
+
+.login-box-msg{
+    padding: 10px;
+}
+
+/*different color schemes*/
+.put-black{
+    color: black;
+}
+
+
+/*****
+**
+**welcome page style
+**
+****/
+.categories, .topics{
+    font-size: larger;
+}
+.topics{
+    text-align: end;
+    padding-top: 0;
+    padding-left: 90px;
+}
+
+.category-topics{
+    padding-top: 10px;
+}
+
+.moments-ago-section h5{
+    font-size: medium;
+ }
+
+.latest-topic-content{
+    padding-left: 50px;
+}
+
+/*mobile phone welcome page styling*/
+@media only screen and (max-width: 700px) {
+    .change-padding h6{
+        padding-left: 50px;
+    }
+    .disappear-item{
+        display: none;
+    }
+    .message-authors{
+        display: none;
+    }
+
+    .category-topics-title{
+        font-size: medium;
+    }
+}
+
+.topic-body{
+    font-size: large;
+    /*line-height: normal;*/
+}
+.message-padding{
+    padding-left: 70px;
+}
+
+.single-topic-message{
+    border-radius: 5px;
+    border:1px solid lightgrey;
+    padding: 10px;
+    margin-top: 10px;
+}

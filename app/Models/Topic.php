@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -40,4 +41,24 @@ class Topic extends Model
         return $this->belongsToMany(Tag::class, 'topic_tags', 'topic_id', 'tag_id')
             ->withTimestamps();
     }
+
+    /**
+     * format the topic time to get minutes only
+     */
+    public function getFormattedTopicTimeAttribute(){
+        $created_time = Carbon::parse($this->created_at);
+        $current_time = Carbon::now();
+        $diff_time = $created_time->diffInMinutes($current_time);
+
+        if ($diff_time < 50){
+            $min = "minutes ago";
+            $my_time = $diff_time .''. $min;
+        }else{
+            $my_time = Carbon::parse($this->created_at)->format('j M, y H:i');
+        }
+
+        return $my_time;
+    }
+
+    protected $appends = ['formatted_topic_time'];
 }

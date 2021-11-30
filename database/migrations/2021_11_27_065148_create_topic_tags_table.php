@@ -15,8 +15,8 @@ class CreateTopicTagsTable extends Migration
     {
         Schema::create('topic_tags', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('topic_id');
-            $table->bigInteger('tag_id');
+            $table->unsignedBigInteger('topic_id');
+            $table->unsignedBigInteger('tag_id');
             $table->timestamps();
 
             $table->foreign('topic_id')->references('id')->on('topics')->onDelete('cascade');

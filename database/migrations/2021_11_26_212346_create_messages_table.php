@@ -16,7 +16,7 @@ class CreateMessagesTable extends Migration
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('topic_id');
-            $table->string('body');
+            $table->longText('body');
             $table->string('author');
             $table->bigInteger('likes');
             $table->timestamps();
