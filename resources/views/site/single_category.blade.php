@@ -25,10 +25,10 @@
             </td>
             <td>
                 <img style="float: left;" class="img-circle topic-authors" src="/profile_pictures/{{\App\Models\User::where('username', $category_topic->author)->first()->profile_url }}"
-                     alt="" width="30" height="30">
+                     alt="" width="35" height="30">
                 @foreach($category_topic->messages as $ct_message)
                     <img style="float: left;" class="img-circle message-authors" src="/profile_pictures/{{\App\Models\User::where('username', $ct_message->author)->first()->profile_url }}"
-                         alt="" width="30" height="30">
+                         alt="" width="35" height="30">
                 @endforeach
             </td>
             <td>

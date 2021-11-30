@@ -7,7 +7,7 @@
         <span class="text-white badge bg-danger">{{ $t_tag->title }}</span>
     @endforeach
     <br>
-    <img src="/profile_pictures/{{\App\Models\User::where('username', $topic->author)->first()->profile_url }}" alt="" width="55" height="50">
+    <img src="/profile_pictures/{{\App\Models\User::where('username', $topic->author)->first()->profile_url }}" alt="" width="60" height="50">
     {{ $topic->author }}
 
     <p class="topic-body">
@@ -19,6 +19,9 @@
             <thead>
             <tr>
                 <th>created</th>
+                <th>
+                    {{ $messages->sum('likes') }}
+                </th>
                 <th>{{ $topic->messages->count() }}</th>
                 <th>{{ $topic->views }}</th>
             </tr>
@@ -30,12 +33,28 @@
                          alt="" width="20" height="17">
                     {{  \Carbon\Carbon::parse($topic->created_at)->format('M, y') }}
                 </td>
+                <td>likes</td>
                 <td>comments</td>
                 <td>views</td>
             </tr>
             </tbody>
         </table>
+        <div class="text-center">
+            <button class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="share this topic's link">
+                <i class="fa fa-link"></i>
+            </button>
+
+            <button class="btn  btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="bookmark this topic">
+                <i class="fa fa-bookmark"></i>
+            </button>
+
+            <a href="#reply-editor" class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="write a comment about this topic">
+                <i class="fa fa-reply"></i> Reply
+            </a>
+        </div>
     </div>
+
+    <h5 class="text-secondary"><strong>Replies</strong></h5>
 
     @foreach($messages as $t_message)
         <div class="single-topic-message">
@@ -43,16 +62,25 @@
                  alt="" width="70" height="60">
 
             <h6 class="">{{ \Carbon\Carbon::parse($t_message->created_at)->format('j M, y') }}</h6>
-            <h6 class="message-padding">{{ $t_message->author }}</h6>
+            <h6 class="message-padding">
+                <a class="text-secondary" data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
+                   data-bs-placement="top" title="{{ $t_message->author }}" data-bs-content="
+                         Joined: {{ \App\Models\User::where('username', $t_message->author)->first()->joined_date  }}
+                    Level: {{ \App\Models\User::where('username', $t_message->author)->first()->level  }}
+                    Messages: {{ \App\Models\Message::where('author', $t_message->author)->count() }}
+                    ">
+                    <strong> {{ $t_message->author }} </strong>
+                </a>
+            </h6>
             <hr style="color: lightgrey;">
             <p class="message-padding">{{ $t_message->body }}</p>
             <div class="text-end">
                 <button class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="like">
-                    <i class="fa fa-heart"></i>
+                    {{ $t_message->likes }} <i class="fa fa-heart"></i>
                 </button>
 
                 <button class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="share this post's link">
-                    <i class="fa fa-share"></i>
+                    <i class="fa fa-link"></i>
                 </button>
 
                 <button class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="bookmark this post">
@@ -60,10 +88,76 @@
                 </button>
 
                 <button class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="write a comment">
-                    <i class="fa fa-reply"></i>Reply
+                    <i class="fa fa-reply"></i> Reply
                 </button>
             </div>
         </div>
     @endforeach
 
+    <div class="" id="reply-editor">
+        <form>
+
+            <textarea class="form-control summernote" name="body" id="body" rows="4"></textarea>
+            <input type="hidden" id="topic_id" value="{{ $topic->id }}">
+
+            <div class="text-end">
+                <button type="submit" class="btn btn-warning" id="reply-button">
+                    <i class="fa fa-reply"></i> Post Reply
+                </button>
+            </div>
+        </form>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript">
+        const inputBody = document.getElementById('body');
+        const btn = document.getElementById('reply-button');
+
+        inputBody.addEventListener('input', function (){
+            btn.disabled = (this.value === '');
+        });
+
+        $('#reply-button').click(function(e){
+            e.preventDefault();
+
+            const body = $('#body').val();
+            const topicId = $('#topic_id').val();
+
+            if(body !== "" ) {
+
+                $.ajax({
+                    url: '/save/message',
+                    type: 'POST',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        'body': body,
+                        'topic_id':topicId,
+                    },
+                    success: function (response) {
+                        console.log(response);
+                        let content = "";
+                        document.getElementById("subscribe-form").reset();
+
+                        if(response.status === 200){
+                            content = '<small class="text-center put-green">' + "Message sent successfully.We will reach you through your email." + '</small>';
+                        }else if(response.status === 202){
+                            content = '<small class="text-center put-red">' + response.message['email'] + '</small>';
+                        }else{
+                            content = '<small class="text-center put-red">' + "Oops! An error occurred." + '</small>';
+                        }
+
+                        $("#message-box").html(content);
+
+                    },
+
+                    failure: function (response) {
+                        console.log("something went wrong");
+                    }
+                });
+            }else{
+                let content = '<small class="text-center put-red">' + "Error!Email cannot be empty" + '</small>';
+                $("#message-box").html(content);
+            }
+        });
+
+    </script>
 @endsection

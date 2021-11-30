@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -41,4 +42,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * customize the created_at timestamp
+     */
+
+    public function getJoinedDateAttribute(){
+        return Carbon::parse($this->created_at)->format('j M, Y');
+    }
+
+    protected $appends = ['joined_date'];
 }

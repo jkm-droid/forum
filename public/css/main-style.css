@@ -65,6 +65,7 @@ a{
     }
 }
 
+/*single topic customization*/
 .topic-body{
     font-size: large;
     /*line-height: normal;*/
@@ -73,9 +74,53 @@ a{
     padding-left: 70px;
 }
 
+.single-topic-table{
+    padding: 0;
+    background-color: lightgrey;
+    border-radius: 5px;
+}
 .single-topic-message{
     border-radius: 5px;
     border:1px solid lightgrey;
     padding: 10px;
     margin-top: 10px;
+}
+
+#reply-editor{
+    margin-top: 30px;
+    border: 1px solid lightgrey;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+#reply-editor .btn{
+    margin: 10px;
+    text-align: end;
+}
+#footer {
+    border-top: 2px solid goldenrod;
+    color: black;
+    font-size: 14px;
+    background: #d3bdc1;
+    box-shadow: 0 2px 15px rgba(18, 66, 101, 0.08);
+}
+
+#footer .social-links a {
+    font-size: 18px;
+    display: inline-block;
+    background: red;
+    color: black;
+    line-height: 1;
+    padding: 8px 0;
+    margin-right: 4px;
+    border-radius: 5px;
+    text-align: center;
+    width: 36px;
+    height: 36px;
+    transition: 0.3s;
+}
+
+#footer .social-links a:hover {
+    background: yellow;
+    color: black;
+    text-decoration: none;
 }
