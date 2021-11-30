@@ -17,8 +17,17 @@
         @foreach($category->topics as $category_topic)
         <tr>
             <td>
-                <h4 class="category-topics-title">{{ $category_topic->title }}</h4>
-                {{ $category_topic->author }}
+                <h4 class="category-topics-title">
+                    <a href="{{ route('site.single.topic', $category_topic->slug) }}">{{ $category_topic->title }}</a>
+                </h4>
+                <a class="text-secondary" data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
+                   data-bs-placement="top" title="{{ $category_topic->author }}" data-bs-content="
+                        Joined: {{ \App\Models\User::where('username', $category_topic->author)->first()->joined_date  }}
+                        Level: {{ \App\Models\User::where('username', $category_topic->author)->first()->level  }}
+                        Messages: {{ \App\Models\Message::where('author', $category_topic->author)->count() }}
+                    ">
+                    <strong>{{ $category_topic->author }}</strong>
+                </a><br>
                 @foreach($category_topic->tags as $tag)
                     <span class="badge bg-secondary">{{ $tag->title }}</span>
                 @endforeach

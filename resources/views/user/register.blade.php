@@ -13,7 +13,7 @@
             @if ($message = Session::get('error'))
                 <p class="alert alert-danger">{{ $message }}</p>
             @endif
-            <h5 class="login-box-msg text-center">Sign in to start your session</h5>
+            <h5 class="login-box-msg text-center">Sign up to start your session</h5>
 
             <form action="{{ route('user.register') }}" method="post">
                 @csrf

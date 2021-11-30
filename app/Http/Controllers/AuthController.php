@@ -16,7 +16,7 @@ use Illuminate\Support\Str;
 class AuthController extends Controller
 {
     public function __construct(){
-        $this->middleware('guest')->except('portal', 'logout');
+        $this->middleware('guest')->except( 'logout');
     }
 
     /**
@@ -40,7 +40,8 @@ class AuthController extends Controller
         $credentials = filter_var($request->username, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
         if(Auth::attempt(array($credentials=>$info['username'], 'password'=>$info['password']))){
 
-            return redirect()->route('portal.magazine.show')->with('success', 'logged in successfully');
+//            return redirect()->setIntendedUrl(url('/'));
+            return redirect()->route('site.home')->with('success', 'logged in successfully');
         }
 
         return redirect()->route('show.login')->with('error', 'Error, login details are incorrect');

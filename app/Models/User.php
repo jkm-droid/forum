@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -51,5 +52,15 @@ class User extends Authenticatable
         return Carbon::parse($this->created_at)->format('j M, Y');
     }
 
-    protected $appends = ['joined_date'];
+    /**
+     * get the total messages for a logged users
+     */
+
+    public function getTotalMessagesAttribute(){
+        $user = Auth::user()->username;
+
+        return Message::where('author', $user)->count();
+    }
+
+    protected $appends = ['joined_date','total_messages'];
 }

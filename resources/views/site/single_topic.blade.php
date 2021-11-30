@@ -48,66 +48,121 @@
                 <i class="fa fa-bookmark"></i>
             </button>
 
-            <a href="#reply-editor" class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="write a comment about this topic">
+            <a href="#reply-editor" class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="write a comment/message about this topic">
                 <i class="fa fa-reply"></i> Reply
             </a>
         </div>
     </div>
 
-    <h5 class="text-secondary"><strong>Replies</strong></h5>
+    <h5 class="text-secondary"><strong>Topic Replies</strong></h5>
 
-    @foreach($messages as $t_message)
-        <div class="single-topic-message">
-            <img style="float: left" src="/profile_pictures/{{\App\Models\User::where('username', $t_message->author)->first()->profile_url }}"
-                 alt="" width="70" height="60">
+    <!------------messages section-------------->
+    <div>
+        @foreach($messages as $t_message)
+            <div class="single-topic-message">
+                <img style="float: left" src="/profile_pictures/{{\App\Models\User::where('username', $t_message->author)->first()->profile_url }}"
+                     alt="" width="70" height="60">
 
-            <h6 class="">{{ \Carbon\Carbon::parse($t_message->created_at)->format('j M, y') }}</h6>
-            <h6 class="message-padding">
-                <a class="text-secondary" data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
-                   data-bs-placement="top" title="{{ $t_message->author }}" data-bs-content="
+                <h6 class="">{{ \Carbon\Carbon::parse($t_message->created_at)->format('j M, y') }}</h6>
+                <h6 class="message-padding">
+                    <a class="text-secondary" data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
+                       data-bs-placement="top" title="{{ $t_message->author }}" data-bs-content="
                          Joined: {{ \App\Models\User::where('username', $t_message->author)->first()->joined_date  }}
-                    Level: {{ \App\Models\User::where('username', $t_message->author)->first()->level  }}
-                    Messages: {{ \App\Models\Message::where('author', $t_message->author)->count() }}
-                    ">
-                    <strong> {{ $t_message->author }} </strong>
-                </a>
-            </h6>
-            <hr style="color: lightgrey;">
-            <p class="message-padding">{{ $t_message->body }}</p>
-            <div class="text-end">
-                <button class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="like">
-                    {{ $t_message->likes }} <i class="fa fa-heart"></i>
-                </button>
+                        Level: {{ \App\Models\User::where('username', $t_message->author)->first()->level  }}
+                        Messages: {{ \App\Models\Message::where('author', $t_message->author)->count() }}
+                        ">
+                        <strong> {{ $t_message->author }} </strong>
+                    </a>
+                </h6>
+                <hr style="color: lightgrey;">
+                <p class="message-padding">{{ $t_message->body }}</p>
+                <div class="text-end">
+                    <button class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="like">
+                        {{ $t_message->comments->count() }} Reactions
+                    </button>
 
-                <button class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="share this post's link">
-                    <i class="fa fa-link"></i>
-                </button>
+                    <button class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="like">
+                        {{ $t_message->likes }} <i class="fa fa-heart"></i>
+                    </button>
 
-                <button class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="bookmark this post">
-                    <i class="fa fa-bookmark"></i>
-                </button>
+                    <button class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="share this post's link">
+                        <i class="fa fa-link"></i>
+                    </button>
 
-                <button class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="write a comment">
-                    <i class="fa fa-reply"></i> Reply
-                </button>
+                    <button class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="bookmark this post">
+                        <i class="fa fa-bookmark"></i>
+                    </button>
+
+                    <button class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="write a comment">
+                        <i class="fa fa-reply"></i> Reply
+                    </button>
+                </div>
+                @if($t_message->comments->count() > 0)
+                    <div class="text-center">
+                        <button id="btn_show_reactions"  class="btn" >view reactions</button>
+                    </div>
+                @endif
+
+                <!---comments sections--->
+                <div id="message_reactions" style="display: none;">
+                    @if($t_message->comments)
+                        @foreach($t_message->comments as $tm_comment)
+                            <img style="float: left" src="/profile_pictures/{{\App\Models\User::where('username', $tm_comment->author)->first()->profile_url }}"
+                                 alt="" width="70" height="60">
+
+                            <h6 class="message-padding">
+                                <a class="text-secondary" data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
+                                   data-bs-placement="top" title="{{ $tm_comment->author }}" data-bs-content="
+                                    Joined: {{ \App\Models\User::where('username', $tm_comment->author)->first()->joined_date  }}
+                                    Level: {{ \App\Models\User::where('username', $tm_comment->author)->first()->level  }}
+                                    Messages: {{ \App\Models\Message::where('author', $tm_comment->author)->count() }}
+                                    ">
+                                    <strong> <i class="fa fa-share"></i>  {{ $tm_comment->author }} says:</strong>
+                                </a>
+                            </h6>
+                            <h6 class="">{{ \Carbon\Carbon::parse($tm_comment->created_at)->format('j M, y') }}</h6>
+                            <p class="message-padding">
+                                {{ $tm_comment->body }}
+                            </p>
+                        @endforeach
+                    @endif
+                </div>
+
+                <script>
+
+                    $(document).on('click', '#btn_show_reactions', function(){
+                        $('#message_reactions').show();
+                    });
+
+                </script>
+                <!-----end comments sections--->
             </div>
-        </div>
-    @endforeach
 
-    <div class="" id="reply-editor">
-        <form>
 
-            <textarea class="form-control summernote" name="body" id="body" rows="4"></textarea>
-            <input type="hidden" id="topic_id" value="{{ $topic->id }}">
-
-            <div class="text-end">
-                <button type="submit" class="btn btn-warning" id="reply-button">
-                    <i class="fa fa-reply"></i> Post Reply
-                </button>
-            </div>
-        </form>
+        @endforeach
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!------------end messages section-------------->
+    <div class="" id="reply-editor">
+        @if(\Illuminate\Support\Facades\Auth::check())
+
+            <form>
+                <textarea class="form-control summernote" name="body" id="body" rows="4"></textarea>
+                <input type="hidden" id="topic_id" value="{{ $topic->id }}">
+
+                <div class="text-end">
+                    <button type="submit" class="btn btn-warning" id="reply-button">
+                        <i class="fa fa-reply"></i> Post Reply
+                    </button>
+                </div>
+            </form>
+
+        @else
+            <h4 class="text-center put-red">you should have an account to reply in this section
+                <a href="{{ route('show.register') }}">create one</a>
+            </h4>
+        @endif
+    </div>
+    {{--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>--}}
     <script type="text/javascript">
         const inputBody = document.getElementById('body');
         const btn = document.getElementById('reply-button');

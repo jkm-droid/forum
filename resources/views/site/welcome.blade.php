@@ -4,6 +4,20 @@
     <div class="main-content" style="padding-top: 20px">
         <div class="row">
             <div class="col-md-3">
+                @if(\Illuminate\Support\Facades\Auth::check())
+                    <div class="logged-user-profile">
+                        <div class="">
+                            <img style="float: left; position: relative;"  src="/profile_pictures/{{ \Illuminate\Support\Facades\Auth::user()->profile_url }}">
+                        </div>
+
+                        <div class="logged-user-details">
+                            <h6>{{ \Illuminate\Support\Facades\Auth::user()->username }}</h6>
+                            <h6>Level : {{ \Illuminate\Support\Facades\Auth::user()->level }}</h6>
+                            <h6>Score : {{ \Illuminate\Support\Facades\Auth::user()->score }}</h6>
+                            <h6>Messages : {{ \Illuminate\Support\Facades\Auth::user()->total_messages  }}</h6>
+                        </div>
+                    </div>
+                @endif
                 <table class="table">
                     <thead>
                     <tr class="text-secondary">
@@ -41,10 +55,10 @@
                             </h5>
                             <h5 class="latest-topic-content text-secondary">
                                 <a class="text-secondary" data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
-                                        data-bs-placement="top" title="{{ $topic->author }}" data-bs-content="
+                                   data-bs-placement="top" title="{{ $topic->author }}" data-bs-content="
                                         Joined: {{ \App\Models\User::where('username', $topic->author)->first()->joined_date  }}
-                                        Level: {{ \App\Models\User::where('username', $topic->author)->first()->level  }}
-                                        Messages: {{ \App\Models\Message::where('author', $topic->author)->count() }}
+                                    Level: {{ \App\Models\User::where('username', $topic->author)->first()->level  }}
+                                    Messages: {{ \App\Models\Message::where('author', $topic->author)->count() }}
                                     ">
                                     <strong>{{ $topic->author }}</strong>
                                 </a>
@@ -92,7 +106,7 @@
                                         <img src="/profile_pictures/{{\App\Models\User::where('username', $topic_message->author)->first()->profile_url }}"
                                              alt="" width="35" height="30">
                                         <a  class="text-secondary" data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
-                                                data-bs-placement="top" title="{{ $topic_message->author }}" data-bs-content="
+                                            data-bs-placement="top" title="{{ $topic_message->author }}" data-bs-content="
                                             Joined: {{ \App\Models\User::where('username', $topic_message->author)->first()->joined_date  }}
                                             Level: {{ \App\Models\User::where('username', $topic_message->author)->first()->level  }}
                                             Messages: {{ \App\Models\Message::where('author', $topic_message->author)->count() }}

@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 
 class SiteController extends Controller
 {
+    public function __construct(){
+//        $this->middleware('guest');
+    }
+
     /**
      *show home page with alongside all categories
      * and latest topics

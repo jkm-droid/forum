@@ -21,6 +21,9 @@ a{
     color: black;
 }
 
+.put-red{
+    color: red;
+}
 
 /*****
 **
@@ -63,6 +66,14 @@ a{
     .category-topics-title{
         font-size: medium;
     }
+
+    .auth-box{
+        padding-top: 15vh;
+    }
+
+    .logged-user-profile{
+        display: none !important;
+    }
 }
 
 /*single topic customization*/
@@ -97,6 +108,7 @@ a{
     text-align: end;
 }
 #footer {
+    margin-top: 15vh;
     border-top: 2px solid goldenrod;
     color: black;
     font-size: 14px;
@@ -123,4 +135,11 @@ a{
     background: yellow;
     color: black;
     text-decoration: none;
+}
+
+/*styling for logged users*/
+
+.logged-user-details h6{
+
+    font-size: larger;
 }
