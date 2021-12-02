@@ -18,14 +18,22 @@
     <!-- Vendor CSS Files -->
     <link href="{{ asset( 'assets/vendor/boxicons/css/boxicons.min.css') }}" rel="stylesheet">
     <link href="{{ asset( 'assets/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
+
+    <!--- toast section---->
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="{{ asset('toast/css/eggy.css') }}" />
+    <!-- Progressbar Styles -->
+    <link rel="stylesheet" href="{{ asset('toast/css/progressbar.css') }}" />
+    <!-- Themes -->
+    <link rel="stylesheet" href="{{ asset('toast/css/theme.css') }}" />
     <title>Forum</title>
 </head>
 <body>
 <div class="container-fluid" style="padding-top: 70px;">
-<!---- forum navbar---->
-@include('includes.navbar')
+    <!---- forum navbar---->
+    @include('includes.navbar')
 
-@yield('content')
+    @yield('content')
 </div>
 
 @include('includes/footer')
@@ -38,10 +46,7 @@
 
 <!-- Summernote -->
 <script src="{{ asset('summernote/summernote-bs4.min.js') }}"></script>
-<!-- Option 2: Separate Popper and Bootstrap JS -->
 
-{{--<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>--}}
-{{--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>--}}
 <script>
     var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
     var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
@@ -64,6 +69,46 @@
     $(document).ready(function() {
         $('.summernote').summernote();
     });
+</script>
+<script type="text/javascript">
+
+    $(document).on('click', '#delete-topic',function(e) {
+        // e.preventDefault();
+
+        if (confirm("Are you sure want to delete this topic?")) {
+
+            const topicId = $(this).attr("data-id");
+
+            $.ajax({
+                url: '/topic/delete',
+                type: 'POST',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    'topic_id': topicId,
+                },
+                success: function (response) {
+                    console.log(response);
+                    let content = "";
+                    if (response.status === 200) {
+                        content = '<small class="text-center put-green">' + "Topic deleted successfully." + '</small>';
+                        location.reload();
+                    } else if (response.status === 202) {
+                        content = '<small class="text-center put-red">' + response.message['email'] + '</small>';
+                    } else {
+                        content = '<small class="text-center put-red">' + "Oops! An error occurred." + '</small>';
+                    }
+
+                    $("#success-box").html(content);
+
+                },
+
+                failure: function (response) {
+                    console.log("something went wrong");
+                }
+            });
+        }
+    });
+
 </script>
 </body>
 </html>

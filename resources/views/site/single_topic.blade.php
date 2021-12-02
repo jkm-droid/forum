@@ -1,6 +1,7 @@
 @extends('base.index')
 
 @section('content')
+    <p id="success-box" class="text-end fixed-top" style="margin-top: 60px; margin-right: 5px;"></p>
     <h4>{{ $topic->title }}</h4>
     {{ $topic->category->title }} |
     @foreach($topic->tags as $t_tag)
@@ -11,7 +12,7 @@
     {{ $topic->author }}
 
     <p class="topic-body">
-        {{ $topic->body }}
+        {!! $topic->body !!}
     </p>
 
     <div class="container col-md-3">
@@ -53,8 +54,11 @@
             </a>
         </div>
     </div>
-
-    <h5 class="text-secondary"><strong>Topic Replies</strong></h5>
+    @if($messages->count() <= 0)
+        <h5 class="text-secondary"><strong>No Topic Replies Be the first one to reply</strong></h5>
+    @else
+        <h5 class="text-secondary"><strong>Topic Replies</strong></h5>
+    @endif
 
     <!------------messages section-------------->
     <div>
@@ -75,36 +79,78 @@
                     </a>
                 </h6>
                 <hr style="color: lightgrey;">
-                <p class="message-padding">{{ $t_message->body }}</p>
+                <p class="message-padding">{!! $t_message->body  !!}</p>
                 <div class="text-end">
+                    @if(\Illuminate\Support\Facades\Auth::check())
+                        @if(\Illuminate\Support\Facades\Auth::user()->username == $t_message->author)
+
+                            <button class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="edit this reply">
+                                <i class="fa fa-edit"></i> Edit
+                            </button>
+
+                            <button id="delete-reply" data-id="{{ $t_message->id }}" class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="delete this reply">
+                                <i class="fa fa-trash"></i> Delete
+                            </button>
+
+                        @endif
+                    @endif
                     <button class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="like">
                         {{ $t_message->comments->count() }} Reactions
-                    </button>
-
-                    <button class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="like">
-                        {{ $t_message->likes }} <i class="fa fa-heart"></i>
                     </button>
 
                     <button class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="share this post's link">
                         <i class="fa fa-link"></i>
                     </button>
+                    @if(\Illuminate\Support\Facades\Auth::check())
+                        <button class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="like">
+                            {{ $t_message->likes }} <i class="fa fa-heart"></i>
+                        </button>
 
-                    <button class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="bookmark this post">
-                        <i class="fa fa-bookmark"></i>
-                    </button>
+                        <button class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="bookmark this post">
+                            <i class="fa fa-bookmark"></i>
+                        </button>
 
-                    <button class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="write a comment">
-                        <i class="fa fa-reply"></i> Reply
-                    </button>
+                        <button reply-id="{{ $t_message->id }}" id="btn_post_reply" class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="write a comment">
+                            <i class="fa fa-reply"></i> Reply
+                        </button>
+                    @else
+                        <button class="btn text-secondary disabled" data-bs-toggle="tooltip" data-bs-placement="left" title="like">
+                            {{ $t_message->likes }} <i class="fa fa-heart"></i>
+                        </button>
+
+                        <button class="btn text-secondary disabled" data-bs-toggle="tooltip" data-bs-placement="left" title="bookmark this post">
+                            <i class="fa fa-bookmark"></i>
+                        </button>
+
+                        <button reply-id="{{ $t_message->id }}" id="btn_post_reply" class="btn text-secondary disabled" data-bs-toggle="tooltip" data-bs-placement="left" title="write a comment">
+                            <i class="fa fa-reply"></i> Reply
+                        </button>
+                    @endif
                 </div>
+
+                <!---reply form sections--->
+                <div class="reply-form" id="{{ $t_message->id }}" style="display: none; margin-top: 10px;">
+                    <form id="message-form" >
+                        <textarea class="form-control summernote" name="body" id="reply-body-{{ $t_message->id }}" reply-body-id="{{ $t_message->id }}" rows="4"></textarea>
+
+                        <div class="text-end" style="margin-top: 5px;">
+                            <button type="submit" class="btn btn-warning" id="reply_button" reply-id="{{ $t_message->id }}">
+                                <i class="fa fa-reply"></i> Post Reply
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!---end reply form sections--->
+
+                <!---comments sections--->
                 @if($t_message->comments->count() > 0)
                     <div class="text-center">
-                        <button id="btn_show_reactions"  class="btn" >view reactions</button>
+                        <button id="btn_show_reactions" comment-id="{{ $t_message->author }}"   class="btn {{ $t_message->id }}" >view reactions</button>
                     </div>
                 @endif
 
-                <!---comments sections--->
-                <div id="message_reactions" style="display: none;">
+                <div id="{{ $t_message->author }}" style="display: none;">
                     @if($t_message->comments)
                         @foreach($t_message->comments as $tm_comment)
                             <img style="float: left" src="/profile_pictures/{{\App\Models\User::where('username', $tm_comment->author)->first()->profile_url }}"
@@ -127,25 +173,22 @@
                         @endforeach
                     @endif
                 </div>
-
-                <script>
-
-                    $(document).on('click', '#btn_show_reactions', function(){
-                        $('#message_reactions').show();
-                    });
-
-                </script>
                 <!-----end comments sections--->
             </div>
 
 
         @endforeach
+        <div class="d-flex justify-content-center" style="margin-top: 15px;">
+            {!! $messages->links() !!}
+        </div>
     </div>
     <!------------end messages section-------------->
-    <div class="" id="reply-editor">
-        @if(\Illuminate\Support\Facades\Auth::check())
 
-            <form>
+    <div class="" id="reply-editor">
+        <p id="message-error-box"></p>
+        @if(\Illuminate\Support\Facades\Auth::check())
+            <h4>write a reply this topic...</h4>
+            <form id="message-form">
                 <textarea class="form-control summernote" name="body" id="body" rows="4"></textarea>
                 <input type="hidden" id="topic_id" value="{{ $topic->id }}">
 
@@ -162,7 +205,25 @@
             </h4>
         @endif
     </div>
-    {{--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>--}}
+    <script>
+        $(document).on('click', '#btn_show_reactions', function(){
+            const id = $(this).attr("comment-id");
+            // document.getElementById('btn_show_reactions').style.display = 'none';
+            // console.log(document.getElementById(id));
+            document.getElementById(id).style.display = 'block';
+        });
+
+    </script>
+
+    <script>
+        $(document).on('click', '#btn_post_reply', function(){
+            const id = $(this).attr("reply-id");
+            // console.log(id);
+            // console.log(document.getElementById(id));
+            document.getElementById(id).style.display = 'block';
+        });
+    </script>
+
     <script type="text/javascript">
         const inputBody = document.getElementById('body');
         const btn = document.getElementById('reply-button');
@@ -190,17 +251,65 @@
                     success: function (response) {
                         console.log(response);
                         let content = "";
-                        document.getElementById("subscribe-form").reset();
 
                         if(response.status === 200){
-                            content = '<small class="text-center put-green">' + "Message sent successfully.We will reach you through your email." + '</small>';
+                            content = '<small class="text-center put-green">' + "Reply saved successfully." + '</small>';
                         }else if(response.status === 202){
                             content = '<small class="text-center put-red">' + response.message['email'] + '</small>';
                         }else{
                             content = '<small class="text-center put-red">' + "Oops! An error occurred." + '</small>';
                         }
 
-                        $("#message-box").html(content);
+                        $("#success-box").html(content);
+
+                        history.scrollRestoration = "manual";
+                        $(this).scrollTop(0);
+                        location.reload();
+                    },
+
+                    failure: function (response) {
+                        console.log("something went wrong");
+                    }
+                });
+            }else{
+                let content = '<small class="text-center put-red">' + "Error!Email cannot be empty" + '</small>';
+                $("#message-box").html(content);
+            }
+        });
+
+    </script>
+    <script>
+        $('.reply-form').on('click', '#reply_button',function(e) {
+            e.preventDefault();
+            const topicId = $(this).attr("reply-id");
+            // const replyBody = $('#reply-body-' + topicId).val();
+            const replyBody = $(this).attr(" reply-body-id");
+
+            if(replyBody !== "" ) {
+
+                $.ajax({
+                    url: '/post/reply/',
+                    type: 'POST',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        'body': body,
+                        'topic_id':topicId,
+                    },
+                    success: function (response) {
+                        console.log(response);
+                        let content = "";
+
+                        if(response.status === 200){
+                            content = '<small class="text-center put-green">' + "Reply saved successfully." + '</small>';
+                            // location.reload();
+                            // $(window).scrollTop(0);
+                        }else if(response.status === 202){
+                            content = '<small class="text-center put-red">' + response.message['email'] + '</small>';
+                        }else{
+                            content = '<small class="text-center put-red">' + "Oops! An error occurred." + '</small>';
+                        }
+
+                        $("#success-box").html(content);
 
                     },
 
@@ -211,6 +320,48 @@
             }else{
                 let content = '<small class="text-center put-red">' + "Error!Email cannot be empty" + '</small>';
                 $("#message-box").html(content);
+            }
+
+        });
+
+    </script>
+
+    <script type="text/javascript">
+
+        $(document).on('click', '#delete-reply',function(e) {
+            // e.preventDefault();
+
+            if (confirm("Are you sure want to delete this reply?")) {
+
+                const replyId = $(this).attr("data-id");
+
+                $.ajax({
+                    url: '/reply/delete',
+                    type: 'POST',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        'reply_id': replyId,
+                    },
+                    success: function (response) {
+                        console.log(response);
+                        let content = "";
+                        if (response.status === 200) {
+                            content = '<small class="text-center put-green">' + "Reply deleted successfully." + '</small>';
+                            location.reload();
+                        } else if (response.status === 202) {
+                            content = '<small class="text-center put-red">' + response.message['email'] + '</small>';
+                        } else {
+                            content = '<small class="text-center put-red">' + "Oops! An error occurred." + '</small>';
+                        }
+
+                        $("#success-box").html(content);
+
+                    },
+
+                    failure: function (response) {
+                        console.log("something went wrong");
+                    }
+                });
             }
         });
 

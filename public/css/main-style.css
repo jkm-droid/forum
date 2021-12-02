@@ -1,4 +1,6 @@
-
+body{
+    /*background-color: #a40e0e;*/
+}
 a{
     text-decoration: none;
 }
@@ -16,6 +18,9 @@ a{
     padding: 10px;
 }
 
+.img-circle{
+    border-radius: 15px;
+}
 /*different color schemes*/
 .put-black{
     color: black;
@@ -25,7 +30,11 @@ a{
     color: red;
 }
 
-/*****
+.put-green{
+    color: #1ac01a;
+}
+
+/*****0A0A0AFF
 **
 **welcome page style
 **
@@ -47,10 +56,18 @@ a{
     font-size: medium;
  }
 
-.latest-topic-content{
+.latest-topic-content, .user-actions{
     padding-left: 50px;
 }
 
+.main-content{
+    padding-top: 20px;
+}
+
+.top-options{
+    border: 2px solid darkgray;
+    font-weight: bold;
+}
 /*mobile phone welcome page styling*/
 @media only screen and (max-width: 700px) {
     .change-padding h6{
@@ -73,6 +90,22 @@ a{
 
     .logged-user-profile{
         display: none !important;
+    }
+
+    .topic-creation-categories{
+        display: none;
+    }
+
+    .top-topics-title{
+        text-align: center;
+    }
+
+    .profile{
+        margin-bottom: 15px !important;
+    }
+
+    .profile-section{
+        text-align: center;
     }
 }
 
@@ -142,4 +175,9 @@ a{
 .logged-user-details h6{
 
     font-size: larger;
+}
+
+#message-error-box{
+    padding: 5px;
+    font-weight: bold;
 }

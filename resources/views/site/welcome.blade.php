@@ -1,47 +1,19 @@
 @extends('base.index')
 
 @section('content')
-    <div class="main-content" style="padding-top: 20px">
+    <p id="success-box" class="text-end fixed-top" style="margin-top: 60px; margin-right: 5px;"></p>
+    <section class="main-content">
+        <div class="text-center">
+            <a class="btn top-options" href="{{ route('site.all.categories') }}">All Categories</a>
+            <a class="btn top-options" href="{{ route('site.top.topics') }}">Top Topics</a>
+            <a class="btn top-options" href="{{ route('site.show.topic.form') }}">
+                <i class="fa fa-plus"></i> New Topic
+            </a>
+        </div>
+
         <div class="row">
-            <div class="col-md-3">
-                @if(\Illuminate\Support\Facades\Auth::check())
-                    <div class="logged-user-profile">
-                        <div class="">
-                            <img style="float: left; position: relative;"  src="/profile_pictures/{{ \Illuminate\Support\Facades\Auth::user()->profile_url }}">
-                        </div>
-
-                        <div class="logged-user-details">
-                            <h6>{{ \Illuminate\Support\Facades\Auth::user()->username }}</h6>
-                            <h6>Level : {{ \Illuminate\Support\Facades\Auth::user()->level }}</h6>
-                            <h6>Score : {{ \Illuminate\Support\Facades\Auth::user()->score }}</h6>
-                            <h6>Messages : {{ \Illuminate\Support\Facades\Auth::user()->total_messages  }}</h6>
-                        </div>
-                    </div>
-                @endif
-                <table class="table">
-                    <thead>
-                    <tr class="text-secondary">
-                        <th class="categories">Category</th>
-                        <th class="topics">Topics</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($categories as $category)
-                        <tr>
-                            <td>
-                                <h3>
-                                    <a class="put-black" href="{{ route('site.single.category', $category->slug) }}">{{ $category->title }}</a>
-                                </h3>
-                                <span class="text-secondary">{{ $category->description }}</span>
-                            </td>
-                            <td style="text-align: end;" class="text-secondary">
-                                <h5><strong>{{ $category->topics->where('status', 0)->count() }}</strong><small style="font-size: 16px;"> / month</small></h5>
-                            </td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-
+            <div class="col-md-3 topic-creation-categories">
+                @include('includes/category')
             </div>
             <div class="col-md-9">
                 <h4>Latest Topics</h4><hr>
@@ -65,13 +37,26 @@
                                 <span style="margin-left: 5px;"></span> {{  \Carbon\Carbon::parse($topic->created_at)->format('j M, y') }}
                                 <button class="btn "><i class="fa fa-thumbs-up"></i> {{ $topic->messages->sum('likes') }}</button>
                             </h5>
-                            @if($topic->tags)
+                            @if($topic->tags->count() > 0)
                                 <span class="latest-topic-content">
                                 @foreach($topic->tags as $topic_tag)
                                         <span class="badge bg-success">{{ $topic_tag->title }}</span>
                                     @endforeach
                                 </span>
-                            @else
+                            @endif
+                            <br>
+                            @if(\Illuminate\Support\Facades\Auth::check())
+                                @if(\Illuminate\Support\Facades\Auth::user()->username == $topic->author)
+                                    <div class="user-actions">
+                                        <button class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="edit this topic">
+                                            <i class="fa fa-edit"></i> Edit
+                                        </button>
+
+                                        <button id="delete-topic" data-id="{{ $topic->id }}" class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="delete this topic">
+                                            <i class="fa fa-trash"></i> Delete
+                                        </button>
+                                    </div>
+                                @endif
                             @endif
                         </div>
                         <div class="col-md-2">
@@ -137,5 +122,5 @@
                 });
             });
         </script>
-
+    </section>
 @endsection

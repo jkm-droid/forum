@@ -14,7 +14,8 @@ class Topic extends Model
         'title',
         'body',
         'author',
-        'slug'
+        'slug',
+        'category_id'
     ];
 
     /**
@@ -51,7 +52,7 @@ class Topic extends Model
         $diff_time = $created_time->diffInMinutes($current_time);
 
         if ($diff_time < 50){
-            $min = "minutes ago";
+            $min = " minutes ago";
             $my_time = $diff_time .''. $min;
         }else{
             $my_time = Carbon::parse($this->created_at)->format('j M, y @ H:i');
