@@ -10,6 +10,18 @@
     <br>
     <img src="/profile_pictures/{{\App\Models\User::where('username', $topic->author)->first()->profile_url }}" alt="" width="60" height="50">
     {{ $topic->author }}
+    @if(\Illuminate\Support\Facades\Auth::check())
+        @if(\Illuminate\Support\Facades\Auth::user()->username == $topic->author)
+
+            <button class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="edit this topic">
+                <a href="{{ route('show.edit.topic.form', $topic->slug) }}"><i class="fa fa-edit"></i></a>
+            </button>
+
+            <button id="delete-topic" data-id="{{ $topic->id }}" class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="delete this topic">
+                <i class="fa fa-trash"></i>
+            </button>
+        @endif
+    @endif
 
     <p class="topic-body">
         {!! $topic->body !!}
@@ -110,7 +122,7 @@
                             <i class="fa fa-bookmark"></i>
                         </button>
 
-                        <button reply-id="{{ $t_message->id }}" id="btn_post_reply" class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="write a comment">
+                        <button reply-id="{{ $t_message->id }}" reply-body="{!! $t_message->body !!}" id="btn_post_reply" class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="write a comment">
                             <i class="fa fa-reply"></i> Reply
                         </button>
                     @else
@@ -122,26 +134,11 @@
                             <i class="fa fa-bookmark"></i>
                         </button>
 
-                        <button reply-id="{{ $t_message->id }}" id="btn_post_reply" class="btn text-secondary disabled" data-bs-toggle="tooltip" data-bs-placement="left" title="write a comment">
+                        <button reply-id="{{ $t_message->id }}"  id="btn_post_reply" class="btn text-secondary disabled" data-bs-toggle="tooltip" data-bs-placement="left" title="write a comment">
                             <i class="fa fa-reply"></i> Reply
                         </button>
                     @endif
                 </div>
-
-                <!---reply form sections--->
-                <div class="reply-form" id="{{ $t_message->id }}" style="display: none; margin-top: 10px;">
-                    <form id="message-form" >
-                        <textarea class="form-control summernote" name="body" id="reply-body-{{ $t_message->id }}" reply-body-id="{{ $t_message->id }}" rows="4"></textarea>
-
-                        <div class="text-end" style="margin-top: 5px;">
-                            <button type="submit" class="btn btn-warning" id="reply_button" reply-id="{{ $t_message->id }}">
-                                <i class="fa fa-reply"></i> Post Reply
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
-                <!---end reply form sections--->
 
                 <!---comments sections--->
                 @if($t_message->comments->count() > 0)
@@ -166,10 +163,12 @@
                                     <strong> <i class="fa fa-share"></i>  {{ $tm_comment->author }} says:</strong>
                                 </a>
                             </h6>
-                            <h6 class="">{{ \Carbon\Carbon::parse($tm_comment->created_at)->format('j M, y') }}</h6>
-                            <p class="message-padding">
-                                {{ $tm_comment->body }}
+                            <h6 class="">{{ \Carbon\Carbon::parse($tm_comment->created_at)->format('j M, Y') }}</h6>
+                            <hr style="color: lightgrey;">
+                            <p class="message-padding" style="margin-left: 190px;">
+                                {!! $tm_comment->body   !!}
                             </p>
+
                         @endforeach
                     @endif
                 </div>
@@ -186,14 +185,19 @@
 
     <div class="" id="reply-editor">
         <p id="message-error-box"></p>
+        <p id="reply-heading"></p>
+        <div id="m-body" class="m-body"></div>
         @if(\Illuminate\Support\Facades\Auth::check())
-            <h4>write a reply this topic...</h4>
+            <h4 id="heading">write a message for this topic...</h4>
             <form id="message-form">
                 <textarea class="form-control summernote" name="body" id="body" rows="4"></textarea>
                 <input type="hidden" id="topic_id" value="{{ $topic->id }}">
 
                 <div class="text-end">
-                    <button type="submit" class="btn btn-warning" id="reply-button">
+                    <button type="submit" class="btn btn-warning" id="reply-topic-button">
+                        <i class="fa fa-reply"></i> Post Reply
+                    </button>
+                    <button type="submit" class="btn btn-warning" id="reply-message-button" style="display: none">
                         <i class="fa fa-reply"></i> Post Reply
                     </button>
                 </div>
@@ -208,7 +212,7 @@
     <script>
         $(document).on('click', '#btn_show_reactions', function(){
             const id = $(this).attr("comment-id");
-            // document.getElementById('btn_show_reactions').style.display = 'none';
+            document.getElementById('btn_show_reactions').style.display = 'none';
             // console.log(document.getElementById(id));
             document.getElementById(id).style.display = 'block';
         });
@@ -217,22 +221,83 @@
 
     <script>
         $(document).on('click', '#btn_post_reply', function(){
+            document.getElementById('reply-editor').scrollIntoView();
             const id = $(this).attr("reply-id");
-            // console.log(id);
+            const mBody = $(this).attr("reply-body");
             // console.log(document.getElementById(id));
-            document.getElementById(id).style.display = 'block';
+            document.getElementById('heading').style.display = 'none';
+            document.getElementById('reply-heading').innerText = "Replying to:";
+            document.getElementById('reply-topic-button').style.display = 'none';
+            document.getElementById('reply-message-button').style.display = 'block';
+
+            const para = '<p>'+mBody+'</p>';
+            $( '.m-body' ).append(para);
+            $('#reply-editor').append('<input type="hidden" value="'+id+'" class="message_id" placeholder="name" id="message-id"/>');
         });
     </script>
 
     <script type="text/javascript">
+        document.getElementById('body').addEventListener('input', function (){
+            document.getElementById('reply-message-button').disabled = (this.value === '');
+        });
+
+        $('#reply-message-button').click(function(e){
+            e.preventDefault();
+
+            const body = $('#body').val();
+            const messageId = $('#message-id').val();
+
+            console.log(body);
+            console.log(messageId);
+            if(body !== "" ) {
+
+                $.ajax({
+                    url: '/post/reply/',
+                    type: 'POST',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        'body': body,
+                        'message_id':messageId,
+                    },
+                    success: function (response) {
+                        console.log(response);
+                        let content = "";
+
+                        if(response.status === 200){
+                            content = '<small class="text-center put-green">' + "Reply saved successfully." + '</small>';
+                        }else if(response.status === 202){
+                            content = '<small class="text-center put-red">' + response.message['email'] + '</small>';
+                        }else{
+                            content = '<small class="text-center put-red">' + "Oops! An error occurred." + '</small>';
+                        }
+
+                        $("#success-box").html(content);
+
+                        history.scrollRestoration = "manual";
+                        $(this).scrollTop(0);
+                        location.reload();
+                    },
+
+                    failure: function (response) {
+                        console.log("something went wrong");
+                    }
+                });
+            }else{
+                let content = '<small class="text-center put-red">' + "Error!Email cannot be empty" + '</small>';
+                $("#message-box").html(content);
+            }
+        });
+
+    </script>
+    <script type="text/javascript">
         const inputBody = document.getElementById('body');
-        const btn = document.getElementById('reply-button');
+        const btn = document.getElementById('reply-topic-button');
 
         inputBody.addEventListener('input', function (){
             btn.disabled = (this.value === '');
         });
 
-        $('#reply-button').click(function(e){
+        $('#reply-topic-button').click(function(e){
             e.preventDefault();
 
             const body = $('#body').val();
@@ -275,53 +340,6 @@
                 let content = '<small class="text-center put-red">' + "Error!Email cannot be empty" + '</small>';
                 $("#message-box").html(content);
             }
-        });
-
-    </script>
-    <script>
-        $('.reply-form').on('click', '#reply_button',function(e) {
-            e.preventDefault();
-            const topicId = $(this).attr("reply-id");
-            // const replyBody = $('#reply-body-' + topicId).val();
-            const replyBody = $(this).attr(" reply-body-id");
-
-            if(replyBody !== "" ) {
-
-                $.ajax({
-                    url: '/post/reply/',
-                    type: 'POST',
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        'body': body,
-                        'topic_id':topicId,
-                    },
-                    success: function (response) {
-                        console.log(response);
-                        let content = "";
-
-                        if(response.status === 200){
-                            content = '<small class="text-center put-green">' + "Reply saved successfully." + '</small>';
-                            // location.reload();
-                            // $(window).scrollTop(0);
-                        }else if(response.status === 202){
-                            content = '<small class="text-center put-red">' + response.message['email'] + '</small>';
-                        }else{
-                            content = '<small class="text-center put-red">' + "Oops! An error occurred." + '</small>';
-                        }
-
-                        $("#success-box").html(content);
-
-                    },
-
-                    failure: function (response) {
-                        console.log("something went wrong");
-                    }
-                });
-            }else{
-                let content = '<small class="text-center put-red">' + "Error!Email cannot be empty" + '</small>';
-                $("#message-box").html(content);
-            }
-
         });
 
     </script>

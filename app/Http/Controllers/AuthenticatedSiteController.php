@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\HelperFunctions\GetRepetitiveItems;
+use App\Models\Comment;
 use App\Models\Message;
 use App\Models\Tag;
 use App\Models\Topic;
@@ -16,6 +17,7 @@ class AuthenticatedSiteController extends Controller
 
     public function __construct(){
         $this->middleware('auth');
+        $this->special_character = array("!", "@", "#", "$", "%", "^", "&", "*", "(", ")", ",", "/", "{", "}", "[", "]", "?");
     }
 
     /**
@@ -62,7 +64,7 @@ class AuthenticatedSiteController extends Controller
      */
 
     public function show_create_new_topic_form(){
-        return view('site.create_topic')
+        return view('site_auth.create_topic')
             ->with('categories', $this->get_all_categories());
     }
 
@@ -87,26 +89,82 @@ class AuthenticatedSiteController extends Controller
         $topic->author = Auth::user()->username;
 
         $topic->save();
+        if ($request->has('tags')) {
+            $tags = $request->tags;
+            $array_tags = explode(",", $tags);
 
-        $tags = $request->tags;
-        $array_tags = explode(",", $tags);
-
-        $tagIds = [];
-        for ($t = 0;$t < count($array_tags);$t++){
-            $tag =   Tag::firstOrCreate([
-                'title'=>$array_tags[$t],
-                'slug'=>strtolower($array_tags[$t])
-            ]);
-            if ($tag){
-                $tagIds[] = $tag->id;
+            $tagIds = [];
+            for ($t = 0; $t < count($array_tags); $t++) {
+                $tag = Tag::firstOrCreate([
+                    'title' => $array_tags[$t],
+                    'slug' => strtolower($array_tags[$t])
+                ]);
+                if ($tag) {
+                    $tagIds[] = $tag->id;
+                }
             }
-        }
 
-        $topic->tags()->attach($tagIds);
+            $topic->tags()->attach($tagIds);
+        }
 
         return redirect()->route('site.home')->with('success', 'Topic created successfully. Awaiting moderator approval');
     }
 
+    /**
+     * show form to edit a topic
+     */
+
+    public function show_edit_topic_form($slug){
+        $topic = Topic::where('slug', $slug)->first();
+
+        return view('site_auth.edit_topic', compact('topic'))
+            ->with('categories', $this->get_all_categories());
+    }
+
+    /**
+     * edit a topic
+     */
+
+    public function edit_topic(Request $request, $id){
+        $request->validate([
+            'title'=>'required|unique:topics',
+            'category'=>'required',
+            'body'=>'required'
+        ]);
+
+        $topic_info = $request->all();
+        $slug = str_replace($this->special_character, "", $topic_info['title']);
+        $topic =  Topic::find($id);
+        $topic->title = $topic_info['title'];
+        $topic->body = $topic_info['body'];
+        $topic->category_id = $topic_info['category'];
+        $topic->slug = str_replace(" ","_", strtolower($slug));
+
+        $topic->update();
+
+        if ($request->has('tags')) {
+            $tags = str_replace(" ", "", $request->tags);
+            $array_tags = explode(",", $tags);
+
+            $tagIds = [];
+            for ($t = 0; $t < count($array_tags); $t++) {
+                if (Tag::find(strtolower($array_tags[$t]))){
+                    
+                }
+                $tag = Tag::firstOrCreate([
+                    'title' => $array_tags[$t],
+                    'slug' => strtolower($array_tags[$t])
+                ]);
+                if ($tag) {
+                    $tagIds[] = $tag->id;
+                }
+            }
+
+            $topic->tags()->attach($tagIds);
+        }
+
+        return redirect()->route('site.home')->with('success', 'Topic edited successfully. Awaiting moderator approval');
+    }
     /**
      * delete a particular topic
      */
@@ -160,6 +218,45 @@ class AuthenticatedSiteController extends Controller
             'status'=>202,
             'message'=>'An error occurred'
         );
+        return response()->json($data);
+    }
+
+    /**
+     * create a new reply/comment
+     */
+
+    public function save_new_reply(Request $request){
+        $validator = Validator::make($request->all(),[
+            'body'=>'required',
+        ]);
+
+        if ($validator->passes()){
+            $reply_body = $request->body;
+            $message_id = $request->message_id;
+
+            $message = Message::find($message_id);
+            $comment = new Comment();
+            $comment->body = $reply_body;
+            $comment->author = Auth::user()->username;
+
+            if($message->comments()->save($comment))
+                $status = 200;
+            else
+                $status = 201;
+
+            $data = array(
+                'status' => $status,
+                'message' => 'success'
+            );
+
+            return response()->json($data);
+        }
+
+        $data = array(
+            'status' => 202,
+            'message' => $validator->errors()
+        );
+
         return response()->json($data);
     }
 }

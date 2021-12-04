@@ -16,7 +16,7 @@ class SiteController extends Controller
     use GetRepetitiveItems;
 
     public function __construct(){
-        $this->special_character = array("!", "@", "#", "$", "%", "^", "&", "*", "(", ")", ",", "/", "{", "}", "[", "]", "?");
+
     }
 
     /**

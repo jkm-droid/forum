@@ -107,6 +107,10 @@ a{
     .profile-section{
         text-align: center;
     }
+
+    .main-profile-section{
+        max-height: none;
+    }
 }
 
 /*single topic customization*/
@@ -180,4 +184,14 @@ a{
 #message-error-box{
     padding: 5px;
     font-weight: bold;
+}
+
+/*profile section styling*/
+
+.main-profile-section{
+    /*max-height: 50vh;*/
+}
+
+.m-body{
+    background-color: #c7bb79;
 }

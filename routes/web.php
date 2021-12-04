@@ -26,12 +26,18 @@ Route::get('/view/top_topics', [SiteController::class, 'show_top_topics'])->name
 /**
  * authenticated users
  */
+//messages/threads
 Route::post('/save/message/', [AuthenticatedSiteController::class, 'save_new_message'])->name('site.save.message');
+//replies/comments
 Route::post('/post/reply/', [AuthenticatedSiteController::class, 'save_new_reply'])->name('site.save.reply');
+Route::post('/reply/delete', [AuthenticatedSiteController::class, 'delete_reply'])->name('reply.delete');
+//topics
 Route::get('/create/new_topic', [AuthenticatedSiteController::class, 'show_create_new_topic_form'])->name('site.show.topic.form');
 Route::post('/save/new_topic/', [AuthenticatedSiteController::class, 'save_new_topic'])->name('new.topic.save');
+Route::get('/edit/{slug}', [AuthenticatedSiteController::class, 'show_edit_topic_form'])->name('show.edit.topic.form');
+Route::get('/edit/topic/{id}', [AuthenticatedSiteController::class, 'edit_topic'])->name('edit.topic');
 Route::post('/topic/delete', [AuthenticatedSiteController::class, 'delete_topic'])->name('topic.delete');
-Route::post('/reply/delete', [AuthenticatedSiteController::class, 'delete_reply'])->name('reply.delete');
+
 
 
 /**
