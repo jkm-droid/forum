@@ -4,7 +4,7 @@
     <section class="main-content">
         <div class="row">
             <div class="col-md-3 topic-creation-categories">
-                @include('includes.forum_list')
+                @include('includes.short_forum_list')
             </div>
             <div class="col-md-9">
                 <h4 class="top-topics-title">Top Topics</h4>

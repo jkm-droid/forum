@@ -19,7 +19,7 @@ class CreateMessagesTable extends Migration
             $table->unsignedBigInteger('topic_id');
             $table->longText('body');
             $table->string('author');
-            $table->bigInteger('likes');
+            $table->bigInteger('likes')->nullable();
             $table->boolean('status')->default(0);
             $table->timestamps();
 

@@ -20,7 +20,7 @@ class CategorySeeder extends Seeder
     public function run()
     {
 //        $faker = Faker::create('App\ForumList');
-//        for ($i = 1; $i <= 5; $i++) {
+//        for ($i = 1; $i <= 6; $i++) {
 //            $title = str_replace(".", " ", $faker->sentence(1));
 //
 //            DB::table('forum_lists')->insert([
@@ -33,7 +33,7 @@ class CategorySeeder extends Seeder
 //        }
 
         $faker = Faker::create('App\Category');
-        for ($i = 1; $i <= 100; $i++) {
+        for ($i = 1; $i <= 97; $i++) {
             $title = str_replace(".", " ", $faker->sentence(2));
             $forum_list_id = ForumList::pluck('id')->random();
 
@@ -46,9 +46,9 @@ class CategorySeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ]);
         }
-
+//
 //        $faker = Faker::create('App\User');
-//        for ($i = 1; $i <= 300; $i++) {
+//        for ($i = 1; $i <= 500; $i++) {
 //
 //            DB::table('users')->insert([
 //                'username' => $faker->userName,

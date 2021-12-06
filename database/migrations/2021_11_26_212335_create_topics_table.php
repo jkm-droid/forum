@@ -22,7 +22,7 @@ class CreateTopicsTable extends Migration
             $table->string('author');
             $table->string('slug');
             $table->boolean('status')->default(0);
-            $table->bigInteger('views');
+            $table->bigInteger('views')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

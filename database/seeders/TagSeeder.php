@@ -20,7 +20,7 @@ class TagSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create('App\Tag');
-        for ($i = 1; $i <= 400; $i++) {
+        for ($i = 1; $i <= 10000; $i++) {
             $title = str_replace('.', "",$faker->word);
             $slug = strtolower($title);
             DB::table('tags')->insert([

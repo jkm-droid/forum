@@ -2,6 +2,14 @@
 
 @section('content')
     <p id="success-box" class="text-end fixed-top" style="margin-top: 60px; margin-right: 5px;"></p>
+
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page"></li>
+        </ol>
+    </nav>
+
     <section class="main-content">
         <div class="text-center">
             <a class="btn top-options" href="{{ route('site.forum.list') }}">Forum List</a>
@@ -15,12 +23,16 @@
             <div class="col-md-2 topic-creation-categories">
                 @include('includes.short_forum_list')
             </div>
+
             <div class="col-md-10">
-                <h4>Latest Topics</h4><hr>
+                <h4>Latest Topics</h4>
+
+                <hr>
+
                 @foreach($topics as $topic)
-                    <div class="row" style="margin-bottom: 0">
+                    <div class="row col-md-12">
                         <div class="col-md-8">
-                            <img style="float: left; margin-right: 10px;" src="/profile_pictures/{{\App\Models\User::where('username', $topic->author)->first()->profile_url }}"
+                            <img style="float: left; margin-right: 10px;" src="/profile_pictures/{{ $topic->user->profile_url }}"
                                  alt="" width="60" height="60">
 
                             <h5 class="latest-topic-content">
@@ -29,14 +41,15 @@
                             <h5 class="latest-topic-content text-secondary">
                                 <a class="text-secondary" data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
                                    data-bs-placement="top" title="{{ $topic->author }}" data-bs-content="
-                                        Joined: {{ \App\Models\User::where('username', $topic->author)->first()->joined_date  }}
-                                    Level: {{ \App\Models\User::where('username', $topic->author)->first()->level  }}
-                                    Messages: {{ \App\Models\Message::where('author', $topic->author)->count() }}
+                                        Joined: {{ $topic->user->joined_date  }}
+                                        Level: {{ $topic->user->level  }}
+                                        Messages: {{ $topic->where('author', $topic->author)->count() }}
                                     ">
                                     <strong>{{ $topic->author }}</strong>
                                 </a>
-                                <span style="margin-left: 5px;"></span> {{  \Carbon\Carbon::parse($topic->created_at)->format('j M, y') }}
-                                <button class="btn "><i class="fa fa-thumbs-up"></i> {{ $topic->messages->sum('likes') }}</button>
+                                <span style="margin-left: 5px; font-size: medium"> {{  \Carbon\Carbon::parse($topic->created_at)->format('j M, y') }}</span>
+                                <button style="padding: 0 0 0 2px" class="btn"><i class="fa fa-thumbs-up"></i> {{ $topic->messages->sum('likes') }}</button>
+                                <button style="padding: 0 0 0 2px;display: none;" class="btn show-item"><i class="fa fa-comments"></i> {{ $topic->messages->count() }}</button>
                             </h5>
                             @if($topic->tags->count() > 0)
                                 <span class="latest-topic-content">
@@ -45,7 +58,7 @@
                                     @endforeach
                                 </span>
                             @endif
-                            <br>
+
                             @if(\Illuminate\Support\Facades\Auth::check())
                                 @if(\Illuminate\Support\Facades\Auth::user()->username == $topic->author)
                                     <div class="user-actions">
@@ -61,10 +74,10 @@
                             @endif
                         </div>
 
-                        <div class="col-md-2">
+                        <div class="col-md-2 text-start disappear-item">
                             <table>
                                 <tbody>
-                                <tr class="change-padding">
+                                <tr>
                                     <td>
                                         <h6>Messages: </h6>
                                     </td>
@@ -72,7 +85,7 @@
                                         <h6><strong>{{ $topic->messages->count() }}</strong></h6>
                                     </td>
                                 </tr>
-                                <tr class="disappear-item">
+                                <tr>
                                     <td>
                                         <h6>Views:</h6>
                                     </td>
@@ -83,34 +96,39 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col-md-2 moments-ago-section">
-                            <h5 class="disappear-item">
-                                <button class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ \Carbon\Carbon::parse($topic->created_at)->format('j M, Y@H:m') }}">
-                                    {{ $topic->formatted_topic_time }}
-                                </button>
-                            </h5>
 
-                            <h5 class="disappear-item">
-                                @foreach($topic->messages as $topic_message)
-                                    @if($loop->first)
-                                        <img src="/profile_pictures/{{\App\Models\User::where('username', $topic_message->author)->first()->profile_url }}"
-                                             alt="" width="30" height="30">
-                                        <a  class="text-secondary" data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
+                        <div class="row col-md-2 disappear-item">
+                            @foreach($topic->messages as $topic_message)
+                                @if($loop->first)
+
+
+                                    <div class="col-md-8 text-end">
+                                        <button class="btn text-secondary" style="padding: 0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ \Carbon\Carbon::parse($topic->created_at)->format('j M, Y@H:m') }}">
+                                            {{ $topic->formatted_topic_time }}
+                                        </button>
+
+                                        <a  class="text-secondary" style="padding: 0; font-size: small;"  data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
                                             data-bs-placement="top" title="{{ $topic_message->author }}" data-bs-content="
-                                            Joined: {{ \App\Models\User::where('username', $topic_message->author)->first()->joined_date  }}
-                                            Level: {{ \App\Models\User::where('username', $topic_message->author)->first()->level  }}
-                                            Messages: {{ \App\Models\Message::where('author', $topic_message->author)->count() }}
+                                            Joined: {{ $topic_message->user->joined_date  }}
+                                            Level: {{ $topic_message->user->level  }}
+                                            Messages: {{ $topic_message->where('author', $topic_message->author)->count() }}
                                             ">
                                             <strong> {{ $topic_message->author }}</strong>
                                         </a>
-                                    @endif
-                                @endforeach
-                            </h5>
+                                    </div>
+
+                                    <div class="col-md-2 text-start">
+                                        <img src="/profile_pictures/{{ $topic_message->user->profile_url }}"
+                                             alt="" width="40" height="45">
+                                    </div>
+                                @endif
+                            @endforeach
                         </div>
                     </div>
 
                     <hr style="color: lightgrey;">
                 @endforeach
+
                 <div class="d-flex justify-content-center">
                     {!! $topics->links() !!}
                 </div>

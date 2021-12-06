@@ -76,5 +76,12 @@ class User extends Authenticatable
         return Message::where('author', $user)->count();
     }
 
-    protected $appends = ['joined_date','total_messages'];
+    /**
+     * get all notifications belonging to a user
+     */
+    public function getAllNotificationsAttribute(){
+        return count(Auth::user()->unreadNotifications);
+    }
+
+    protected $appends = ['joined_date','total_messages','all_notifications'];
 }

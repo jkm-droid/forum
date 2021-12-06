@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthenticatedSiteController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SiteController;
 use Illuminate\Support\Facades\Route;
@@ -60,3 +61,10 @@ Route::post('reset_pass', [AuthController::class, 'reset_pass'])->name('user.res
 Route::get('profile/view/{username}', [ProfileController::class, 'view_profile'])->name('profile.view');
 Route::get('profile/edit/{username}', [ProfileController::class, 'show_profile_edit_form'])->name('show.profile.edit');
 Route::put('profile/update/{user_id}', [ProfileController::class, 'update_profile'])->name('profile.update');
+
+
+/**
+ * user notifications
+ */
+Route::get('notifications/all', [NotificationController::class, 'show_all_notifications'])->name('notifications.view.all');
+Route::post('notifications/mark_as_read/{notification_id}', [NotificationController::class, 'mark_as_read'])->name('notifications.mark.as.read');

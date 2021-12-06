@@ -28,19 +28,35 @@
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
+
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <!-- topic creation form button -->
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('site.show.topic.form') }}" style="font-weight: bold;">
                         <i class="fa fa-plus"></i> New Topic
                     </a>
                 </li>
-                @if(\Illuminate\Support\Facades\Auth::check())
+                <!-- end topic creation form button -->
+
+            @if(\Illuminate\Support\Facades\Auth::check())
+                <!-- Notifications Dropdown Menu -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('notifications.view.all') }}" role="button"  aria-expanded="false">
+                            <i class="fa fa-bell fa-lg"></i>
+                            <span class="badge bg-danger" style="position: relative;top: -10px;left: -15px;  border-radius: 50%;  font-size: 10px">
+                                <strong>{{ \Illuminate\Support\Facades\Auth::user()->all_notifications }}</strong>
+                            </span>
+                        </a>
+                    </li>
+                    <!-- end Notifications Dropdown Menu -->
+
+                    <!--user profile -->
                     <li class="nav-item dropdown dropstart">
-{{--                        <div class="profile-circled-image">--}}
-                            <a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="/profile_pictures/{{ \Illuminate\Support\Facades\Auth::user()->profile_url }}" alt="" class="img-circle" height="30" width="30" >
-                            </a>
-{{--                        </div>--}}
+
+                        <a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="/profile_pictures/{{ \Illuminate\Support\Facades\Auth::user()->profile_url }}" alt="" class="img-circle" height="30" width="30" >
+                        </a>
+
                         <ul class="dropdown-menu dropdown-menu-start" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="{{ route('profile.view', \Illuminate\Support\Facades\Auth::user()->username) }}">Profile</a></li>
                             <li><a class="dropdown-item" href="#">Another action</a></li>
@@ -48,6 +64,7 @@
                             <li><a class="dropdown-item" href="{{ route('user.logout') }}">Logout</a></li>
                         </ul>
                     </li>
+                    <!--end user profile -->
                 @else
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('show.register') }}">Register</a>

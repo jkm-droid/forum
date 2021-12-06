@@ -19,7 +19,7 @@ class TopicTagSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create('App\TopicTag');
-        for ($i = 1; $i <= 200; $i++) {
+        for ($i = 1; $i <= 2000; $i++) {
             DB::table('topic_tags')->insert([
                 'topic_id' =>  Topic::pluck('id')->random(),
                 'tag_id' => Tag::pluck('id')->random(),

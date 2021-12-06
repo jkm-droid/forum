@@ -4,6 +4,7 @@ namespace App\HelperFunctions;
 
 use App\Models\Category;
 use App\Models\ForumList;
+use Illuminate\Support\Facades\Auth;
 
 trait GetRepetitiveItems
 {
@@ -24,10 +25,15 @@ trait GetRepetitiveItems
     }
 
     /**
-     * get 5 forum list
+     * get logged user details
      */
+    public function get_logged_user_details(){
+        $user = '';
+        if (Auth::check()){
+            $user = \App\Models\User::where('id',Auth::user()->id)->first();
+        }
 
-    public function get_top_forum_list(){
-        return ForumList::orderBy('created_at', 'DESC')->take(5)->get();
+        return $user;
     }
+
 }

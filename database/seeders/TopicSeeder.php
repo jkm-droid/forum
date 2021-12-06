@@ -24,8 +24,10 @@ class TopicSeeder extends Seeder
             $title = str_replace(".", " ", $faker->sentence(8));
             $author_name = User::pluck('username')->random();
             $category_id = Category::pluck('id')->random();
+            $user_id = User::pluck('id')->random();
 
             DB::table('topics')->insert([
+                'user_id'=> $user_id,
                 'category_id'=> $category_id,
                 'title' => ucfirst($title),
                 'author' => $author_name,

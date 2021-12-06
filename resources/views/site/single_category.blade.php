@@ -22,22 +22,23 @@
                         </h5>
                         <a class="text-secondary" data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
                            data-bs-placement="top" title="{{ $category_topic->author }}" data-bs-content="
-                        Joined: {{ \App\Models\User::where('username', $category_topic->author)->first()->joined_date  }}
-                            Level: {{ \App\Models\User::where('username', $category_topic->author)->first()->level  }}
-                            Messages: {{ \App\Models\Message::where('author', $category_topic->author)->count() }}
+                            Joined: {{ $category_topic->user->joined_date  }}
+                            Level: {{ $category_topic->user->level  }}
+                            Messages: {{ $category_topic->where('author', $category_topic->author)->count() }}
                             ">
                             <strong>{{ $category_topic->author }}</strong>
                         </a><br>
                     </td>
                     <td>
                         <div>
-                            <img style="float: left;" class="img-circle topic-authors" src="/profile_pictures/{{\App\Models\User::where('username', $category_topic->author)->first()->profile_url }}"
+                            <img style="float: left;" class="img-circle topic-authors" src="/profile_pictures/{{ $category_topic->user->profile_url }}"
                                  alt="" width="30" height="30">
                         </div>
+
                         @foreach($category_topic->messages as $ct_message)
-                            <img style="float: left;" class="img-circle message-authors" src="/profile_pictures/{{\App\Models\User::where('username', $ct_message->author)->first()->profile_url }}"
+                            <img style="float: left;" class="img-circle message-authors" src="/profile_pictures/{{ $ct_message->user->profile_url }}"
                                  alt="" width="30" height="30">
-                            @if(count($category_topic->messages) == 10)
+                            @if ($loop->index == 10)
                                 @break
                             @endif
                         @endforeach
@@ -51,7 +52,7 @@
                     <td>
                         @foreach($category_topic->messages as $ct_message)
                             @if($loop->last)
-                                {{ \Carbon\Carbon::parse($ct_message->created_at)->diffInHours(\Carbon\Carbon::now()) }}h
+                                {{ \Carbon\Carbon::parse($ct_message->created_at)->diffInHours(\Carbon\Carbon::now()) }} h
                             @endif
                         @endforeach
                     </td>

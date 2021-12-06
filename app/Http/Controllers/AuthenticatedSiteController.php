@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\HelperFunctions\GetRepetitiveItems;
+use App\Jobs\NewMessageJob;
 use App\Models\Comment;
 use App\Models\Message;
 use App\Models\Tag;
 use App\Models\Topic;
+use App\Models\User;
+use App\Notifications\NewMessageNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -34,14 +38,26 @@ class AuthenticatedSiteController extends Controller
             $topic_id = $request->topic_id;
 
             $topic = Topic::find($topic_id);
+
             $message = new Message();
             $message->body = $message_body;
-            $message->author = Auth::user()->username;
+            $message->user_id = $this->get_id()->id;
+            $message->author = $this->get_id()->username;
 
-            if($topic->messages()->save($message))
+            $details = array();
+            if($topic->messages()->save($message)) {
                 $status = 200;
-            else
-                $status = 201;
+
+                $details = [
+                    'author'=>$topic->author,
+                    'post_title'=> $topic->title,
+                    'message_author'=>$this->get_id()->username
+                ];
+//                NewMessageJob::dispatch($topic->user->email, $details);
+
+                $this->send_new_message_notification($message, $topic,$topic->user);
+            }else
+                $status = $topic->user;
 
             $data = array(
                 'status' => $status,
@@ -59,12 +75,17 @@ class AuthenticatedSiteController extends Controller
         return response()->json($data);
     }
 
+    public function send_new_message_notification($message, $topic, $recipient){
+        Notification::send($recipient, new NewMessageNotification($message, $topic));
+    }
+
     /**
      * show the form to create a new topic/thread
      */
 
     public function show_create_new_topic_form(){
         return view('site_auth.create_topic')
+            ->with('user', $this->get_logged_user_details())
             ->with('categories', $this->get_all_categories());
     }
 
@@ -82,11 +103,12 @@ class AuthenticatedSiteController extends Controller
         $topic_info = $request->all();
         $slug = str_replace($this->special_character, "", $topic_info['title']);
         $topic = new Topic();
+        $topic->user_id = $this->get_id()->id;
         $topic->title = $topic_info['title'];
         $topic->body = $topic_info['body'];
         $topic->category_id = $topic_info['category'];
         $topic->slug = str_replace(" ","_", strtolower($slug));
-        $topic->author = Auth::user()->username;
+        $topic->author = $this->get_id()->username;
 
         $topic->save();
         if ($request->has('tags')) {
@@ -118,6 +140,7 @@ class AuthenticatedSiteController extends Controller
         $topic = Topic::where('slug', $slug)->first();
 
         return view('site_auth.edit_topic', compact('topic'))
+            ->with('user', $this->get_logged_user_details())
             ->with('categories', $this->get_all_categories());
     }
 
@@ -260,5 +283,16 @@ class AuthenticatedSiteController extends Controller
         );
 
         return response()->json($data);
+    }
+
+    /**
+     * get authenticated user id
+     */
+    public function get_id(){
+        $user = '';
+        if (Auth::check())
+            $user = User::where('id', Auth::user()->id)->first();
+
+        return $user;
     }
 }

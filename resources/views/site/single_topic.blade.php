@@ -18,11 +18,11 @@
             @if(\Illuminate\Support\Facades\Auth::check())
                 @if(\Illuminate\Support\Facades\Auth::user()->username == $topic->author)
 
-                    <button class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="edit this topic">
+                    <button style="padding: 0 0 0 2px" class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="edit this topic">
                         <a href="{{ route('show.edit.topic.form', $topic->slug) }}"><i class="fa fa-edit"></i></a>
                     </button>
 
-                    <button id="delete-topic" data-id="{{ $topic->id }}" class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="delete this topic">
+                    <button style="padding: 0 0 0 2px"  id="delete-topic" data-id="{{ $topic->id }}" class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="delete this topic">
                         <i class="fa fa-trash"></i>
                     </button>
                 @endif
@@ -83,17 +83,17 @@
                     <div class="single-topic-message">
                         <div class="row col-md-7">
                             <div class="col-md-1">
-                                <img style="margin-right: 0" src="/profile_pictures/{{\App\Models\User::where('username', $t_message->author)->first()->profile_url }}"
+                                <img style="margin-right: 0" class="img-fluid" src="/profile_pictures/{{\App\Models\User::where('username', $t_message->author)->first()->profile_url }}"
                                      alt="" width="70" height="60">
                             </div>
                             <div class="col-md-6 text-start">
-                                <h6 class="">{{ \Carbon\Carbon::parse($t_message->created_at)->format('j M, y') }}</h6>
-                                <h6 class="message-paddin">
+                                <h6>{{ \Carbon\Carbon::parse($t_message->created_at)->format('j M, y') }}</h6>
+                                <h6>
                                     <a class="text-secondary" data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
                                        data-bs-placement="top" title="{{ $t_message->author }}" data-bs-content="
-                         Joined: {{ \App\Models\User::where('username', $t_message->author)->first()->joined_date  }}
-                                        Level: {{ \App\Models\User::where('username', $t_message->author)->first()->level  }}
-                                        Messages: {{ \App\Models\Message::where('author', $t_message->author)->count() }}
+                                        Joined: {{ $t_message->user->joined_date  }}
+                                        Level: {{ $t_message->user->level  }}
+                                        Messages: {{ $t_message->where('author', $t_message->author)->count() }}
                                         ">
                                         <strong> {{ $t_message->author }} </strong>
                                     </a>
@@ -171,7 +171,7 @@
                                             <h6>
                                                 <a class="text-secondary" data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
                                                    data-bs-placement="top" title="{{ $tm_comment->author }}" data-bs-content="
-                                    Joined: {{ \App\Models\User::where('username', $tm_comment->author)->first()->joined_date  }}
+                                                    Joined: {{ \App\Models\User::where('username', $tm_comment->author)->first()->joined_date  }}
                                                     Level: {{ \App\Models\User::where('username', $tm_comment->author)->first()->level  }}
                                                     Messages: {{ \App\Models\Message::where('author', $tm_comment->author)->count() }}
                                                     ">

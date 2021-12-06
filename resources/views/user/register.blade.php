@@ -10,9 +10,9 @@
                 </h3>
             </div>
 
-            @if ($message = Session::get('error'))
-                <p class="alert alert-danger">{{ $message }}</p>
-            @endif
+{{--            @if ($message = Session::get('error'))--}}
+{{--                <p class="alert alert-danger">{{ $message }}</p>--}}
+{{--            @endif--}}
             <h5 class="login-box-msg text-center">Sign up to start your session</h5>
 
             <form action="{{ route('user.register') }}" method="post">
