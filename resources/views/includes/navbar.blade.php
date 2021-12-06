@@ -36,11 +36,13 @@
                 </li>
                 @if(\Illuminate\Support\Facades\Auth::check())
                     <li class="nav-item dropdown dropstart">
-                        <a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="/profile_pictures/{{ \Illuminate\Support\Facades\Auth::user()->profile_url }}" alt="" class="img-fluid" width="40" height="40">
-                        </a>
+{{--                        <div class="profile-circled-image">--}}
+                            <a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="/profile_pictures/{{ \Illuminate\Support\Facades\Auth::user()->profile_url }}" alt="" class="img-circle" height="30" width="30" >
+                            </a>
+{{--                        </div>--}}
                         <ul class="dropdown-menu dropdown-menu-start" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="{{ route('profile.view', \Illuminate\Support\Facades\Auth::user()->id) }}">Profile</a></li>
+                            <li><a class="dropdown-item" href="{{ route('profile.view', \Illuminate\Support\Facades\Auth::user()->username) }}">Profile</a></li>
                             <li><a class="dropdown-item" href="#">Another action</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{{ route('user.logout') }}">Logout</a></li>

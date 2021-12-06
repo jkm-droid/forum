@@ -4,7 +4,7 @@
     <div class="main-content" style="padding-top: 20px">
         <div class="row">
             <div class="col-md-3 topic-creation-categories">
-                @include('includes.category')
+                @include('includes.forum_list')
             </div>
             <div class="col-md-9">
                 <div class="col-12">
@@ -62,7 +62,7 @@
 
                             <div class="card-footer">
                                 <label for="title" class="form-label">Topic Tags <small>(Multiple tags should be separated by commas(,))</small></label>
-                                <input type="text" name="tags" class="form-control" value="@if($topic->tags)@foreach($topic->tags as $tag)  @if(!$loop->last) {{ $tag->title.','}} @endif @if($loop->last) {{ $tag->title }} @endif  @endforeach @endif" placeholder="enter topic tags">
+                                <input type="text" name="tags" class="form-control" value="@if($topic->tags)@foreach($topic->tags as $tag) @if(!$loop->last) {{ trim($tag->title.',') }} @endif @if($loop->last) {{ str_replace(" ","",$tag->title) }} @endif @endforeach @endif" placeholder="enter topic tags">
                                 <hr>
                                 <button type="submit" id="submit_button" value="Edit Topic" name="edit_topic" class="btn bg-warning">
                                     <i class="fa fa-edit"></i> Edit Topic

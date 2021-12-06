@@ -17,6 +17,14 @@ class Message extends Model
     ];
 
     /**
+     * get the user owning the message
+     */
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
+   /**
      * get the topic owning the message
      */
 

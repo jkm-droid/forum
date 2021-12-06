@@ -19,6 +19,14 @@ class Topic extends Model
     ];
 
     /**
+     * get the user that owns the topic
+     */
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
+    /**
      * get the category that owns the topic
      */
 
@@ -55,7 +63,7 @@ class Topic extends Model
             $min = " minutes ago";
             $my_time = $diff_time .''. $min;
         }else{
-            $my_time = Carbon::parse($this->created_at)->format('j M, y @ H:i');
+            $my_time = Carbon::parse($this->created_at)->format('j M, Y');
         }
 
         return $my_time;

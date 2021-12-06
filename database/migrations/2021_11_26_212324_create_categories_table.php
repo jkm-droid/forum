@@ -15,11 +15,14 @@ class CreateCategoriesTable extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->unique();
+            $table->unsignedBigInteger('forum_list_id');
+            $table->string('title');
             $table->string('description');
             $table->string('slug');
             $table->boolean('status')->default(0);
             $table->timestamps();
+
+            $table->foreign('forum_list_id')->references('id')->on('forum_lists')->onDelete('cascade');
         });
     }
 

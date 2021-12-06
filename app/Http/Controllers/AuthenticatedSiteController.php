@@ -74,7 +74,7 @@ class AuthenticatedSiteController extends Controller
 
     public function save_new_topic(Request $request){
         $request->validate([
-            'title'=>'required|unique:topics',
+            'title'=>'required',
             'category'=>'required',
             'body'=>'required'
         ]);
@@ -127,7 +127,7 @@ class AuthenticatedSiteController extends Controller
 
     public function edit_topic(Request $request, $id){
         $request->validate([
-            'title'=>'required|unique:topics',
+            'title'=>'required',
             'category'=>'required',
             'body'=>'required'
         ]);
@@ -148,19 +148,21 @@ class AuthenticatedSiteController extends Controller
 
             $tagIds = [];
             for ($t = 0; $t < count($array_tags); $t++) {
-                if (Tag::find(strtolower($array_tags[$t]))){
-                    
+                $old_tag = Tag::where('slug',strtolower($array_tags[$t]))->first();
+                if (!$old_tag){
+                    $tag = Tag::firstOrCreate([
+                        'title' => $array_tags[$t],
+                        'slug' => strtolower($array_tags[$t])
+                    ]);
+                    if ($tag) {
+                        $tagIds[] = $tag->id;
+                    }
                 }
-                $tag = Tag::firstOrCreate([
-                    'title' => $array_tags[$t],
-                    'slug' => strtolower($array_tags[$t])
-                ]);
-                if ($tag) {
-                    $tagIds[] = $tag->id;
-                }
+
+                array_push($tagIds, $old_tag->id);
             }
 
-            $topic->tags()->attach($tagIds);
+            $topic->tags()->sync($tagIds);
         }
 
         return redirect()->route('site.home')->with('success', 'Topic edited successfully. Awaiting moderator approval');

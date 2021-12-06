@@ -15,8 +15,9 @@ class CreateTopicsTable extends Migration
     {
         Schema::create('topics', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('category_id');
-            $table->string('title')->unique();
+            $table->string('title');
             $table->longText('body');
             $table->string('author');
             $table->string('slug');
@@ -24,6 +25,7 @@ class CreateTopicsTable extends Migration
             $table->bigInteger('views');
             $table->timestamps();
 
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
 
         });

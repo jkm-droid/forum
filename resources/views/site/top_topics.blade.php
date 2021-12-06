@@ -4,7 +4,7 @@
     <section class="main-content">
         <div class="row">
             <div class="col-md-3 topic-creation-categories">
-                @include('includes/category')
+                @include('includes.forum_list')
             </div>
             <div class="col-md-9">
                 <h4 class="top-topics-title">Top Topics</h4>
@@ -18,7 +18,7 @@
                             </h6>
                             @if($top->tags->count() > 0)
                                 @foreach($top->tags as $t_tag)
-                                    {{ $t_tag->title }}
+                                    <span class="badge bg-secondary">{{ $t_tag->title }}</span>
                                 @endforeach
                             @endif
                         </div>
@@ -43,7 +43,11 @@
                                 </a>
                                 </span>
                                 <br>
-                                <span class="text-secondary">{{ \Carbon\Carbon::parse($top->created_at )->format('j M, Y @ H:s')}}</span>
+                                <span class="text-secondary">
+                                    <button class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ \Carbon\Carbon::parse($top->created_at)->format('j M, Y@H:m') }}">
+                                    {{ \Carbon\Carbon::parse($top->created_at )->format('j M, Y')}}
+                                </button>
+                                </span>
                             </div>
                         </div>
 

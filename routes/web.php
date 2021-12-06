@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [SiteController::class, 'show_welcome_page'])->name('site.home');
 Route::get('/category/{slug}', [SiteController::class, 'show_single_category'])->name('site.single.category');
 Route::get('/topic/{slug}', [SiteController::class, 'show_topic'])->name('site.single.topic');
-Route::get('/view/all_categories', [SiteController::class, 'show_all_categories'])->name('site.all.categories');
+Route::get('/view/forum/list', [SiteController::class, 'show_forum_list'])->name('site.forum.list');
 Route::get('/view/top_topics', [SiteController::class, 'show_top_topics'])->name('site.top.topics');
 
 /**
@@ -35,7 +35,7 @@ Route::post('/reply/delete', [AuthenticatedSiteController::class, 'delete_reply'
 Route::get('/create/new_topic', [AuthenticatedSiteController::class, 'show_create_new_topic_form'])->name('site.show.topic.form');
 Route::post('/save/new_topic/', [AuthenticatedSiteController::class, 'save_new_topic'])->name('new.topic.save');
 Route::get('/edit/{slug}', [AuthenticatedSiteController::class, 'show_edit_topic_form'])->name('show.edit.topic.form');
-Route::get('/edit/topic/{id}', [AuthenticatedSiteController::class, 'edit_topic'])->name('edit.topic');
+Route::post('/edit/topic/{id}', [AuthenticatedSiteController::class, 'edit_topic'])->name('edit.topic');
 Route::post('/topic/delete', [AuthenticatedSiteController::class, 'delete_topic'])->name('topic.delete');
 
 
@@ -57,6 +57,6 @@ Route::post('reset_pass', [AuthController::class, 'reset_pass'])->name('user.res
 /**
  * user profile
  * */
-Route::get('profile/view/{user_id}', [ProfileController::class, 'view_profile'])->name('profile.view');
-Route::get('profile/edit/{user_id}', [ProfileController::class, 'edit_profile'])->name('profile.edit');
+Route::get('profile/view/{username}', [ProfileController::class, 'view_profile'])->name('profile.view');
+Route::get('profile/edit/{username}', [ProfileController::class, 'show_profile_edit_form'])->name('show.profile.edit');
 Route::put('profile/update/{user_id}', [ProfileController::class, 'update_profile'])->name('profile.update');

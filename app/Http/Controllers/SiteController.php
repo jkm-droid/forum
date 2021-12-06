@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\HelperFunctions\GetRepetitiveItems;
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\Message;
 use App\Models\Tag;
 use App\Models\Topic;
@@ -26,7 +27,8 @@ class SiteController extends Controller
     public function show_welcome_page(){
         $categories = Category::orderBy('created_at', 'DESC')->get();
         $topics = Topic::orderBy('created_at', 'DESC')->latest()->paginate(20);
-        return view('site.welcome', compact('categories', 'topics'))
+        $forum_list = $this->get_forum_list();
+        return view('site.welcome', compact('categories', 'topics','forum_list'))
             ->with('i', (request()->input('page',1) - 1) * 20);
     }
 
@@ -52,7 +54,8 @@ class SiteController extends Controller
         $messages = Message::where('topic_id', $topic->id)->latest()->paginate(10);
 
         return view('site.single_topic', compact('topic', 'messages'))
-            ->with('i', (request()->input('page',1) - 1) * 10);
+            ->with('i', (request()->input('page',1) - 1) * 10)
+            ->with('categories', $this->get_all_categories());
     }
 
     /**
@@ -63,6 +66,17 @@ class SiteController extends Controller
         $top_topics = Topic::orderBy('views', 'DESC')->take(20)->get();
 
         return view('site.top_topics', compact('top_topics'))
+            ->with('categories', $this->get_all_categories());
+    }
+
+    /**
+     * show all the categories
+     */
+
+    public function show_forum_list(){
+        $forum_list = $this->get_forum_list();
+
+        return view('site.forum_list', compact('forum_list'))
             ->with('categories', $this->get_all_categories());
     }
 

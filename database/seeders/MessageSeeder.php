@@ -20,7 +20,7 @@ class MessageSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create('App\Message');
-        for ($i = 1; $i <= 1000; $i++) {
+        for ($i = 1; $i <= 40000; $i++) {
             $author_name = User::pluck('username')->random();
             $topic_id = Topic::pluck('id')->random();
 
@@ -28,7 +28,7 @@ class MessageSeeder extends Seeder
                 'topic_id'=> $topic_id,
                 'author' => $author_name,
                 'body' => $faker->sentence(100),
-                'likes'=>$faker->randomDigitNotNull,
+                'likes'=>$faker->numberBetween(30,90),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);

@@ -19,8 +19,8 @@ class CommentSeeder extends Seeder
      */
     public function run()
     {
-        $faker = Faker::create('App\Message');
-        for ($i = 1; $i <= 200; $i++) {
+        $faker = Faker::create('App\Comment');
+        for ($i = 1; $i <= 6000; $i++) {
             $author_name = User::pluck('username')->random();
             $message_id = Message::pluck('id')->random();
 

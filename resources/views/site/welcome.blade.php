@@ -4,7 +4,7 @@
     <p id="success-box" class="text-end fixed-top" style="margin-top: 60px; margin-right: 5px;"></p>
     <section class="main-content">
         <div class="text-center">
-            <a class="btn top-options" href="{{ route('site.all.categories') }}">All Categories</a>
+            <a class="btn top-options" href="{{ route('site.forum.list') }}">Forum List</a>
             <a class="btn top-options" href="{{ route('site.top.topics') }}">Top Topics</a>
             <a class="btn top-options" href="{{ route('site.show.topic.form') }}">
                 <i class="fa fa-plus"></i> New Topic
@@ -12,16 +12,17 @@
         </div>
 
         <div class="row">
-            <div class="col-md-3 topic-creation-categories">
-                @include('includes/category')
+            <div class="col-md-2 topic-creation-categories">
+                @include('includes.short_forum_list')
             </div>
-            <div class="col-md-9">
+            <div class="col-md-10">
                 <h4>Latest Topics</h4><hr>
                 @foreach($topics as $topic)
-                    <div class="row">
+                    <div class="row" style="margin-bottom: 0">
                         <div class="col-md-8">
-                            <img style="float: left;" src="/profile_pictures/{{\App\Models\User::where('username', $topic->author)->first()->profile_url }}"
-                                 alt="" width="60" height="50">
+                            <img style="float: left; margin-right: 10px;" src="/profile_pictures/{{\App\Models\User::where('username', $topic->author)->first()->profile_url }}"
+                                 alt="" width="60" height="60">
+
                             <h5 class="latest-topic-content">
                                 <a class="put-black" href="{{ route('site.single.topic', $topic->slug) }}">{{ $topic->title }}</a>
                             </h5>
@@ -48,9 +49,9 @@
                             @if(\Illuminate\Support\Facades\Auth::check())
                                 @if(\Illuminate\Support\Facades\Auth::user()->username == $topic->author)
                                     <div class="user-actions">
-                                        <button class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="edit this topic">
+                                        <a href="{{ route('show.edit.topic.form', $topic->slug) }}" class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="edit this topic">
                                             <i class="fa fa-edit"></i> Edit
-                                        </button>
+                                        </a>
 
                                         <button id="delete-topic" data-id="{{ $topic->id }}" class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="delete this topic">
                                             <i class="fa fa-trash"></i> Delete
@@ -59,6 +60,7 @@
                                 @endif
                             @endif
                         </div>
+
                         <div class="col-md-2">
                             <table>
                                 <tbody>
@@ -83,13 +85,16 @@
                         </div>
                         <div class="col-md-2 moments-ago-section">
                             <h5 class="disappear-item">
-                                {{ $topic->formatted_topic_time }}
+                                <button class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ \Carbon\Carbon::parse($topic->created_at)->format('j M, Y@H:m') }}">
+                                    {{ $topic->formatted_topic_time }}
+                                </button>
                             </h5>
+
                             <h5 class="disappear-item">
                                 @foreach($topic->messages as $topic_message)
                                     @if($loop->first)
                                         <img src="/profile_pictures/{{\App\Models\User::where('username', $topic_message->author)->first()->profile_url }}"
-                                             alt="" width="35" height="30">
+                                             alt="" width="30" height="30">
                                         <a  class="text-secondary" data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
                                             data-bs-placement="top" title="{{ $topic_message->author }}" data-bs-content="
                                             Joined: {{ \App\Models\User::where('username', $topic_message->author)->first()->joined_date  }}
@@ -100,9 +105,7 @@
                                         </a>
                                     @endif
                                 @endforeach
-
                             </h5>
-
                         </div>
                     </div>
 

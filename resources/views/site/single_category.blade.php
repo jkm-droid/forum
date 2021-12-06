@@ -8,7 +8,7 @@
             <tr>
                 <th>Topic</th>
                 <th></th>
-                <th>Replies</th>
+                <th>Messages</th>
                 <th>Views</th>
                 <th>Activity</th>
             </tr>
@@ -17,9 +17,9 @@
             @foreach($category_topics as $category_topic)
                 <tr>
                     <td>
-                        <h4 class="category-topics-title">
+                        <h5 class="category-topics-title">
                             <a href="{{ route('site.single.topic', $category_topic->slug) }}">{{ $category_topic->title }}</a>
-                        </h4>
+                        </h5>
                         <a class="text-secondary" data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
                            data-bs-placement="top" title="{{ $category_topic->author }}" data-bs-content="
                         Joined: {{ \App\Models\User::where('username', $category_topic->author)->first()->joined_date  }}
@@ -30,11 +30,16 @@
                         </a><br>
                     </td>
                     <td>
-                        <img style="float: left;" class="img-circle topic-authors" src="/profile_pictures/{{\App\Models\User::where('username', $category_topic->author)->first()->profile_url }}"
-                             alt="" width="35" height="30">
+                        <div>
+                            <img style="float: left;" class="img-circle topic-authors" src="/profile_pictures/{{\App\Models\User::where('username', $category_topic->author)->first()->profile_url }}"
+                                 alt="" width="30" height="30">
+                        </div>
                         @foreach($category_topic->messages as $ct_message)
                             <img style="float: left;" class="img-circle message-authors" src="/profile_pictures/{{\App\Models\User::where('username', $ct_message->author)->first()->profile_url }}"
-                                 alt="" width="35" height="30">
+                                 alt="" width="30" height="30">
+                            @if(count($category_topic->messages) == 10)
+                                @break
+                            @endif
                         @endforeach
                     </td>
                     <td>

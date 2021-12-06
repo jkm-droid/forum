@@ -4,7 +4,7 @@
     <div class="main-content" style="padding-top: 20px">
         <div class="row">
             <div class="col-md-3 topic-creation-categories">
-                @include('includes.category')
+                @include('includes.forum_list')
             </div>
             <div class="col-md-9">
                 <div class="col-12">

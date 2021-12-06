@@ -45,6 +45,20 @@ class User extends Authenticatable
     ];
 
     /**
+     * get the topics owned by the user
+     */
+    public function topics(){
+        return $this->hasMany(Topic::class);
+    }
+
+    /**
+     * get the messages owned by the user
+     */
+    public function messages(){
+        return $this->hasMany(Message::class);
+    }
+
+    /**
      * customize the created_at timestamp
      */
 

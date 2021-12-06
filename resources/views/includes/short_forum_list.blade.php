@@ -24,27 +24,23 @@
         <i class="fa fa-user"></i> Sign Up Now!
     </a>
 </div>
-<table class="table">
-    <thead>
-    <tr class="text-secondary">
-        <th class="categories">Category</th>
-        <th class="topics">Topics</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach($categories as $category)
-        <tr>
-            <td>
-                <h5>
-                    <a class="put-black" href="{{ route('site.single.category', $category->slug) }}">{{ $category->title }}</a>
-                </h5>
-                <span class="text-secondary">{{ $category->description }}</span>
-            </td>
-            <td style="text-align: end;" class="text-secondary">
-                <h6><strong>{{ $category->topics->where('status', 0)->count() }}</strong><small style="font-size: 16px;"> / month</small></h6>
-            </td>
-        </tr>
-    @endforeach
-    </tbody>
-</table>
 
+<h5>Forum List</h5>
+<div class="accordion" id="accordionPanelsStayOpenExample">
+    @foreach($forum_list as $forum)
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                <button class="accordion-button" style="font-size: 25px; padding: 5px;" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne-{{ $forum->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                    {{ $forum->title }}
+                </button>
+            </h2>
+            <div id="panelsStayOpen-collapseOne-{{ $forum->id }}" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+                <div class="accordion-body">
+                    @foreach($forum->categories as $forum_category)
+                        <h5><a href="{{ route('site.single.category', $forum_category->slug) }}">{{ $forum_category->title }}</a></h5>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    @endforeach
+</div>
