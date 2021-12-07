@@ -39,4 +39,12 @@ class Message extends Model
     public function comments(){
         return $this->hasMany(Comment::class);
     }
+
+    /**
+     * get the message likes
+     */
+
+    public function likes(){
+        return $this->hasMany(Like::class);
+    }
 }

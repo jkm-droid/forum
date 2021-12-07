@@ -52,6 +52,14 @@ class Topic extends Model
     }
 
     /**
+     * register topic views
+     */
+    public function incrementViewCount() {
+        $this->views++;
+        return $this->save();
+    }
+
+    /**
      * format the topic time to get minutes only
      */
     public function getFormattedTopicTimeAttribute(){

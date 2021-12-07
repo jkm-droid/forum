@@ -59,6 +59,12 @@ class User extends Authenticatable
     }
 
     /**
+     * get the user likes
+     */
+    public function likes(){
+        return $this->hasMany(Like::class);
+    }
+    /**
      * customize the created_at timestamp
      */
 

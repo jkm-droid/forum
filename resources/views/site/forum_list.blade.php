@@ -1,7 +1,13 @@
 @extends('base.index')
 
 @section('content')
-
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item">Forum</li>
+            <li class="breadcrumb-item active" aria-current="page">All</li>
+        </ol>
+    </nav>
     <div class="row">
         <div class="col-md-3 topic-creation-categories">
             @include('includes.category')
@@ -33,11 +39,11 @@
                                         <div class="row col-md-2" style="padding-top: 0">
                                             @foreach($forum_category->topics as $topic)
                                                 @if($loop->first)
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-5 text-end">
                                                         <img src="/profile_pictures/{{ $topic->user->profile_url }}" alt="" width="55" height="60" class="disappear-item">
                                                     </div>
-                                                    <div class="col-md-8">
-                                                        <button class="btn text-secondary"  style="padding: 0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ \Carbon\Carbon::parse($topic->created_at)->format('j M, Y@H:m') }}">
+                                                    <div class="col-md-7 text-start">
+                                                        <button class="btn text-secondary"  style="padding: 0; font-size: small" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ \Carbon\Carbon::parse($topic->created_at)->format('j M, Y@H:m') }}">
                                                             {{ \Carbon\Carbon::parse($topic->created_at)->format('j M, Y') }}
                                                         </button>
 

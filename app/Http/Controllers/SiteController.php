@@ -55,6 +55,9 @@ class SiteController extends Controller
     public function show_topic($slug){
         $topic = Topic::where('slug', $slug)->first();
 
+        //register views
+        $topic->incrementViewCount();
+
         $messages = Message::where('topic_id', $topic->id)->latest()->paginate(10);
 
         return view('site.single_topic', compact('topic', 'messages'))
