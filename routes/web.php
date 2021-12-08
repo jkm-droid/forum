@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthenticatedSiteController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SiteController;
@@ -68,3 +69,9 @@ Route::put('profile/update/{user_id}', [ProfileController::class, 'update_profil
  */
 Route::get('notifications/all', [NotificationController::class, 'show_all_notifications'])->name('notifications.view.all');
 Route::post('notifications/mark_as_read/{notification_id}', [NotificationController::class, 'mark_as_read'])->name('notifications.mark.as.read');
+
+/**
+ * message likes
+ */
+
+Route::post('message/like',[LikeController::class, 'like_message'])->name('message.like');
