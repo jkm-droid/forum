@@ -5,7 +5,7 @@
 
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
             <li class="breadcrumb-item active" aria-current="page"></li>
         </ol>
     </nav>
@@ -36,14 +36,36 @@
                                  alt="" width="60" height="60">
 
                             <h5 class="latest-topic-content">
-                                <a class="put-black" href="{{ route('site.single.topic', $topic->slug) }}">{{ $topic->title }}</a>
+                                <a class="put-black" id="{{ $topic->id }}" href="{{ route('site.single.topic', $topic->slug) }}">{{ $topic->title }}</a>
                             </h5>
+                            <script type="text/javascript">
+                                $.ajax({
+                                    url: '/view/status',
+                                    type: 'POST',
+                                    data: {
+                                        "_token": "{{ csrf_token() }}",
+                                        'topic_id': {{ $topic->id }},
+                                    },
+                                    success: function (response) {
+                                        if(response.message === "viewed"){
+                                            document.getElementById({{ $topic->id }}).style.color = 'blue';
+                                        }else{
+                                            document.getElementById({{ $topic->id }}).style.fontWeight = 'bold';
+                                        }
+                                    },
+
+                                    failure: function (response) {
+                                        console.log("something went wrong");
+                                    }
+                                });
+                            </script>
+
                             <h5 class="latest-topic-content text-secondary">
                                 <a class="text-secondary" data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
                                    data-bs-placement="top" title="{{ $topic->author }}" data-bs-content="
                                         Joined: {{ $topic->user->joined_date  }}
-                                        Level: {{ $topic->user->level  }}
-                                        Messages: {{ $topic->where('author', $topic->author)->count() }}
+                                    Level: {{ $topic->user->level  }}
+                                    Messages: {{ $topic->where('author', $topic->author)->count() }}
                                     ">
                                     <strong>{{ $topic->author }}</strong>
                                 </a>
@@ -60,7 +82,7 @@
                             @endif
 
                             @if(\Illuminate\Support\Facades\Auth::check())
-                                @if(\Illuminate\Support\Facades\Auth::user()->username == $topic->author)
+                                @if($user->username == $topic->author)
                                     <div class="user-actions">
                                         <a href="{{ route('show.edit.topic.form', $topic->slug) }}" class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="edit this topic">
                                             <i class="fa fa-edit"></i> Edit
@@ -136,12 +158,30 @@
 
         </div>
         <script>
-            $(document).ready(function() {
-                var image = '<img src="https://developer.chrome.com/extensions/examples/api/idle/idle_simple/sample-128.png">';
-                $('[data-toggle="popover"]').popover({
-                    html:true
+            function getTopicStatus(topicId){
+                const id = $(this).attr("topic-id");
+                console.log(id);
+                document.getElementById(id)
+                $(document).ready(function() {
+
+                    console.log(topicId);
+                    $.ajax({
+                        url: '/view/status',
+                        type: 'POST',
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            'topic_id': topicId,
+                        },
+                        success: function (response) {
+                            console.log(response);
+                        },
+
+                        failure: function (response) {
+                            console.log("something went wrong");
+                        }
+                    });
                 });
-            });
+            }
         </script>
     </section>
 @endsection

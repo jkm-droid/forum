@@ -8,7 +8,8 @@ use App\Models\Comment;
 use App\Models\Message;
 use App\Models\Tag;
 use App\Models\Topic;
-use http\Client\Curl\User;
+use App\Models\User;
+use App\Models\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -30,10 +31,20 @@ class SiteController extends Controller
         $topics = Topic::with('category')->orderBy('created_at', 'DESC')->latest()->paginate(20);
         $forum_list = $this->get_forum_list();
 
+//        if (Auth::check()) {
+//            $user = $this->get_logged_user_details();
+//
+//            $view = View::where('user_id', $user->id)->where('topic_id', $topic->id)->first();
+//            if ($view->isViewed == 1)
+//                $isViewed = 1;
+//            else
+//                $isViewed = 0;
+//        }
 
         return view('site.welcome', compact('categories', 'topics','forum_list'))
             ->with('user', $this->get_logged_user_details())
             ->with('i', (request()->input('page',1) - 1) * 20);
+//            ->with('isViewed', $isViewed);
     }
 
     /**
@@ -52,11 +63,27 @@ class SiteController extends Controller
      * show a single topic alongside the body, messages and comments
      */
 
-    public function show_topic($slug){
+    public function show_topic($slug)
+    {
         $topic = Topic::where('slug', $slug)->first();
 
         //register views
-        $topic->incrementViewCount();
+        if (Auth::check()) {
+            $user = $this->get_logged_user_details();
+
+            if (!$user->views()->where('topic_id', $topic->id)->first()) {
+                $topic->views = $topic->views + 2;
+                $topic->update();
+
+                $view = new View();
+                $view->user_id = $user->id;
+                $view->topic_id = $topic->id;
+                $view->isViewed = 1;
+                $view->save();
+            }
+        }else{
+            $topic->incrementViewCount();
+        }
 
         $messages = Message::where('topic_id', $topic->id)->latest()->paginate(10);
 

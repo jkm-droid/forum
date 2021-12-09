@@ -8,11 +8,14 @@ use App\Models\Comment;
 use App\Models\Message;
 use App\Models\Tag;
 use App\Models\Topic;
+use App\Models\TopicTag;
 use App\Models\User;
+use App\Models\View;
 use App\Notifications\NewMessageNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
 class AuthenticatedSiteController extends Controller
@@ -111,7 +114,7 @@ class AuthenticatedSiteController extends Controller
         $topic->author = $this->get_id()->username;
 
         $topic->save();
-        if ($request->has('tags')) {
+        if ($request->has('tags')  && $request->tags != null) {
             $tags = $request->tags;
             $array_tags = explode(",", $tags);
 
@@ -164,14 +167,16 @@ class AuthenticatedSiteController extends Controller
         $topic->slug = str_replace(" ","_", strtolower($slug));
 
         $topic->update();
+        $old_tags = array();
 
-        if ($request->has('tags')) {
+        if ($request->has('tags') && $request->tags != null) {
             $tags = str_replace(" ", "", $request->tags);
             $array_tags = explode(",", $tags);
 
             $tagIds = [];
             for ($t = 0; $t < count($array_tags); $t++) {
                 $old_tag = Tag::where('slug',strtolower($array_tags[$t]))->first();
+
                 if (!$old_tag){
                     $tag = Tag::firstOrCreate([
                         'title' => $array_tags[$t],
@@ -186,6 +191,9 @@ class AuthenticatedSiteController extends Controller
             }
 
             $topic->tags()->sync($tagIds);
+
+        }else{
+            $topic->tags()->detach();
         }
 
         return redirect()->route('site.home')->with('success', 'Topic edited successfully. Awaiting moderator approval');
@@ -294,5 +302,26 @@ class AuthenticatedSiteController extends Controller
             $user = User::where('id', Auth::user()->id)->first();
 
         return $user;
+    }
+
+    /**
+     * get topic view status based on user_id and topic_id
+     */
+    public function get_topic_view_status(Request $request){
+        $topic_id = $request->topic_id;
+        $user = $this->get_logged_user_details();
+
+        $view = View::where('user_id', $user->id)->where('topic_id',$topic_id)->where('isViewed', 1)->first();
+        $message = '';
+        if ($view){
+            $message = "viewed";
+        }
+
+        $data = array(
+            'status'=>200,
+            'message'=>$message
+        );
+
+        return response()->json($data);
     }
 }

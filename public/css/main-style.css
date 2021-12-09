@@ -1,5 +1,6 @@
 html, body{
     height: 100%;
+   /*background-color: rgba(223, 224, 234, 0.8);*/
 }
 a{
     text-decoration: none;
@@ -34,6 +35,13 @@ a{
     color: #1ac01a;
 }
 
+.read-topic a{
+    color: #c50303 !important;
+}
+
+.unread-topic a{
+    color: black !important;
+}
 /*****0A0A0AFF
 **
 **welcome page style
@@ -118,6 +126,10 @@ a{
 
     .show-item{
         display: block !important;
+    }
+
+    .action-buttons{
+        text-align: start !important;
     }
 }
 

@@ -103,8 +103,8 @@
                 </div>
 
                 <hr style="color: lightgrey;">
-                <p class="message-paddin">{!! $t_message->body  !!}</p>
-                <div class="text-end">
+                <p>{!! $t_message->body  !!}</p>
+                <div class="text-end action-buttons">
                     @if(\Illuminate\Support\Facades\Auth::check())
                         @if(\Illuminate\Support\Facades\Auth::user()->username == $t_message->author)
 
@@ -124,6 +124,10 @@
                     </button>
 
                     <div class="btn-group" role="group" id="{{ $t_message->id }}{{ $t_message->author }}" style="display: none;">
+                        <a type="button" class="btn" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" title="Share this post" data-bs-content="{{ route('site.single.topic', $topic->slug) }}">
+                            <i class="fa fa-link"></i>
+                        </a>
+
                         <a href="https://www.facebook.com/sharer/sharer.php?u={{ route('site.single.topic', $topic->slug) }}&quote={{ $topic->title }}" type="button" class="btn" style="color: #0a53be;">
                             <i class="fa fa-facebook"></i>
                         </a>
@@ -143,10 +147,44 @@
                         <i class="fa fa-share-alt"></i> Share
                     </button>
                     @if(\Illuminate\Support\Facades\Auth::check())
-                        <button id="btn_like_message" class="btn text-secondary" data-bs-toggle="tooltip" like-id="{{ $t_message->id }}" data-bs-placement="left" title="like">
-                            {{ $t_message->likes }} <i class="fa fa-heart"></i>
+                        <button id="{{ $t_message->id }}"  class="btn text-secondary" data-bs-toggle="tooltip" like-id="{{ $t_message->id }}" like-author="{{ $t_message->author }}" data-bs-placement="left" title="like">
+                            <span id="{{ $t_message->author }}{{ $t_message->id }}">{{ $t_message->likes }}</span> <i class="fa fa-heart"></i>
                         </button>
 
+                        <script>
+                            // function like(){
+                                $(document).on('click', '#'+{{ $t_message->id }}, function(){
+                                    const id = $(this).attr("like-id");
+                                    const author = $(this).attr("like-author");
+                                    const id_author = id+author;
+                                    console.log(id_author);
+                                    $.ajax({
+                                        url: '/message/like',
+                                        type: 'POST',
+                                        data: {
+                                            "_token": "{{ csrf_token() }}",
+                                            'message_id': id,
+                                        },
+                                        success: function (response) {
+                                            console.log(response.likeCount);
+                                            if(response.status === 200){
+                                                toastr.options =
+                                                    {
+                                                        "closeButton" : true,
+                                                        "progressBar" : true
+                                                    }
+                                                toastr.success("Message Liked successfully");
+                                                document.getElementById(id_author).innerHTML = response.likeCount;
+                                            }
+                                        },
+
+                                        failure: function (response) {
+                                            console.log("something went wrong");
+                                        }
+                                    });
+                                });
+                            // }
+                        </script>
                         <button reply-id="{{ $t_message->id }}" reply-body="{!! $t_message->body !!}" id="btn_post_reply" class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="write a comment">
                             <i class="fa fa-reply"></i> Reply
                         </button>

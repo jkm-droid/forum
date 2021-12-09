@@ -18,15 +18,13 @@
 
             <div class="col-md-10 card card-outline card-warning">
                 <h5>Notifications</h5>
-                <!-- /.card-header -->
-                <div class="card-body m-1 table-responsive p-0">
 
                     @foreach($notifications as $notification)
 
                         <div class="notifications card card-outline m-2 " style="padding: 5px;">
                             <p>
                                 {{ $notification->created_at }}<br>
-                                <strong>{{ $notification->data['author'] }}</strong> reacted to your post <strong>Message</strong>.
+                                <strong>{{ $notification->data['author'] }}</strong> reacted to your post <strong>{{ $notification->data['author'] }}</strong>.
                                 <a class="btn badge bg-danger right"  href="">view</a>
                                 <button class="btn badge bg-info" id="mark-as-read" data-id="{{ $notification->id }}">mark as read</button>
                             </p>
@@ -49,9 +47,7 @@
                         </div>
 
                     @endforeach
-                    <a href="#" id="mark-all-as-read" class="btn btn-sm btn-info ml-2">Mark all as Read</a>
-                </div>
-                <!-- /.card-body -->
+                    <a href="#" id="mark-all-as-read" class="badge bg-info col-md-1 ml-2">Mark all as Read</a>
 
             </div>
             <!-- /.card -->

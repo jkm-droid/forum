@@ -15,50 +15,46 @@ class LikeController extends Controller
     }
 
     public function like_message(Request $request){
-        if ($request->ajax()) {
-            $message_id = $request->message_id;
-            $message = Message::where('id', $message_id)->first();
+        $message_id = $request->message_id;
+        $message = Message::where('id', $message_id)->first();
 
-            $alreadyLiked = Auth::user()->likes()->where('message_id', $message_id)->first();
+        $alreadyLiked = Auth::user()->likes()->where('message_id', $message_id)->first();
+        $likeCount = $message->likes;
 
-            $data = array();
-            if (!$alreadyLiked) {
-                $message->likes = $message->likes + 1;
-                $message->update();
+        $data = array();
+        if (!$alreadyLiked) {
+            $message->likes = $message->likes + 1;
+            $message->update();
 
-                $like = new Like();
-                $like->user_id = Auth::user()->id;
-                $like->message_id = $message_id;
+            $like = new Like();
+            $like->user_id = Auth::user()->id;
+            $like->message_id = $message_id;
 
-                //like saved
-                if ($like->save()) {
-                    $status = 200;
-                    $msg = "success";
-                } else {
-                    $status = 201;
-                    $msg = "error";
-                }
-
-                $data = array(
-                    'status'=>$status,
-                    'message'=>$msg
-                );
-
-            }else {
-                $data = array(
-                    'status' => 204,
-                    'message' => "success"
-                );
+            //like saved
+            if ($like->save()) {
+                $status = 200;
+                $msg = "success";
+            } else {
+                $status = 201;
+                $msg = "error";
             }
+            $likeCount = $message->likes;
 
-            return response()->json($data);
+            $data = array(
+                'status'=>$status,
+                'message'=>$msg,
+                'likeCount'=>$likeCount
+            );
+
+        }else {
+            $data = array(
+                'status' => 204,
+                'message' => "success",
+                'likeCount'=>$likeCount
+            );
         }
-
-        $data = array(
-            'status'=>202,
-            'message'=>"Unsupported method"
-        );
 
         return response()->json($data);
     }
+
 }

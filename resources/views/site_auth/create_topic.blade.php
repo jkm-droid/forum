@@ -58,7 +58,8 @@
                                 <label for="title" class="form-label">Topic Tags <small>(Multiple tags should be separated by commas(,))</small></label>
                                 <input type="text" name="tags" class="form-control" placeholder="enter topic tags">
                                 <hr>
-                                <input type="submit" id="submit_button" value="Post Topic" name="save_topic" class="btn bg-warning">
+                                <button type="submit" id="submit_button" value="Post Topic" name="save_topic" class="btn bg-warning">
+                                    <i class="fa fa-share"></i> Post Topic</button>
                             </div>
 
                         </form>

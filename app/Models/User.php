@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\HelperFunctions\GetRepetitiveItems;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,7 +13,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, GetRepetitiveItems;
 
     /**
      * The attributes that are mass assignable.
@@ -64,6 +65,14 @@ class User extends Authenticatable
     public function likes(){
         return $this->hasMany(Like::class);
     }
+
+    /**
+     * get the user views
+     */
+    public function views(){
+        return $this->hasMany(View::class);
+    }
+
     /**
      * customize the created_at timestamp
      */
@@ -89,5 +98,14 @@ class User extends Authenticatable
         return count(Auth::user()->unreadNotifications);
     }
 
-    protected $appends = ['joined_date','total_messages','all_notifications'];
+    /**
+     * get viewed topics attribute
+     */
+
+    public function getViewsAttribute(){
+        $user = $this->get_logged_user_details();
+        return View::where('user_id', $user->id)->where('isViewed', 1)->get();
+    }
+
+    protected $appends = ['joined_date','total_messages','all_notifications','views'];
 }

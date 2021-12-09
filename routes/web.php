@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthenticatedSiteController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
@@ -39,7 +40,8 @@ Route::post('/save/new_topic/', [AuthenticatedSiteController::class, 'save_new_t
 Route::get('/edit/{slug}', [AuthenticatedSiteController::class, 'show_edit_topic_form'])->name('show.edit.topic.form');
 Route::post('/edit/topic/{id}', [AuthenticatedSiteController::class, 'edit_topic'])->name('edit.topic');
 Route::post('/topic/delete', [AuthenticatedSiteController::class, 'delete_topic'])->name('topic.delete');
-
+//topic view status
+Route::post('/view/status', [AuthenticatedSiteController::class, 'get_topic_view_status'])->name('topic.status');
 
 
 /**
@@ -75,3 +77,9 @@ Route::post('notifications/mark_as_read/{notification_id}', [NotificationControl
  */
 
 Route::post('message/like',[LikeController::class, 'like_message'])->name('message.like');
+
+/**
+ * admin
+ */
+
+Route::get('dashboard', [DashboardController::class,'dashboard'])->name('dashboard');

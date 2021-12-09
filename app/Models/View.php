@@ -5,26 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Like extends Model
+class View extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'user_id',
-        'message_id'
+        'topic_id'
     ];
 
     /**
-     * get the user that owns the like
+     * get the user that owns the view
      */
     public function user(){
         return $this->belongsTo(User::class);
     }
 
     /**
-     * get the message that owns the like
+     * get the topic that owns the view
      */
-    public function message(){
-        return $this->belongsTo(Message::class);
+    public function topic(){
+        return $this->belongsTo(Topic::class);
     }
 }

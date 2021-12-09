@@ -52,6 +52,14 @@ class Topic extends Model
     }
 
     /**
+     * get the topic views
+     */
+
+    public function views(){
+        return $this->hasMany(View::class);
+    }
+
+    /**
      * register topic views
      */
     public function incrementViewCount() {
