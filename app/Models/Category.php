@@ -23,7 +23,7 @@ class Category extends Model
      */
 
     public function forumlist(){
-        return $this->belongsTo(ForumList::class);
+        return $this->belongsTo(ForumList::class, 'forum_list_id');
     }
 
     /**
@@ -57,5 +57,44 @@ class Category extends Model
         return $messageCount;
     }
 
-    protected $appends = ['messages_count'];
+    /**
+     * get category topic count
+     */
+    public function getTopicCountAttribute(){
+        $categories = $this->get_all_categories();
+        $topic_count = 0;
+        foreach ($categories as $category){
+            $topic_count = $this->thousandsCurrencyFormat($category->topics->count());
+        }
+
+        return $topic_count;
+    }
+
+    protected $appends = ['messages_count','topic_count'];
+
+    /**
+     * @param $num
+     * @return string
+     * format large number (thousands) to k,m,b format
+     */
+    public static function thousandsCurrencyFormat($num) {
+
+        if($num>1000) {
+
+            $x = round($num);
+            $x_number_format = number_format($x);
+            $x_array = explode(',', $x_number_format);
+            $x_parts = array('k', 'm', 'b', 't');
+            $x_count_parts = count($x_array) - 1;
+            $x_display = $x;
+            $x_display = $x_array[0] . ((int) $x_array[1][0] !== 0 ? '.' . $x_array[1][0] : '');
+            $x_display .= $x_parts[$x_count_parts - 1];
+
+            return $x_display;
+
+        }
+
+        return $num;
+    }
+
 }
