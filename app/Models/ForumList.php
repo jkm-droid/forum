@@ -18,7 +18,7 @@ class ForumList extends Model
      * get the categories that belongs to the Forum List
      */
     public function categories(){
-        return $this->hasMany(Category::class);
+        return $this->hasMany(Category::class)->where('status', 1);
     }
 
     /**

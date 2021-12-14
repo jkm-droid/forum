@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <div class="auth-box col-md-4 container">
+    <div class="auth-box col-md-3 container">
         <!-- /.login-logo -->
         <div class="card card-outline card-warning">
             <div class="card-header text-center">

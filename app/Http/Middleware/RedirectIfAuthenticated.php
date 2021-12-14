@@ -26,9 +26,8 @@ class RedirectIfAuthenticated
                 if ($guard == 'admin'){
                     return redirect()->route('dashboard');
                 }
-                if ($guard == 'auth'){
-                    return redirect()->route('site.home');
-                }
+
+                return redirect()->route('site.home');
             }
         }
 

@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Mail\NewMessageEmail;
+use App\Mail\AdminTopicMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -11,20 +11,21 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
 
-class NewMessageJob implements ShouldQueue
+class AdminTopicJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $recipientEmail, $details;
+    private $adminEmail, $details;
+
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($recipientEmail, $details)
+    public function __construct($adminEmail, $details)
     {
+        $this->adminEmail = $adminEmail;
         $this->details = $details;
-        $this->recipientEmail = $recipientEmail;
     }
 
     /**
@@ -34,7 +35,7 @@ class NewMessageJob implements ShouldQueue
      */
     public function handle()
     {
-        $email = new NewMessageEmail('joshwriter53@gmail.com', $this->details);
-        Mail::to($this->recipientEmail)->send($email);
+        $mail = new AdminTopicMail($this->adminEmail, $this->details);
+        Mail::to($this->adminEmail)->send($mail);
     }
 }

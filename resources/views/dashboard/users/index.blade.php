@@ -25,19 +25,23 @@
                 <th>Score</th>
                 <th>Level</th>
                 <th>Messages</th>
+                <th>Likes</th>
                 <th>Topics</th>
+                <th>Joined</th>
             </tr>
             </thead>
             <tbody>
             @foreach($users as $user)
                 <tr>
-                    <td>{{ $i++ }}</td>
+                    <td>{{ $f++ }}</td>
                     <td>{{ $user->username }}</td>
                     <td>{{ $user->email }}</td>
                     <td>{{ $user->score }}</td>
                     <td>{{ $user->level }}</td>
                     <td>{{ $user->messages->count() }}</td>
+                    <td>{{ $user->messages->sum('likes') }}</td>
                     <td>{{ $user->topics->count() }}</td>
+                    <td>{{ \Carbon\Carbon::parse($user->created_at)->format('j M, Y H:m') }}</td>
                 </tr>
             @endforeach
             </tbody>

@@ -20,6 +20,7 @@ class UserController extends Controller
 
         return view('dashboard.users.index', compact('users'))
             ->with('userCount', $userCount)
+            ->with('f',1)
             ->with('i', (request()->input('page',1) - 1) * 30);
     }
 }

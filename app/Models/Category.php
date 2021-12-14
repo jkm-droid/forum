@@ -30,7 +30,7 @@ class Category extends Model
      * get the topics that belongs to the category
      */
     public function topics(){
-        return $this->hasMany(Topic::class);
+        return $this->hasMany(Topic::class)->where('status', 1);
     }
 
     /**

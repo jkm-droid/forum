@@ -12,7 +12,9 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4",
-        "overtrue/laravel-follow": "^3.1"
+        "overtrue/laravel-follow": "^3.1",
+      "ext-json": "*",
+      "ext-gd": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

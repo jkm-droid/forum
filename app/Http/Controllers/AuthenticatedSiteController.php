@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\HelperFunctions\GetRepetitiveItems;
+use App\Jobs\AdminTopicJob;
 use App\Jobs\NewMessageJob;
+use App\Models\Admin;
 use App\Models\Comment;
 use App\Models\Message;
 use App\Models\Tag;
@@ -11,6 +13,7 @@ use App\Models\Topic;
 use App\Models\TopicTag;
 use App\Models\User;
 use App\Models\View;
+use App\Notifications\AdminTopicNotifications;
 use App\Notifications\NewMessageNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
@@ -114,6 +117,7 @@ class AuthenticatedSiteController extends Controller
         $topic->author = $this->get_id()->username;
 
         $topic->save();
+
         if ($request->has('tags')  && $request->tags != null) {
             $tags = $request->tags;
             $array_tags = explode(",", $tags);
@@ -132,7 +136,25 @@ class AuthenticatedSiteController extends Controller
             $topic->tags()->attach($tagIds);
         }
 
+        $this->send_topic_notifications($topic);
+
         return redirect()->route('site.home')->with('success', 'Topic created successfully. Awaiting moderator approval');
+    }
+
+    public function send_topic_notifications($topic){
+        $details = [
+            'author'=>$topic->author,
+            'topic_title'=> $topic->title
+        ];
+
+        $admins  = Admin::get();
+
+        Notification::send($admins, new AdminTopicNotifications($topic));
+
+        //send mail notifications
+        foreach ($admins as $admin) {
+            AdminTopicJob::dispatch($admin->email,$details);
+        }
     }
 
     /**

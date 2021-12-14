@@ -4,17 +4,17 @@
     <p id="success-box" class="text-end fixed-top" style="margin-top: 60px; margin-right: 5px;"></p>
 
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-        <ol class="breadcrumb">
+        <ol class="breadcrumb bg-light">
             <li class="breadcrumb-item"><a href="/">Home</a></li>
             <li class="breadcrumb-item active" aria-current="page"></li>
         </ol>
     </nav>
 
     <section class="main-content">
-        <div class="text-center">
-            <a class="btn top-options" href="{{ route('site.forum.list') }}">Forum List</a>
-            <a class="btn top-options" href="{{ route('site.top.topics') }}">Top Topics</a>
-            <a class="btn top-options" href="{{ route('site.show.topic.form') }}">
+        <div class="text-center" >
+            <a class="btn top-options text-primary" href="{{ route('site.forum.list') }}">Forum List</a>
+            <a class="btn top-options text-danger" href="{{ route('site.top.topics') }}">Top Topics</a>
+            <a class="btn top-options text-success" href="{{ route('site.show.topic.form') }}">
                 <i class="fa fa-plus"></i> New Topic
             </a>
         </div>
@@ -121,12 +121,12 @@
 
                         <div class="row col-md-2 disappear-item">
                             @foreach($topic->messages as $topic_message)
-                                @if($loop->first)
+                                @if($loop->last)
 
 
                                     <div class="col-md-8 text-end">
-                                        <button class="btn text-secondary" style="padding: 0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ \Carbon\Carbon::parse($topic->created_at)->format('j M, Y@H:m') }}">
-                                            {{ $topic->formatted_topic_time }}
+                                        <button class="btn text-secondary" style="padding: 0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ \Carbon\Carbon::parse($topic_message->created_at)->format('j M, Y@H:m') }}">
+                                            {{ $topic_message->formatted_message_time }}
                                         </button>
 
                                         <a  class="text-secondary" style="padding: 0; font-size: small;"  data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"

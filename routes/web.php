@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\AdminNotificationsController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthenticatedSiteController;
 use App\Http\Controllers\CategoryController;
@@ -153,3 +154,10 @@ Route::post('topic/publish_draft/{topic_id}',[TopicController::class, 'publish_d
  * users
  */
 Route::get('users', [UserController::class, 'show_all_users'])->name('show.all.users');
+
+/**
+ * admin notifications
+ */
+
+Route::get('admin/notifications',[AdminNotificationsController::class, 'show_all_notifications'])->name('admin.notifications.show');
+Route::post('admin/notifications/mark_as_read/{notification_id}', [AdminNotificationsController::class, 'mark_as_read'])->name('admin.notifications.mark.as.read');

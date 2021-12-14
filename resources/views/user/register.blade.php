@@ -1,7 +1,7 @@
 @extends('base.index')
 
 @section('content')
-    <div class="auth-box container col-md-4">
+    <div class="auth-box container col-md-3">
         <div class="card card-outline card-dark">
             <div class="card-header text-center">
                 <h3><a href="/" class="h3">

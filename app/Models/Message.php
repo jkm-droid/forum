@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -47,4 +48,24 @@ class Message extends Model
     public function likes(){
         return $this->hasMany(Like::class);
     }
+
+    /**
+     * format the message time to get minutes only
+     */
+    public function getFormattedMessageTimeAttribute(){
+        $created_time = Carbon::parse($this->created_at);
+        $current_time = Carbon::now();
+        $diff_time = $created_time->diffInMinutes($current_time);
+
+        if ($diff_time < 50){
+            $min = " minutes ago";
+            $my_time = $diff_time .''. $min;
+        }else{
+            $my_time = Carbon::parse($this->created_at)->format('j M, Y');
+        }
+
+        return $my_time;
+    }
+
+    protected $appends = ['formatted_message_time'];
 }

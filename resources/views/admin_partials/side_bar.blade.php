@@ -89,11 +89,11 @@
         <div id="collapseNotifications" class="collapse" aria-labelledby="headingUtilities"
              data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Custom Utilities:</h6>
-                <a class="collapse-item" href="utilities-color.html">Colors</a>
-                <a class="collapse-item" href="utilities-border.html">Borders</a>
-                <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                <a class="collapse-item" href="utilities-other.html">Other</a>
+                <h6 class="collapse-header">Actions</h6>
+                <a class="collapse-item" href="{{ route('admin.notifications.show') }}">Topic Alerts</a>
+                <a class="collapse-item" href="utilities-border.html">Message Alerts</a>
+                <a class="collapse-item" href="utilities-animation.html">User Alerts</a>
+                <a class="collapse-item" href="utilities-other.html">Other Alerts</a>
             </div>
         </div>
     </li>

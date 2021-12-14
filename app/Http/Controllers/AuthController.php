@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Country;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -12,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
+use App\HelperFunctions\MakeAvatars;
 
 class AuthController extends Controller
 {
@@ -67,7 +67,20 @@ class AuthController extends Controller
         ]);
 
         $user_data = $request->all();
-        $this->create($user_data);
+        /** Make avatar */
+
+        $path = 'profile_pictures/';
+        $fontPath = public_path('fonts/Oliciy.ttf');
+        $char = strtoupper($request->username[0]);
+        $newAvatarName = trim($user_data['username']).'_avatar.png';
+        $dest = $path.$newAvatarName;
+
+        $avatar = new MakeAvatars();
+
+        $createAvatar = $avatar->makeAvatar($fontPath,$dest,$char);
+        $picture = $createAvatar == true ? $newAvatarName : '';
+
+        $this->create($user_data, $picture);
 
         return redirect()->route('show.login')
             ->with('success', 'registered successfully');
@@ -77,10 +90,11 @@ class AuthController extends Controller
      *
      * create the user
      */
-    public function create(array $data){
+    public function create(array $data, $profile_url){
         return User::create([
             'username'=>$data['username'],
             'email'=>$data['email'],
+            'profile_url'=>$profile_url,
             'password'=>Hash::make(trim($data['password']))
         ]);
     }

@@ -32,6 +32,9 @@
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+    <!-- Custom styles for this template-->
+{{--    <link href="{{ asset('admin-assets/css/sb-admin-2.min.css') }}" rel="stylesheet">--}}
     <title>Forum</title>
 </head>
 <body>

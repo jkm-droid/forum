@@ -13,7 +13,7 @@ trait GetRepetitiveItems
      */
 
     public  function get_all_categories(){
-        return Category::orderBy('created_at', 'DESC')->take(20)->get();
+        return Category::where('status',1)->orderBy('created_at', 'DESC')->take(20)->get();
     }
 
     /**
@@ -21,7 +21,7 @@ trait GetRepetitiveItems
      */
 
     public function get_forum_list(){
-        return ForumList::orderBy('created_at', 'DESC')->get();
+        return ForumList::where('status',1)->orderBy('created_at', 'DESC')->get();
     }
 
     /**
