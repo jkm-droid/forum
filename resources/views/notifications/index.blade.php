@@ -24,7 +24,7 @@
                         <div class="notifications card card-outline m-2 " style="padding: 5px;">
                             <p>
                                 {{ $notification->created_at }}<br>
-                                <strong>{{ $notification->data['author'] }}</strong> reacted to your post <strong>{{ $notification->data['author'] }}</strong>.
+                                <strong>{{ $notification->data['author'] }}</strong> reacted to your post <strong>{{ $notification->data['topic_title'] }}</strong>.
                                 <a class="btn badge bg-danger right"  href="">view</a>
                                 <button class="btn badge bg-info" id="mark-as-read" data-id="{{ $notification->id }}">mark as read</button>
                             </p>
@@ -47,7 +47,7 @@
                         </div>
 
                     @endforeach
-                    <a href="#" id="mark-all-as-read" class="badge bg-info col-md-1 ml-2">Mark all as Read</a>
+{{--                    <a href="#" id="mark-all-as-read" class="badge bg-info col-md-1 ml-2">Mark all as Read</a>--}}
 
             </div>
             <!-- /.card -->

@@ -269,3 +269,7 @@ a{
 .profile-circled-image img{
     border-radius: 50%;
 }
+
+.breadcrumb{
+    background-color: white;
+}

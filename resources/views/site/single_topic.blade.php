@@ -1,12 +1,13 @@
 @extends('base.index')
 
 @section('content')
-    <p id="success-box" class="text-end fixed-top" style="margin-top: 60px; margin-right: 5px;"></p>
-    {{--    <div class="row">--}}
-    {{--        <div class="col-md-3 topic-creation-categories">--}}
-    {{--            @include('includes/category')--}}
-    {{--        </div>--}}
-    {{--        <div class="col-md-9">--}}
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item">Topics</li>
+            <li class="breadcrumb-item active" aria-current="page">{{ $topic->title }}</li>
+        </ol>
+    </nav>
     <h4>{{ $topic->title }}</h4>
     {{ $topic->category->title }} |
     @foreach($topic->tags as $t_tag)
@@ -19,7 +20,7 @@
         @if(\Illuminate\Support\Facades\Auth::user()->username == $topic->author)
 
             <button style="padding: 0 0 0 2px" class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="edit this topic">
-                <a href="{{ route('show.edit.topic.form', $topic->slug) }}"><i class="fa fa-edit"></i></a>
+                <a href="{{ route('site.show.edit.topic.form', $topic->slug) }}"><i class="fa fa-edit"></i></a>
             </button>
 
             <button style="padding: 0 0 0 2px"  id="delete-topic" data-id="{{ $topic->id }}" class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="delete this topic">
@@ -48,7 +49,7 @@
             <tr>
                 <td>
                     <img src="/profile_pictures/{{\App\Models\User::where('username', $topic->author)->first()->profile_url }}"
-                         alt="" width="20" height="17">
+                         alt="" width="17" height="17">
                     {{  \Carbon\Carbon::parse($topic->created_at)->format('M, y') }}
                 </td>
                 <td>likes</td>

@@ -59,7 +59,7 @@ class AuthenticatedSiteController extends Controller
                     'post_title'=> $topic->title,
                     'message_author'=>$this->get_id()->username
                 ];
-//                NewMessageJob::dispatch($topic->user->email, $details);
+                NewMessageJob::dispatch($topic->user->email, $details);
 
                 $this->send_new_message_notification($message, $topic,$topic->user);
             }else

@@ -56,7 +56,8 @@ class SiteController extends Controller
         $category = Category::where('slug', $slug)->first();
         $category_topics = Topic::where('status', 1)->where('category_id', $category->id)->orderBy('created_at', 'DESC')->get();
 
-        return view('site.single_category',compact('category','category_topics'));
+        return view('site.single_category',compact('category','category_topics'))
+            ->with('user', $this->get_logged_user_details());
     }
 
     /**

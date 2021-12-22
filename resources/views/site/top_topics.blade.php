@@ -51,7 +51,8 @@
                                 </span>
                                 <br>
                                 <span class="text-secondary">
-                                    <button class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ \Carbon\Carbon::parse($top->created_at)->format('j M, Y@H:m') }}">
+                                    <button style="padding: 0" class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                            title="{{ \Carbon\Carbon::parse($top->created_at)->format('j M, Y@H:m') }}">
                                     {{ \Carbon\Carbon::parse($top->created_at )->format('j M, Y')}}
                                 </button>
                                 </span>

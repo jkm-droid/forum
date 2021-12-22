@@ -14,7 +14,7 @@
                         </div>
                         <!-- /.card-header -->
 
-                        <form role="form" method="post" action="{{ route('new.topic.save') }}" id="form_submit" enctype="multipart/form-data">
+                        <form role="form" method="post" action="{{ route('site.new.topic.save') }}" id="form_submit" enctype="multipart/form-data">
                             @csrf
                             <div class="card-body m-1">
                                 <div class="">

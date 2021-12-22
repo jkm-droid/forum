@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <div class="auth-box col-md-4 container">
+    <div class="auth-box col-md-3 container">
         <!-- /.login-logo -->
         <div class="card card-outline card-warning">
             <div class="card-header text-center">
@@ -31,26 +31,15 @@
                             <div class="text-danger form-text"><small>{{ $errors->first('password') }}</small></div>
                         @endif
                     </div>
-                    <div class="row">
-                        <div class="col-8">
-                            <div class="icheck-primary">
-                                <input type="checkbox" name="remember_me" id="remember">
-                                <label for="remember">
-                                    Remember Me
-                                </label>
-                            </div>
-                        </div>
-                        <!-- /.col -->
-                        <div class="col-4">
-                            <button type="submit" class="btn btn-primary btn-block background-black put-gold text-uppercase">Sign In</button>
-                        </div>
-                        <!-- /.col -->
+
+                    <!-- /.col -->
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-primary btn-block form-control text-uppercase">Sign In</button>
                     </div>
+                    <!-- /.col -->
+
                 </form>
-                <div class="text-center">
-                    <a href="{{ route('show.register') }}" class="text-center">I don't have a membership</a><br><br>
-                    <a href="{{ route('user.show.forgot_pass_form') }}" class="text-center">Forgot password?</a>
-                </div>
+
             </div>
             <!-- /.card-body -->
         </div>

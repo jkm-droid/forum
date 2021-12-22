@@ -52,7 +52,7 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                   <p>{{ $topic->body }}</p>
+                                   <p>{!! $topic->body !!} </p>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>

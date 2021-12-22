@@ -35,7 +35,7 @@ class AdminTopicJob implements ShouldQueue
      */
     public function handle()
     {
-        $mail = new AdminTopicMail($this->adminEmail, $this->details);
+        $mail = new AdminTopicMail("joshlinnas@gmail.com", $this->details);
         Mail::to($this->adminEmail)->send($mail);
     }
 }

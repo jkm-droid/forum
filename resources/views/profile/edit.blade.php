@@ -2,11 +2,11 @@
 
 @section('content')
 <div class="row mt-4">
-   <div class="col-md-4 disappear-item">
+   <div class="col-md-3 disappear-item">
        @include('includes.category')
    </div>
 
-    <div class="col-md-8">
+    <div class="col-md-9">
         <h3>Change Avatar</h3>
 
         @if ($errors->any())

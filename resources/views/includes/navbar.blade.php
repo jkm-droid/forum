@@ -44,25 +44,41 @@
                         <a class="nav-link" href="{{ route('notifications.view.all') }}" role="button"  aria-expanded="false">
                             <i class="fa fa-bell fa-lg"></i>
                             <span class="badge bg-danger" style="position: relative;top: -10px;left: -15px;  border-radius: 50%;  font-size: 10px">
-                                <strong>{{ \Illuminate\Support\Facades\Auth::user()->all_notifications }}</strong>
+                                <strong>{{ $user->all_notifications }}</strong>
                             </span>
                         </a>
                     </li>
                     <!-- end Notifications Dropdown Menu -->
 
                     <!--user profile -->
-                    <li class="nav-item dropdown dropstart">
-
-                        <a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="/profile_pictures/{{ \Illuminate\Support\Facades\Auth::user()->profile_url }}" alt="" class="img-circle" height="30" width="30" >
+                    <li class="nav-item dropdown no-arrow" style="margin-right: 30px">
+                        <a class="nav-link " href="#" id="userDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small"><strong>{{ $user->username }}</strong></span>
+                            <img src="/profile_pictures/{{ $user->profile_url }}" alt=""
+                                 class="img-profile rounded-circle" height="30" width="30" >
                         </a>
-
-                        <ul class="dropdown-menu dropdown-menu-start" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="{{ route('profile.view', \Illuminate\Support\Facades\Auth::user()->username) }}">Profile</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{{ route('user.logout') }}">Logout</a></li>
-                        </ul>
+                        <!-- Dropdown - User Information -->
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                             aria-labelledby="userDropdown" style="margin-right: 30px">
+                            <a class="dropdown-item" href="{{ route('profile.view', $user->username) }}">
+                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Profile
+                            </a>
+                            <a class="dropdown-item" href="{{ route('profile.settings', $user->username) }}">
+                                <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Settings
+                            </a>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Activity Log
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ route('user.logout') }}" >
+                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Logout
+                            </a>
+                        </div>
                     </li>
                     <!--end user profile -->
                 @else

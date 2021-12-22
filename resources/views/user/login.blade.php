@@ -9,12 +9,12 @@
                 <h3 class="put-black"><a href="/" class="h3">Forum</a></h3>
             </div>
             <div class="card-body">
-{{--                @if ($message = Session::get('success'))--}}
-{{--                    <p class="alert alert-success">{{ $message }}</p>--}}
-{{--                @endif--}}
-{{--                @if ($message = Session::get('error'))--}}
-{{--                    <p class="alert alert-danger">{{ $message }}</p>--}}
-{{--                @endif--}}
+                @if ($message = Session::get('success'))
+                    <p class="alert alert-success">{{ $message }}</p>
+                @endif
+                @if ($message = Session::get('error'))
+                    <p class="alert alert-danger">{{ $message }}</p>
+                @endif
                 <h5 class="login-box-msg text-center">Sign in to start your session</h5>
 
                 <form action="{{ route('user.login') }}" method="post">

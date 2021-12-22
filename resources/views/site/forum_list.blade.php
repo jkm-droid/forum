@@ -33,14 +33,14 @@
                                         </div>
                                         <div class="row col-md-3">
                                             <div class="col-md-5"> {{ $forum_category->topics->count() }} Topics</div>
-                                            <div class="col-md-7">{{ $forum_category->messages->count() }} Messages</div>
+                                            <div class="col-md-7">{{ \App\Models\Category::thousandsCurrencyFormat($forum_category->messages->count()) }} Messages</div>
                                         </div>
 
                                         <div class="row col-md-2" style="padding-top: 0">
                                             @foreach($forum_category->topics as $topic)
                                                 @if($loop->first)
                                                     <div class="col-md-5 text-end">
-                                                        <img src="/profile_pictures/{{ $topic->user->profile_url }}" alt="" width="55" height="60" class="disappear-item">
+                                                        <img src="/profile_pictures/{{ $topic->user->profile_url }}" alt="" width="50" height="50" class="disappear-item">
                                                     </div>
                                                     <div class="col-md-7 text-start">
                                                         <button class="btn text-secondary"  style="padding: 0; font-size: small" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ \Carbon\Carbon::parse($topic->created_at)->format('j M, Y@H:m') }}">

@@ -4,7 +4,7 @@
     <p id="success-box" class="text-end fixed-top" style="margin-top: 60px; margin-right: 5px;"></p>
 
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-        <ol class="breadcrumb bg-light">
+        <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">Home</a></li>
             <li class="breadcrumb-item active" aria-current="page"></li>
         </ol>
@@ -70,7 +70,7 @@
                                     <strong>{{ $topic->author }}</strong>
                                 </a>
                                 <span style="margin-left: 5px; font-size: medium"> {{  \Carbon\Carbon::parse($topic->created_at)->format('j M, y') }}</span>
-                                <button style="padding: 0 0 0 2px" class="btn"><i class="fa fa-thumbs-up"></i> {{ $topic->messages->sum('likes') }}</button>
+                                <button style="padding: 0 0 0 2px" class="btn"><i class="fa fa-thumbs-up"></i> {{ \App\Models\Category::thousandsCurrencyFormat($topic->messages->sum('likes') )}}</button>
                                 <button style="padding: 0 0 0 2px;display: none;" class="btn show-item"><i class="fa fa-comments"></i> {{ $topic->messages->count() }}</button>
                             </h5>
                             @if($topic->tags->count() > 0)
@@ -84,7 +84,7 @@
                             @if(\Illuminate\Support\Facades\Auth::check())
                                 @if($user->username == $topic->author)
                                     <div class="user-actions">
-                                        <a href="{{ route('show.edit.topic.form', $topic->slug) }}" class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="edit this topic">
+                                        <a href="{{ route('site.show.edit.topic.form', $topic->slug) }}" class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="edit this topic">
                                             <i class="fa fa-edit"></i> Edit
                                         </a>
 
@@ -125,11 +125,11 @@
 
 
                                     <div class="col-md-8 text-end">
-                                        <button class="btn text-secondary" style="padding: 0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ \Carbon\Carbon::parse($topic_message->created_at)->format('j M, Y@H:m') }}">
+                                        <button class="btn text-secondary" style="padding: 0; font-size: medium;" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ \Carbon\Carbon::parse($topic_message->created_at)->format('j M, Y@H:m') }}">
                                             {{ $topic_message->formatted_message_time }}
                                         </button>
 
-                                        <a  class="text-secondary" style="padding: 0; font-size: small;"  data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
+                                        <a  class="text-secondary" style="padding: 0; font-size: medium;"  data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
                                             data-bs-placement="top" title="{{ $topic_message->author }}" data-bs-content="
                                             Joined: {{ $topic_message->user->joined_date  }}
                                             Level: {{ $topic_message->user->level  }}

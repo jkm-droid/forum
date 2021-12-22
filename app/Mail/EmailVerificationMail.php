@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class NewMessageEmail extends Mailable
+class EmailVerificationMail extends Mailable
 {
     use Queueable, SerializesModels;
     private $recipientEmail, $details;
@@ -30,9 +30,9 @@ class NewMessageEmail extends Mailable
      */
     public function build()
     {
-        return $this->view('mail.message_notification')
-            ->from('no-reply@industrialisingafrica.com','mail.industrialisingafrica.com')
-            ->subject("New Reaction Notification")
+        return $this->view('mail.email_verification')
+            ->from('no-reply@industrialisingafrica.com','industrialisingafrica.com')
+            ->subject("Account Verification")
             ->with([
                 'email'=>strstr($this->recipientEmail, '@',true),
                 'details'=>$this->details,

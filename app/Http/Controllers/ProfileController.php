@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\HelperFunctions\GetRepetitiveItems;
+use App\Models\Country;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -45,8 +46,8 @@ class ProfileController extends Controller
     /**
      * Update the user's profile
      **/
-    public function update_profile(Request $request, $user_id){
-        $user = User::find($user_id);
+    public function update_profile(Request $request, $username){
+        $user = $this->get_user($username);
 
         if ($request->hasFile('profile_picture')){
             $imageName = str_replace(' ', '_',$user->username).'.'.$request->profile_picture->extension();
@@ -60,5 +61,20 @@ class ProfileController extends Controller
         $user->update();
 
         return redirect()->route('profile.view', $user->username)->with('success', 'Profile updated successfully');
+    }
+
+    /**
+     * profile settings / update extra user information
+     */
+
+    public function profile_settings(Request $request, $username){
+        $user = $this->get_user($username);
+        $countries = Country::get();
+        return view('profile.settings', compact('user','countries'))
+            ->with('categories', $this->get_all_categories());
+    }
+
+    public function get_user($username){
+        return User::where('username', $username)->first();
     }
 }

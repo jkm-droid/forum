@@ -1,10 +1,10 @@
-@extends('base.auth_user_index')
+@extends('base.index')
 
 @section('content')
-    <div class="login-box">
+    <div class="auth-box col-md-3 container">
         <div class="card card-outline card-danger">
             <div class="card-header text-center">
-                <h3 class="put-black"><a href="/" class="h3">Industrialising Africa<br><small><strong>Publication</strong></small></a></h3>
+                <h3 class="put-black"><a href="/" class="h3">Forum</a></h3>
             </div>
             <div class="card-body">
                 @if ($message = Session::get('success'))
@@ -25,7 +25,7 @@
                     </div>
 
                     <div class="col-xs-12">
-                        <button type="submit" class="btn btn-primary btn-block put-gold background-black">Request Password Reset</button>
+                        <button type="submit" class="btn btn-primary btn-block form-control">Request Password Reset</button>
                     </div>
                 </form>
             </div>

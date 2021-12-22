@@ -26,28 +26,33 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [SiteController::class, 'show_welcome_page'])->name('site.home');
-Route::get('/category/{slug}', [SiteController::class, 'show_single_category'])->name('site.single.category');
-Route::get('/topic/{slug}', [SiteController::class, 'show_topic'])->name('site.single.topic');
-Route::get('/view/forum/list', [SiteController::class, 'show_forum_list'])->name('site.forum.list');
-Route::get('/view/top_topics', [SiteController::class, 'show_top_topics'])->name('site.top.topics');
+Route::name('site.')->group(function(){
+    /**
+     * guest users
+     */
+    Route::get('/', [SiteController::class, 'show_welcome_page'])->name('home');
+    Route::get('/category/{slug}', [SiteController::class, 'show_single_category'])->name('single.category');
+    Route::get('/topic/{slug}', [SiteController::class, 'show_topic'])->name('single.topic');
+    Route::get('/view/forum/list', [SiteController::class, 'show_forum_list'])->name('forum.list');
+    Route::get('/view/top_topics', [SiteController::class, 'show_top_topics'])->name('top.topics');
 
-/**
- * authenticated users
- */
-//messages/threads
-Route::post('/save/message/', [AuthenticatedSiteController::class, 'save_new_message'])->name('site.save.message');
-//replies/comments
-Route::post('/post/reply/', [AuthenticatedSiteController::class, 'save_new_reply'])->name('site.save.reply');
-Route::post('/reply/delete', [AuthenticatedSiteController::class, 'delete_reply'])->name('reply.delete');
-//topics
-Route::get('/create/new_topic', [AuthenticatedSiteController::class, 'show_create_new_topic_form'])->name('site.show.topic.form');
-Route::post('/save/new_topic/', [AuthenticatedSiteController::class, 'save_new_topic'])->name('new.topic.save');
-Route::get('/edit/{slug}', [AuthenticatedSiteController::class, 'show_edit_topic_form'])->name('show.edit.topic.form');
-Route::post('/edit/topic/{id}', [AuthenticatedSiteController::class, 'edit_topic'])->name('edit.topic');
-Route::post('/topic/delete', [AuthenticatedSiteController::class, 'delete_topic'])->name('topic.delete');
-//topic view status
-Route::post('/view/status', [AuthenticatedSiteController::class, 'get_topic_view_status'])->name('topic.status');
+    /**
+     * authenticated users
+     */
+    //messages/threads
+    Route::post('/save/message/', [AuthenticatedSiteController::class, 'save_new_message'])->name('save.message');
+    //replies/comments
+    Route::post('/post/reply/', [AuthenticatedSiteController::class, 'save_new_reply'])->name('save.reply');
+    Route::post('/reply/delete', [AuthenticatedSiteController::class, 'delete_reply'])->name('reply.delete');
+    //topics
+    Route::get('/create/new_topic', [AuthenticatedSiteController::class, 'show_create_new_topic_form'])->name('show.topic.form');
+    Route::post('/save/new_topic/', [AuthenticatedSiteController::class, 'save_new_topic'])->name('new.topic.save');
+    Route::get('/edit/{slug}', [AuthenticatedSiteController::class, 'show_edit_topic_form'])->name('show.edit.topic.form');
+    Route::post('/edit/topic/{id}', [AuthenticatedSiteController::class, 'edit_topic'])->name('edit.topic');
+    Route::post('/topic/delete', [AuthenticatedSiteController::class, 'delete_topic'])->name('topic.delete');
+    //topic view status
+    Route::post('/view/status', [AuthenticatedSiteController::class, 'get_topic_view_status'])->name('topic.status');
+});
 
 
 /**
@@ -63,13 +68,19 @@ Route::post('forgot_pass', [AuthController::class, 'submit_forgot_pass_form'])->
 Route::get('user/reset_pass/{token}', [AuthController::class, 'show_reset_pass_form'])->name('user.show.reset_form');
 Route::post('reset_pass', [AuthController::class, 'reset_pass'])->name('user.reset_pass');
 
+/**
+ * email verification
+ */
+Route::get('account/verify/{token}', [AuthController::class, 'verify_user_email'])->name('user.verify.email');
+
 
 /**
  * user profile
  * */
 Route::get('profile/view/{username}', [ProfileController::class, 'view_profile'])->name('profile.view');
 Route::get('profile/edit/{username}', [ProfileController::class, 'show_profile_edit_form'])->name('show.profile.edit');
-Route::put('profile/update/{user_id}', [ProfileController::class, 'update_profile'])->name('profile.update');
+Route::put('profile/update/{username}', [ProfileController::class, 'update_profile'])->name('profile.update');
+Route::get('profile/settings/{username}', [ProfileController::class, 'profile_settings'])->name('profile.settings');
 
 
 /**
