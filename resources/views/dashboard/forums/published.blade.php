@@ -6,11 +6,11 @@
         <ol class="breadcrumb bg-light" >
             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
             <li class="breadcrumb-item" >Forums</li>
-            <li class="breadcrumb-item active" aria-current="page">Published</li>
+            <li class="breadcrumb-item active" aria-current="page">All Published Forums</li>
         </ol>
     </nav>
     <!--End Page Heading -->
-
+    <h5>Published Forums</h5>
     <table class="table">
         <thead>
         <tr>

@@ -273,3 +273,8 @@ a{
 .breadcrumb{
     background-color: white;
 }
+
+#profile-settings label{
+    padding-bottom: 5px;
+    padding-top: 10px;
+}

@@ -3,20 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\HelperFunctions\GetRepetitiveItems;
+use App\HelperFunctions\MyHelperClass;
 use App\Models\Country;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redirect;
+use Symfony\Component\Console\Input\Input;
 
 class ProfileController extends Controller
 {
 
     use GetRepetitiveItems;
+    private $userDetails, $idGenerator, $activity;
 
-    public function __construct(){
+    public function __construct(MyHelperClass $myHelperClass){
         $this->middleware('auth');
+        $this->userDetails = $myHelperClass;
+        $this->idGenerator = $myHelperClass;
+        $this->activity = $myHelperClass;
     }
 
     /**
@@ -60,6 +66,9 @@ class ProfileController extends Controller
 
         $user->update();
 
+        $activity_id = $this->idGenerator->generateUniqueId('up-aisca','activities','activity_id');
+        $this->activity->saveUserActivity($username." updated the profile details", $activity_id);
+
         return redirect()->route('profile.view', $user->username)->with('success', 'Profile updated successfully');
     }
 
@@ -76,5 +85,32 @@ class ProfileController extends Controller
 
     public function get_user($username){
         return User::where('username', $username)->first();
+    }
+
+    /**
+     * update the extra profile settings
+     */
+    public function update_profile_settings(Request $request, $user_id){
+        $profile = $request->all();
+
+        if ($request->has('dob')){
+
+        }
+        if ($request->has('country')){
+
+        }
+        if ($request->has('website')){
+
+        }
+
+        if ($request->has('gender_m')){
+
+        }   if ($request->has('gender_f')){
+
+        }
+        if ($request->has('about')){
+
+        }
+
     }
 }

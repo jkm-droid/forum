@@ -15,6 +15,7 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->string('user_id')->unique();
             $table->string('username')->unique();
             $table->string('email')->unique();
             $table->string('profile_url')->default('blank.profile.picture.png');

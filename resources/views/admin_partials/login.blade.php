@@ -3,18 +3,14 @@
 @section('content')
 
     <div class="auth-box col-md-3 container">
-        <!-- /.login-logo -->
-        <div class="card card-outline card-warning">
-            <div class="card-header text-center">
-                <h3 class="put-black"><a href="/" class="h3">Forum</a></h3>
-            </div>
+
             <div class="card-body">
-                {{--                @if ($message = Session::get('success'))--}}
-                {{--                    <p class="alert alert-success">{{ $message }}</p>--}}
-                {{--                @endif--}}
-                {{--                @if ($message = Session::get('error'))--}}
-                {{--                    <p class="alert alert-danger">{{ $message }}</p>--}}
-                {{--                @endif--}}
+                @if ($message = Session::get('success'))
+                    <p class="alert alert-success">{{ $message }}</p>
+                @endif
+                @if ($message = Session::get('error'))
+                    <p class="alert alert-danger">{{ $message }}</p>
+                @endif
                 <h5 class="login-box-msg text-center">Sign in to start your session</h5>
 
                 <form action="{{ route('admin.login') }}" method="post">
@@ -42,8 +38,7 @@
 
             </div>
             <!-- /.card-body -->
-        </div>
-        <!-- /.card -->
+
     </div>
 @endsection
 

@@ -53,9 +53,11 @@ class CategoryController extends Controller
      */
     public function show_drafted_categories(){
         $categories = Category::where('status',0)->latest()->paginate();
+        $no_draft = Category::where('status',0)->count();
 
         return view('dashboard.categories.drafted', compact('categories'))
             ->with('f',1)
+            ->with('no_drafts', $no_draft)
             ->with('i', (request()->input('page',1) - 1) * 20);
     }
 
@@ -64,9 +66,11 @@ class CategoryController extends Controller
      */
     public function show_published_categories(){
         $categories = Category::where('status',1)->latest()->paginate();
+        $no_published = Category::where('status',1)->count();
 
         return view('dashboard.categories.published', compact('categories'))
             ->with('f',1)
+            ->with('no_published', $no_published)
             ->with('i', (request()->input('page',1) - 1) * 20);
     }
 

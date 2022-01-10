@@ -5,17 +5,14 @@
     <nav style="--bs-breadcrumb-divider: '>'; background-color: white;" aria-label="breadcrumb">
         <ol class="breadcrumb bg-light" >
             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page"><a href="{{ route('show.all.topics') }}">Topics</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('show.all.topics') }}">Topics</a></li>
+            <li class="breadcrumb-item active" aria-current="page">All Topics</li>
         </ol>
     </nav>
     <!--End Page Heading -->
+    <h5>All Topics ({{ $topicCount}})</h5>
 
-    <div class="card">
-        <div class="card-header">
-            <a class="btn btn-info btn-sm" href="">{{ $topicCount}} Topics</a>
-        </div>
-
-        <div class="card-body">
+    @if(count($topics) > 0)
         <table class="table">
             <thead>
             <tr>
@@ -52,7 +49,7 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                   <p>{!! $topic->body !!} </p>
+                                    <p>{!! $topic->body !!} </p>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -120,8 +117,15 @@
             @endforeach
             </tbody>
         </table>
-        </div>
 
         {{ $topics->links() }}
-    </div>
+    @else
+        @include('admin_partials.alert')
+        <div class="alert alert-danger d-flex align-items-center" role="alert">
+            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+            <div>
+                Oops! No published categories were found
+            </div>
+        </div>
+    @endif
 @endsection

@@ -20,7 +20,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('profile.update',$user->id) }}" method="POST" enctype="multipart/form-data">
+            <form id="profile-settings" action="{{ route('profile.settings.update',$user->username) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -48,8 +48,11 @@
                 </div>
 
                 <div class="col-md-12">
-                    <label for="profile_picture" class="form-label">Location</label><br>
+                    <label for="location" class="form-label">Location</label><br>
                     <select name="country" class="form-select form-control" aria-label="Default select example" autofocus>
+                        @if($user->country)
+                            <option value="{{ $country->id }}" selected>{{ $country->name }}</option>
+                        @endif
                         <option value="" disabled selected>Select Country</option>
                         @foreach($countries as $country)
                             <option value="{{ $country->id }}">{{ $country->name }}</option>
@@ -60,12 +63,43 @@
                     @endif
                 </div>
 
+                <div class="col-md-12">
+                    <label for="dob" class="form-label">Date of Birth</label>
+                    <input type="date" class="form-control" name="dob" value="">
+                </div>
+
+                <div class="col-md-12">
+                    <label for="website" class="form-label">Website</label>
+                    <input type="text" class="form-control" name="website" placeholder="Enter your website" value="">
+                </div>
+
+                <div class="col-md-12">
+                    <label for="website" class="form-label">Select Gender</label>
+                    <div class="form-check">
+                        <input class="form-check-input" name="gender_m" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Male
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" name="gender_f" type="checkbox" value="" id="flexCheckChecked" checked>
+                        <label class="form-check-label" for="flexCheckChecked">
+                            Female
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <label for="about" class="form-label">Bio</label>
+                    <textarea rows="5" type="text" class="form-control" name="about" placeholder="Write a short bio" ></textarea>
+                </div>
+
                 <br>
 
                 <div class="col-md-3 d-grid">
                     <button type="submit" id="submit_button" value="Update My Avatar"  class="btn btn-info">
                         <i class="fa fa-save"></i>
-                        Update My Avatar
+                        Update My Profile
                     </button>
                 </div>
 

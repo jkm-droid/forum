@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\HelperFunctions\GetRepetitiveItems;
+use App\HelperFunctions\MyHelperClass;
 use App\Jobs\AdminTopicJob;
 use App\Jobs\NewMessageJob;
+use App\Models\Activity;
 use App\Models\Admin;
 use App\Models\Comment;
 use App\Models\Message;
@@ -24,10 +26,13 @@ use Illuminate\Support\Facades\Validator;
 class AuthenticatedSiteController extends Controller
 {
     use GetRepetitiveItems;
+    private $userDetails, $activity;
 
-    public function __construct(){
+    public function __construct(MyHelperClass $myHelperClass){
         $this->middleware('auth');
         $this->special_character = array("!", "@", "#", "$", "%", "^", "&", "*", "(", ")", ",", "/", "{", "}", "[", "]", "?");
+        $this->userDetails = $myHelperClass;
+        $this->activity = $myHelperClass;
     }
 
     /**

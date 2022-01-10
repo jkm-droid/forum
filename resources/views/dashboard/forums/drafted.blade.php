@@ -6,73 +6,82 @@
         <ol class="breadcrumb bg-light" >
             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
             <li class="breadcrumb-item">Forums</li>
-            <li class="breadcrumb-item active" aria-current="page">Drafted</li>
+            <li class="breadcrumb-item active" aria-current="page">All Drafted Forums</li>
         </ol>
     </nav>
     <!--End Page Heading -->
-
-    <table class="table">
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>Title</th>
-            <th>Description</th>
-            <th>No. Categories</th>
-            <th>No. Topics</th>
-            <th>Status</th>
-            <th>Action</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach($forums as $forum)
+    <h5>Drafted Forums</h5>
+    @if(count($forums) > 0)
+        <table class="table">
+            <thead>
             <tr>
-                <td>{{ $f++ }}</td>
-                <td>{{ $forum->title }}</td>
-                <td>{{ $forum->description }}</td>
-                <td>{{ $forum->categories->count() }}</td>
-                <td>{{ $forum->topics->count() }}</td>
-                <td>
-                    @if($forum->status == 1)
-                        <span class="badge badge-success ">Published</span>
-                    @else
-                        <span class="badge badge-danger">Draft</span>
-                    @endif
-                </td>
-                <td>
-                    <form action="{{ route('forum.delete', $forum->id) }}">
-                        <a class="btn btn-sm btn-info" href="{{ route('forum.view', $forum->id) }}">
-                            <i class="fa fa-eye"></i>
-                        </a>
-                        <a class="btn btn-sm btn-primary" href="{{ route('show.forum.edit', $forum->id) }}">
-                            <i class="fa fa-pencil-alt"></i>
-                        </a>
-                        @csrf
-                        <button type="submit" class="btn btn-sm btn-danger">
-                            <i class="fa fa-trash"></i>
-                        </button>
-                    </form>
-                </td>
-                <td>
-                    @if($forum->status == 1)
-                        <form action="{{ route('forum.publish.draft', $forum->id) }}" method="post">
+                <th>#</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>No. Categories</th>
+                <th>No. Topics</th>
+                <th>Status</th>
+                <th>Action</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach($forums as $forum)
+                <tr>
+                    <td>{{ $f++ }}</td>
+                    <td>{{ $forum->title }}</td>
+                    <td>{{ $forum->description }}</td>
+                    <td>{{ $forum->categories->count() }}</td>
+                    <td>{{ $forum->topics->count() }}</td>
+                    <td>
+                        @if($forum->status == 1)
+                            <span class="badge badge-success ">Published</span>
+                        @else
+                            <span class="badge badge-danger">Draft</span>
+                        @endif
+                    </td>
+                    <td>
+                        <form action="{{ route('forum.delete', $forum->id) }}">
+                            <a class="btn btn-sm btn-info" href="{{ route('forum.view', $forum->id) }}">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                            <a class="btn btn-sm btn-primary" href="{{ route('show.forum.edit', $forum->id) }}">
+                                <i class="fa fa-pencil-alt"></i>
+                            </a>
                             @csrf
                             <button type="submit" class="btn btn-sm btn-danger">
-                                <i class="fa fa-times"></i>Draft
+                                <i class="fa fa-trash"></i>
                             </button>
                         </form>
-                    @else
-                        <form action="{{ route('forum.publish.draft', $forum->id) }}" method="post">
-                            @csrf
-                            <button type="submit" class="btn btn-sm btn-success">
-                                <i class="fa fa-check"></i>Publish
-                            </button>
-                        </form>
-                    @endif
-                </td>
-            </tr>
-        @endforeach
-        </tbody>
-    </table>
-
+                    </td>
+                    <td>
+                        @if($forum->status == 1)
+                            <form action="{{ route('forum.publish.draft', $forum->id) }}" method="post">
+                                @csrf
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    <i class="fa fa-times"></i>Draft
+                                </button>
+                            </form>
+                        @else
+                            <form action="{{ route('forum.publish.draft', $forum->id) }}" method="post">
+                                @csrf
+                                <button type="submit" class="btn btn-sm btn-success">
+                                    <i class="fa fa-check"></i>Publish
+                                </button>
+                            </form>
+                        @endif
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    @else
+        @include('admin_partials.alert')
+        <div class="alert alert-danger d-flex align-items-center" role="alert">
+            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+            <div>
+                Oops! No drafted forums were found
+            </div>
+        </div>
+    @endif
 @endsection

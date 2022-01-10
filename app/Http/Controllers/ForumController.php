@@ -19,9 +19,11 @@ class ForumController extends Controller
      */
     public function show_all_forums(){
         $forums = ForumList::latest()->paginate(20);
+        $no_forums = ForumList::count();
 
         return view('dashboard.forums.index', compact('forums'))
             ->with('f',1)
+            ->with('no_forums', $no_forums)
             ->with('i', (request()->input('page',1) - 1) * 20);
     }
 

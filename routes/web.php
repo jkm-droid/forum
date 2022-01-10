@@ -8,6 +8,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ForumController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SiteController;
@@ -25,7 +26,9 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+/**
+ * site urls
+ */
 Route::name('site.')->group(function(){
     /**
      * guest users
@@ -54,6 +57,13 @@ Route::name('site.')->group(function(){
     Route::post('/view/status', [AuthenticatedSiteController::class, 'get_topic_view_status'])->name('topic.status');
 });
 
+/**
+ * registered users urls
+ */
+Route::name('member.')->group(function() {
+    //user activity log
+    Route::get('activity_log', [MemberController::class, 'view_system_activities'])->name('activity.log');
+});
 
 /**
  * user authentication
@@ -81,6 +91,7 @@ Route::get('profile/view/{username}', [ProfileController::class, 'view_profile']
 Route::get('profile/edit/{username}', [ProfileController::class, 'show_profile_edit_form'])->name('show.profile.edit');
 Route::put('profile/update/{username}', [ProfileController::class, 'update_profile'])->name('profile.update');
 Route::get('profile/settings/{username}', [ProfileController::class, 'profile_settings'])->name('profile.settings');
+Route::put('profile/settings/update/{username}', [ProfileController::class, 'update_profile_settings'])->name('profile.settings.update');
 
 
 /**

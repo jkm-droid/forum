@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\HelperFunctions\MyHelperClass;
 use App\Jobs\EmailVerificationJob;
 use App\Models\User;
 use App\Models\UserVerification;
@@ -17,8 +18,11 @@ use App\HelperFunctions\MakeAvatars;
 
 class AuthController extends Controller
 {
-    public function __construct(){
+    private $idGenerator;
+
+    public function __construct(MyHelperClass $myHelperClass){
         $this->middleware('guest')->except( 'logout');
+        $this->idGenerator = $myHelperClass;
     }
 
     /**
@@ -109,6 +113,7 @@ class AuthController extends Controller
      */
     public function create(array $data, $profile_url){
         return User::create([
+            'user_id'=>$this->idGenerator->generateUniqueId($data['username'],'users','user_id'),
             'username'=>$data['username'],
             'email'=>$data['email'],
             'profile_url'=>$profile_url,
