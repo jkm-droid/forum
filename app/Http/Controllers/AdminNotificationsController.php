@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\HelperFunctions\MyHelperClass;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -9,35 +10,23 @@ use Illuminate\Support\Facades\DB;
 
 class AdminNotificationsController extends Controller
 {
+    private $adminDetails, $activity, $idGenerator;
 
-    public function __construct(){
+    public function __construct(MyHelperClass $myHelperClass){
         $this->middleware('auth:admin');
+        $this->adminDetails = $myHelperClass;
+        $this->activity = $myHelperClass;
+        $this->idGenerator = $myHelperClass;
     }
 
     //show all notifications to admins only
     public function show_all_notifications(){
-//        dd(Auth::guard('admin')->user()->username);
-        $notifications = DB::table('notifications')
-            ->where('notifiable_type', 'App\Models\Admin ')
-            ->where('read_at', NULL)
-            ->get();
+        $admin = $this->adminDetails->get_logged_admin_details();
 
-        $notificationData = '';
-        $dataArray = array();
+        $notifications = $admin->unreadNotifications;
 
-        foreach ($notifications as $notification){
-            $notificationData = json_decode($notification->data, true);
-
-            $nId = $notification->id;
-            $nCreation =  $notification->created_at;
-            $notificationData['id'] = $nId;
-            $notificationData['created_at'] = $nCreation;
-
-            array_push($dataArray, $notificationData);
-        }
-
-//        dd($dataArray);
-        return view('dashboard.notifications.index', compact('dataArray'));
+        return view('dashboard.notifications.index', compact('notifications'))
+            ->with('admin',$admin);
     }
 
     /**

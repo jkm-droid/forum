@@ -8,13 +8,14 @@
     <title></title>
 </head>
 <body>
-<h4>Hello, </h4>
+<h4>Hello {{ ucfirst($details['admin_username']) }}, </h4>
 <p>
-    You have a new notification. {{ $details['author'] }} posted a new topic {{ $details['topic_title'] }}
+    You have a new notification.<br>
+    <strong>{{ ucfirst($details['author']) }}</strong> posted a new topic <strong>{{ $details['title'] }}</strong>.
 </p>
 <p>
     Kindest regards,<br>
-    <span style="font-style: italic;">The Forum</span><br>
+    <span style="font-weight: bolder;">The Forum</span><br>
 </p>
 
 </body>

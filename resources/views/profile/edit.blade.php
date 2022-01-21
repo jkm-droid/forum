@@ -20,7 +20,7 @@
             </div>
         @endif
 
-        <form action="{{ route('profile.update',$user->id) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('profile.update',$user->user_id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 

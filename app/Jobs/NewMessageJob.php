@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Mail\NewMessageEmail;
+use App\Mail\MemberSendEmail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -34,7 +34,7 @@ class NewMessageJob implements ShouldQueue
      */
     public function handle()
     {
-        $email = new NewMessageEmail('joshwriter53@gmail.com', $this->details);
+        $email = new MemberSendEmail('joshwriter53@gmail.com', $this->details);
         Mail::to($this->recipientEmail)->send($email);
     }
 }

@@ -19,6 +19,14 @@ class MyHelperClass
     }
 
     /**
+     * get logged admin details
+     */
+    public function get_logged_admin_details(): ?\Illuminate\Contracts\Auth\Authenticatable
+    {
+        return Auth::guard('admin')->user();
+    }
+
+    /**
      * get the country
      */
     public function get_country($user){
@@ -77,16 +85,4 @@ class MyHelperClass
         return DB::table($table)->where($column,'=',$id)->exists();
     }
 
-    /**
-     * save user activities in the system
-     */
-    public function saveUserActivity($message, $activity_id){
-        $user = $this->get_logged_user_details();
-        $activity = new Activity();
-        $activity->user_id = $user->id;
-        $activity->activity_id = $activity_id;
-        $activity->activity_body = $message;
-
-        $activity->save();
-    }
 }

@@ -12,7 +12,7 @@
 
                 <div class="middle-profile">
                     <div class="text">
-                        <a href="{{ route('show.profile.edit', $user->username) }}" class="put-black">Change Avatar</a>
+                        <a href="{{ route('profile.show.edit', $user->user_id) }}" class="put-black">Change Avatar</a>
                     </div>
                 </div>
             </div>
@@ -37,7 +37,7 @@
                             {{ \App\Models\Message::where('author',$user->username)->count() }}
                         </td>
                         <td>25</td>
-                        <td>1</td>
+                        <td>{{ $user->rating }}%</td>
                         <td>
                             {{ $user->score }}
                         </td>

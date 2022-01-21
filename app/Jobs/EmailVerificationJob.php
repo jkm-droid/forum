@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Mail\EmailVerificationMail;
-use App\Mail\NewMessageEmail;
+use App\Mail\MemberSendEmail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;

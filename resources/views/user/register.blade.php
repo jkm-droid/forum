@@ -55,7 +55,7 @@
                 </div>
             </form>
 
-            <a href="{{ route('show.login') }}" class="text-center" style="margin-bottom: 30px;">I already have a membership</a>
+            <a href="{{ route('user.show.login') }}" class="text-center" style="margin-bottom: 30px;">I already have a membership</a>
 
             <!-- /.form-box -->
         </div><!-- /.card -->

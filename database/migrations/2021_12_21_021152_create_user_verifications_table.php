@@ -18,10 +18,6 @@ class CreateUserVerificationsTable extends Migration
             $table->string('token');
             $table->timestamps();
         });
-
-        Schema::table('users', function (Blueprint $table) {
-            $table->boolean('is_email_verified')->default(0);
-        });
     }
 
     /**

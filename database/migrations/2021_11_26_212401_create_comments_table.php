@@ -16,6 +16,7 @@ class CreateCommentsTable extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('message_id');
+            $table->string('comment_id');
             $table->longText('body');
             $table->string('author');
             $table->boolean('status')->default(0);

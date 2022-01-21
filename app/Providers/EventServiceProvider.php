@@ -2,6 +2,14 @@
 
 namespace App\Providers;
 
+use App\Events\AdminEvent;
+use App\Events\HelperEvent;
+use App\Events\MemberEvent;
+use App\Events\ProcessUserPost;
+use App\Listeners\AdminListener;
+use App\Listeners\MemberListener;
+use App\Listeners\ProcessUserPostListener;
+use App\Listeners\SaveActivityListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -17,6 +25,22 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+
+        HelperEvent::class => [
+            SaveActivityListener::class,
+        ],
+
+        AdminEvent::class => [
+            AdminListener::class,
+        ],
+
+        MemberEvent::class => [
+            MemberListener::class,
+        ],
+
+        ProcessUserPost::class => [
+            ProcessUserPostListener::class,
         ],
     ];
 

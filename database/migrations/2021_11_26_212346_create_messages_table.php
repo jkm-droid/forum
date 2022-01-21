@@ -17,6 +17,7 @@ class CreateMessagesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('topic_id');
+            $table->string('message_id');
             $table->longText('body');
             $table->string('author');
             $table->bigInteger('likes')->nullable();

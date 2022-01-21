@@ -19,10 +19,12 @@ class CreateUsersTable extends Migration
             $table->string('username')->unique();
             $table->string('email')->unique();
             $table->string('profile_url')->default('blank.profile.picture.png');
-            $table->bigInteger('score')->default(0);
+            $table->bigInteger('score')->nullable();
+            $table->bigInteger('rating')->nullable();
             $table->string('level')->default("noob");
             $table->boolean('status')->default(0);
             $table->timestamp('email_verified_at')->nullable();
+            $table->boolean('is_email_verified')->default(0);
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

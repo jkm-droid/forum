@@ -12,6 +12,7 @@ class Category extends Model
     use GetRepetitiveItems;
 
     protected $fillable = [
+        'category_id',
         'title',
         'description',
         'slug',

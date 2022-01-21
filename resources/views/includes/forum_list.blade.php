@@ -1,8 +1,8 @@
 @if(\Illuminate\Support\Facades\Auth::check())
-    @include('includes.logged_user_details')
+    @include('includes.member')
 @else
     <div class="text-start">
-        <a class="btn top-options" href="{{ route('show.register') }}">
+        <a class="btn top-options" href="{{ route('user.show.register') }}">
             <i class="fa fa-user"></i> Sign Up Now!
         </a>
     </div>

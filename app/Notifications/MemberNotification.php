@@ -2,23 +2,27 @@
 
 namespace App\Notifications;
 
+use App\Models\Message;
+use App\Models\Topic;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewCommentNotification extends Notification
+class MemberNotification extends Notification implements ShouldQueue
 {
     use Queueable;
+
+    private $details;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($details)
     {
-        //
+        $this->details = $details;
     }
 
     /**
@@ -29,7 +33,7 @@ class NewCommentNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['database'];
     }
 
     /**
@@ -41,8 +45,9 @@ class NewCommentNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
+                    ->greeting('greeting')
+                    ->line('body')
+                    ->action('Notification Action', url('/user/login'))
                     ->line('Thank you for using our application!');
     }
 
@@ -55,7 +60,9 @@ class NewCommentNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
+            'message_author'=>$this->details['message_author'],
+            'time'=>$this->details['time'],
+            'topic_title'=>$this->details['post_title']
         ];
     }
 }

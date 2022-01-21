@@ -7,20 +7,20 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class NewMessageEmail extends Mailable
+class AdminSendMail extends Mailable
 {
     use Queueable, SerializesModels;
-    private $recipientEmail, $details;
+
+    private $details;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($recipientEmail, $details)
+    public function __construct($details)
     {
         $this->details = $details;
-        $this->recipientEmail = $recipientEmail;
     }
 
     /**
@@ -30,11 +30,11 @@ class NewMessageEmail extends Mailable
      */
     public function build()
     {
-        return $this->view('mail.message_notification')
-            ->from('no-reply@industrialisingafrica.com','mail.industrialisingafrica.com')
-            ->subject("New Reaction Notification")
+        return $this->view('mail.admin_topic')
+            ->from('no-reply@theforum.com','The Forum')
+            ->subject($this->details['subject'])
             ->with([
-                'email'=>strstr($this->recipientEmail, '@',true),
+                'email'=>strstr($this->details['admin_email'], '@',true),
                 'details'=>$this->details,
             ]);
     }

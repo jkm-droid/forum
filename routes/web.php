@@ -3,7 +3,7 @@
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminNotificationsController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\AuthenticatedSiteController;
+use App\Http\Controllers\PortalController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ForumController;
@@ -43,18 +43,18 @@ Route::name('site.')->group(function(){
      * authenticated users
      */
     //messages/threads
-    Route::post('/save/message/', [AuthenticatedSiteController::class, 'save_new_message'])->name('save.message');
+    Route::post('/save/message/', [PortalController::class, 'save_new_message'])->name('save.message');
     //replies/comments
-    Route::post('/post/reply/', [AuthenticatedSiteController::class, 'save_new_reply'])->name('save.reply');
-    Route::post('/reply/delete', [AuthenticatedSiteController::class, 'delete_reply'])->name('reply.delete');
+    Route::post('/post/reply/', [PortalController::class, 'save_new_reply'])->name('save.reply');
+    Route::post('/reply/delete', [PortalController::class, 'delete_reply'])->name('reply.delete');
     //topics
-    Route::get('/create/new_topic', [AuthenticatedSiteController::class, 'show_create_new_topic_form'])->name('show.topic.form');
-    Route::post('/save/new_topic/', [AuthenticatedSiteController::class, 'save_new_topic'])->name('new.topic.save');
-    Route::get('/edit/{slug}', [AuthenticatedSiteController::class, 'show_edit_topic_form'])->name('show.edit.topic.form');
-    Route::post('/edit/topic/{id}', [AuthenticatedSiteController::class, 'edit_topic'])->name('edit.topic');
-    Route::post('/topic/delete', [AuthenticatedSiteController::class, 'delete_topic'])->name('topic.delete');
+    Route::get('/create/new_topic', [PortalController::class, 'show_create_new_topic_form'])->name('show.topic.form');
+    Route::post('/save/new_topic/', [PortalController::class, 'save_new_topic'])->name('new.topic.save');
+    Route::get('/edit/{slug}', [PortalController::class, 'show_edit_topic_form'])->name('show.edit.topic.form');
+    Route::post('/edit/topic/{id}', [PortalController::class, 'edit_topic'])->name('edit.topic');
+    Route::post('/topic/delete', [PortalController::class, 'delete_topic'])->name('topic.delete');
     //topic view status
-    Route::post('/view/status', [AuthenticatedSiteController::class, 'get_topic_view_status'])->name('topic.status');
+    Route::post('/view/status', [PortalController::class, 'get_topic_view_status'])->name('topic.status');
 });
 
 /**
@@ -66,33 +66,42 @@ Route::name('member.')->group(function() {
 });
 
 /**
- * user authentication
+ * user
  * */
-Route::get('user/login', [AuthController::class, 'show_login_page'])->name('show.login');
-Route::post('login', [AuthController::class, 'login'])->name('user.login');
-Route::get('user/register', [AuthController::class, 'show_register_page'])->name('show.register');
-Route::post('register', [AuthController::class, 'register'])->name('user.register');
-Route::get('logout', [AuthController::class, 'logout'])->name('user.logout');
-Route::get('user/forgot_pass', [AuthController::class, 'show_forgot_pass_form'])->name('user.show.forgot_pass_form');
-Route::post('forgot_pass', [AuthController::class, 'submit_forgot_pass_form'])->name('user.forgot_submit');
-Route::get('user/reset_pass/{token}', [AuthController::class, 'show_reset_pass_form'])->name('user.show.reset_form');
-Route::post('reset_pass', [AuthController::class, 'reset_pass'])->name('user.reset_pass');
+Route::name('user.')->group(function(){
+    /**
+     * user authentication
+     */
+    Route::get('user/login', [AuthController::class, 'show_login_page'])->name('show.login');
+    Route::post('login', [AuthController::class, 'login'])->name('login');
+    Route::get('user/register', [AuthController::class, 'show_register_page'])->name('show.register');
+    Route::post('register', [AuthController::class, 'register'])->name('register');
+    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
-/**
- * email verification
- */
-Route::get('account/verify/{token}', [AuthController::class, 'verify_user_email'])->name('user.verify.email');
+    /**
+     * password resetting
+     */
+    Route::get('user/forgot_pass', [AuthController::class, 'show_forgot_pass_form'])->name('show.forgot_pass_form');
+    Route::post('forgot_pass', [AuthController::class, 'submit_forgot_pass_form'])->name('forgot_submit');
+    Route::get('user/reset_pass/{token}', [AuthController::class, 'show_reset_pass_form'])->name('show.reset_form');
+    Route::post('reset_pass', [AuthController::class, 'reset_pass'])->name('reset_pass');
 
+    /**
+     * email verification
+     */
+    Route::get('account/verify/{token}', [AuthController::class, 'verify_user_email'])->name('verify.email');
+});
 
 /**
  * user profile
  * */
-Route::get('profile/view/{username}', [ProfileController::class, 'view_profile'])->name('profile.view');
-Route::get('profile/edit/{username}', [ProfileController::class, 'show_profile_edit_form'])->name('show.profile.edit');
-Route::put('profile/update/{username}', [ProfileController::class, 'update_profile'])->name('profile.update');
-Route::get('profile/settings/{username}', [ProfileController::class, 'profile_settings'])->name('profile.settings');
-Route::put('profile/settings/update/{username}', [ProfileController::class, 'update_profile_settings'])->name('profile.settings.update');
-
+Route::name('profile.')->group(function (){
+    Route::get('profile/view/{user_id}', [ProfileController::class, 'view_profile'])->name('view');
+    Route::get('profile/edit/{user_id}', [ProfileController::class, 'show_profile_edit_form'])->name('show.edit');
+    Route::put('profile/update/{user_id}', [ProfileController::class, 'update_profile'])->name('update');
+    Route::get('profile/settings/{user_id}', [ProfileController::class, 'profile_settings'])->name('settings');
+    Route::put('profile/settings/update/{user_id}', [ProfileController::class, 'update_profile_settings'])->name('settings.update');
+});
 
 /**
  * user notifications

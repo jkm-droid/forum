@@ -152,7 +152,7 @@ class AuthController extends Controller
         Session::flush();
 
         $request->session()->invalidate();
-        return redirect()->route('show.login')->with('success', 'Logged out successfully');
+        return redirect()->route('user.show.login')->with('success', 'Logged out successfully');
 
     }
 

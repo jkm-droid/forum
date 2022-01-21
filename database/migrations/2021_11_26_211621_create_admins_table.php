@@ -15,9 +15,14 @@ class CreateAdminsTable extends Migration
     {
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
+            $table->string('admin_id');
             $table->string('username');
+            $table->string('name')->nullable();
             $table->string('email')->unique();
             $table->string('profile_url')->default('blank.profile.picture.png');
+            $table->string('password');
+            $table->boolean('isSuperAdmin')->default(1);
+            $table->rememberToken()->nullable();
             $table->timestamps();
         });
     }

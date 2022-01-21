@@ -4,7 +4,7 @@
 
         <div class="middle">
             <div class="text text-center">
-                <a href="{{ route('show.profile.edit', $user->username) }}" class="put-black">Change Avatar</a>
+                <a href="{{ route('profile.show.edit', $user->user_id) }}" class="put-black">Change Avatar</a>
             </div>
         </div>
     </div>

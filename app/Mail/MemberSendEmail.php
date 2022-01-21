@@ -6,21 +6,21 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
-class AdminTopicMail extends Mailable
+class MemberSendEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    private $adminEmail, $details;
+    private $details;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($adminEmail, $details)
+    public function __construct($details)
     {
-        $this->adminEmail = $adminEmail;
         $this->details = $details;
     }
 
@@ -31,11 +31,14 @@ class AdminTopicMail extends Mailable
      */
     public function build()
     {
-        return $this->view('mail.admin_topic')
-            ->from('no-reply@industrialisingafrica.com','industrialisingafrica.com')
-            ->subject("Invitation to become an Admin")
+        Log::channel('daily')->info("member mail");
+        Log::channel('daily')->info(implode('',$this->details));
+
+        return $this->markdown('mail.member')
+            ->from('no-reply@industrialisingafrica.com','The Forum')
+            ->subject($this->details['subject'])
             ->with([
-                'email'=>strstr($this->adminEmail, '@',true),
+                'email'=>strstr($this->details['receiver'], '@',true),
                 'details'=>$this->details,
             ]);
     }

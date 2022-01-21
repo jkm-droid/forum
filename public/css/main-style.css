@@ -27,6 +27,10 @@ a{
     color: black;
 }
 
+.put-bold{
+    font-weight: bold;
+}
+
 .put-red{
     color: red;
 }

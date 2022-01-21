@@ -16,6 +16,7 @@ class CreateCategoriesTable extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('forum_list_id');
+            $table->string('category_id');
             $table->string('title');
             $table->string('description');
             $table->string('slug');

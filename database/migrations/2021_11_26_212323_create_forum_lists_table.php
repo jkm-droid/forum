@@ -15,6 +15,7 @@ class CreateForumListsTable extends Migration
     {
         Schema::create('forum_lists', function (Blueprint $table) {
             $table->id();
+            $table->string('forum_list_id');
             $table->string('title');
             $table->string('slug');
             $table->string('description')->nullable();

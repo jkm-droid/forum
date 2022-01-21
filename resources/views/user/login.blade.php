@@ -48,7 +48,7 @@
                     </div>
                 </form>
                 <div class="text-center">
-                    <a href="{{ route('show.register') }}" class="text-center">I don't have a membership</a><br><br>
+                    <a href="{{ route('user.show.register') }}" class="text-center">I don't have a membership</a><br><br>
                     <a href="{{ route('user.show.forgot_pass_form') }}" class="text-center">Forgot password?</a>
                 </div>
             </div>

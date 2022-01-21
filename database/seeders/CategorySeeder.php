@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\HelperFunctions\MakeAvatars;
+use App\HelperFunctions\MyHelperClass;
 use App\Models\Admin;
 use App\Models\ForumList;
 use Carbon\Carbon;
@@ -27,13 +29,14 @@ class CategorySeeder extends Seeder
 //                'title' => ucfirst($title),
 //                'description'=> $faker->sentence(3),
 //                'slug' => str_replace(" ", "_", strtolower($title)),
+//                'status'=>1,
 //                'created_at' => Carbon::now(),
 //                'updated_at' => Carbon::now(),
 //            ]);
 //        }
 
         $faker = Faker::create('App\Category');
-        for ($i = 1; $i <= 97; $i++) {
+        for ($i = 1; $i <= 40; $i++) {
             $title = str_replace(".", " ", $faker->sentence(2));
             $forum_list_id = ForumList::pluck('id')->random();
 
@@ -42,17 +45,24 @@ class CategorySeeder extends Seeder
                 'forum_list_id'=>$forum_list_id,
                 'description'=> $faker->sentence(6),
                 'slug' => str_replace(" ", "_", strtolower($title)),
+                'status'=>1,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
         }
 //
 //        $faker = Faker::create('App\User');
-//        for ($i = 1; $i <= 500; $i++) {
+//        $helper = new MyHelperClass();
+//        $avatar = new MakeAvatars();
+//        for ($i = 1; $i <= 2000; $i++) {
+//            $username = $faker->userName;
 //
 //            DB::table('users')->insert([
-//                'username' => $faker->userName,
+//                'user_id'=> $helper->generateUniqueId($username,'users','user_id'),
+//                'username' => $username,
 //                'email' => $faker->email,
+//                'score'=>$faker->numberBetween(247, 15561),
+//                'rating'=>$faker->numberBetween(10, 89),
 //                'password' => Hash::make("jkmq1234"),
 //                'created_at' => Carbon::now(),
 //                'updated_at' => Carbon::now(),

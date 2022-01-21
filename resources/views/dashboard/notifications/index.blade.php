@@ -1,21 +1,21 @@
 @extends('base.admin')
 
 @section('content')
-    @if(count($dataArray) <= 0)
+    @if(count($notifications) <= 0)
         <h4 class="text-center">No notification found.</h4>
     @else
         <div class="card">
             <div class="card-header">
-                <h5>Current Notifications ({{ count($dataArray) }})</h5>
+                <h5>Current Notifications ({{ count($notifications) }})</h5>
             </div>
             <div class="card-body">
-                @foreach ($dataArray as $dataArr)
-                    {{ $dataArr['created_at'] }}
+                @foreach ($notifications as $notification)
+                    {{ $notification['created_at'] }}
                     <h6>
-                        <strong>{{ $dataArr['author'] }}</strong> created a new topic <strong>{{ $dataArr['topic_title'] }}</strong> at
-                        {{ \Carbon\Carbon::parse($dataArr['time'])->format('j M, Y H:m') }}
+                        <strong>{{ $notification->data['author'] }}</strong> created a new topic <strong>{{ $notification->data['topic_title'] }}</strong> at
+                        {{ \Carbon\Carbon::parse($notification['time'])->format('j M, Y H:m') }}
 
-                    <button class="btn badge bg-info text-white" id="mark-as-read" data-id="{{ $dataArr['id'] }}">mark as read</button>
+                    <button class="btn badge bg-info text-white" id="mark-as-read" data-id="{{ $notification['id'] }}">mark as read</button>
                     </h6>
                     <hr>
                 @endforeach

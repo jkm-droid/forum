@@ -20,7 +20,7 @@ class TopicSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create('App\Topic');
-        for ($i = 1; $i <= 1000; $i++) {
+        for ($i = 1; $i <= 600; $i++) {
             $title = str_replace(".", " ", $faker->sentence(8));
             $author_name = User::pluck('username')->random();
             $category_id = Category::pluck('id')->random();
@@ -34,6 +34,7 @@ class TopicSeeder extends Seeder
                 'body' => $faker->sentence(300),
                 'slug' => str_replace(" ", "_", strtolower($title)),
                 'views'=>$faker->numberBetween(41,86),
+                'status'=>0,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);

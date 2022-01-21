@@ -44,7 +44,7 @@
                         <a class="nav-link" href="{{ route('notifications.view.all') }}" role="button"  aria-expanded="false">
                             <i class="fa fa-bell fa-lg"></i>
                             <span class="badge bg-danger" style="position: relative;top: -10px;left: -15px;  border-radius: 50%;  font-size: 10px">
-                                <strong>{{ $user->all_notifications }}</strong>
+                                <strong>{{ count($user->unreadNotifications) }}</strong>
                             </span>
                         </a>
                     </li>
@@ -61,11 +61,11 @@
                         <!-- Dropdown - User Information -->
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                              aria-labelledby="userDropdown" style="margin-right: 30px">
-                            <a class="dropdown-item" href="{{ route('profile.view', $user->username) }}">
+                            <a class="dropdown-item" href="{{ route('profile.view', $user->user_id) }}">
                                 <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Profile
                             </a>
-                            <a class="dropdown-item" href="{{ route('profile.settings', $user->username) }}">
+                            <a class="dropdown-item" href="{{ route('profile.settings', $user->user_id) }}">
                                 <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Settings
                             </a>
@@ -83,10 +83,10 @@
                     <!--end user profile -->
                 @else
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('show.register') }}">Register</a>
+                        <a class="nav-link" href="{{ route('user.show.register') }}">Register</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('show.login') }}">Login</a>
+                        <a class="nav-link" href="{{ route('user.show.login') }}">Login</a>
                     </li>
                 @endif
             </ul>

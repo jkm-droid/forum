@@ -95,13 +95,6 @@ class User extends Authenticatable
     }
 
     /**
-     * get all notifications belonging to a user
-     */
-    public function getAllNotificationsAttribute(){
-        return count(Auth::user()->unreadNotifications);
-    }
-
-    /**
      * get viewed topics attribute
      */
 
@@ -110,5 +103,5 @@ class User extends Authenticatable
         return View::where('user_id', $user->id)->where('isViewed', 1)->get();
     }
 
-    protected $appends = ['joined_date','total_messages','all_notifications','views'];
+    protected $appends = ['joined_date','total_messages','views'];
 }

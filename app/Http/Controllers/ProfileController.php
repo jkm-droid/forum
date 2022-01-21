@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\HelperFunctions\GetRepetitiveItems;
 use App\HelperFunctions\MyHelperClass;
 use App\Models\Country;
+use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +17,7 @@ class ProfileController extends Controller
 {
 
     use GetRepetitiveItems;
+
     private $userDetails, $idGenerator, $activity;
 
     public function __construct(MyHelperClass $myHelperClass){
@@ -28,9 +30,9 @@ class ProfileController extends Controller
     /**
      * show a user their profile
      */
-    public function view_profile($username){
-        $user = User::where('username', $username)->first();
-        if($user->id == Auth::user()->id) {
+    public function view_profile($user_id){
+        $user = User::where('user_id', $user_id)->first();
+        if($user_id == Auth::user()->user_id) {
 
             return view('profile.view')->with('user', $user)
                 ->with('categories', $this->get_all_categories());
@@ -42,8 +44,8 @@ class ProfileController extends Controller
     /**
      * show the profile edit form
      */
-    public function show_profile_edit_form($username){
-        $user = User::where('username', $username)->first();
+    public function show_profile_edit_form($user_id){
+        $user = $this->get_user($user_id);
 
         return view('profile.edit')->with('user', $user)
             ->with('categories', $this->get_all_categories());
@@ -52,8 +54,8 @@ class ProfileController extends Controller
     /**
      * Update the user's profile
      **/
-    public function update_profile(Request $request, $username){
-        $user = $this->get_user($username);
+    public function update_profile(Request $request, $user_id){
+        $user = $this->get_user($user_id);
 
         if ($request->hasFile('profile_picture')){
             $imageName = str_replace(' ', '_',$user->username).'.'.$request->profile_picture->extension();
@@ -66,51 +68,72 @@ class ProfileController extends Controller
 
         $user->update();
 
-        $activity_id = $this->idGenerator->generateUniqueId('up-aisca','activities','activity_id');
-        $this->activity->saveUserActivity($username." updated the profile details", $activity_id);
+        $activity_id = $this->idGenerator->generateUniqueId('up-forum','activities','activity_id');
+        $this->activity->saveUserActivity($user->username." updated the profile image", $activity_id);
 
-        return redirect()->route('profile.view', $user->username)->with('success', 'Profile updated successfully');
+        return redirect()->route('profile.view', $user_id)->with('success', 'Profile updated successfully');
     }
 
     /**
      * profile settings / update extra user information
      */
 
-    public function profile_settings(Request $request, $username){
-        $user = $this->get_user($username);
+    public function profile_settings($user_id){
+        $user = $this->get_user($user_id);
         $countries = Country::get();
+        $profile = Profile::where('user_id',$user->id)->first();
+//dd($profile);
         return view('profile.settings', compact('user','countries'))
+            ->with('profile',$profile)
             ->with('categories', $this->get_all_categories());
     }
 
-    public function get_user($username){
-        return User::where('username', $username)->first();
+    public function get_user($user_id){
+        return User::where('user_id', $user_id)->first();
     }
 
     /**
      * update the extra profile settings
      */
     public function update_profile_settings(Request $request, $user_id){
-        $profile = $request->all();
-
+        $profileInfo = $request->all();
+        $user = $this->get_user($user_id);
+//dd($profileInfo);
+        $country = $dob = $website = $gender = $about = "";
         if ($request->has('dob')){
-
+            $dob = $profileInfo['dob'];
         }
+
         if ($request->has('country')){
-
+            $country = $profileInfo['country'];
         }
+
         if ($request->has('website')){
-
+            $website = $profileInfo['website'];
         }
 
-        if ($request->has('gender_m')){
-
-        }   if ($request->has('gender_f')){
-
+        if ($request->has('gender')){
+            $gender = $profileInfo['gender'];
         }
+
         if ($request->has('about')){
-
+            $about = $profileInfo['about'];
         }
 
+        Profile::updateOrCreate(
+            ['user_id'=>$user->id],
+            [
+                'country'=>$country,
+                'dob'=>$dob,
+                'website'=>$website,
+                'gender'=>$gender,
+                'about'=>$about
+            ]
+        );
+
+        $activity_id = $this->idGenerator->generateUniqueId('up-forum','activities','activity_id');
+        $this->activity->saveUserActivity($user->username." added additional profile details", $activity_id);
+
+        return redirect()->route('profile.settings',$user->user_id)->with('info','Profile Updated Successfully');
     }
 }

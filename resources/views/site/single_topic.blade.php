@@ -211,6 +211,16 @@
                     </div>
                 @endif
 
+                <script>
+                    // function showComment() {
+                    $(document).on('click', '#btn_show_reactions', function () {
+                        const id = $(this).attr("comment-id");
+                        document.getElementById('btn_show_reactions').style.display = 'none';
+                        document.getElementById(id).style.display = 'block';
+                    });
+                    // }
+                </script>
+
                 <div id="{{ $t_message->author }}" style="display: none; border-top: 1px solid #a7c2a7; padding: 5px; background-color: #e7e4e4;">
                     @if($t_message->comments)
                         @foreach($t_message->comments as $tm_comment)
@@ -275,22 +285,13 @@
 
         @else
             <h4 class="text-center put-red">you should have an account to reply in this section
-                <a href="{{ route('show.register') }}">create one</a>
+                <a href="{{ route('user.show.register') }}">create one</a>
             </h4>
         @endif
     </div>
     {{--        </div>--}}
     {{--    </div>--}}
 
-    <script>
-        // function showComment() {
-        $(document).on('click', '#btn_show_reactions', function () {
-            const id = $(this).attr("comment-id");
-            document.getElementById('btn_show_reactions').style.display = 'none';
-            document.getElementById(id).style.display = 'block';
-        });
-        // }
-    </script>
 
     <script>
         $(document).on('click', '#btn_share_topic', function () {
