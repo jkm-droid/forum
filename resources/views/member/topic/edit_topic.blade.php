@@ -14,7 +14,7 @@
                         </div>
                         <!-- /.card-header -->
 
-                        <form role="form" method="post" action="{{ route('site.edit.topic', $topic->id) }}" id="form_submit" enctype="multipart/form-data">
+                        <form role="form" method="post" action="{{ route('topic.update', $topic->id) }}" id="form_submit" enctype="multipart/form-data">
                             @csrf
                             <div class="card-body m-1">
                                 <div class="">

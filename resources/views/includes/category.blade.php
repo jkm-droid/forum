@@ -19,10 +19,10 @@
     @foreach($categories as $category)
         <tr>
             <td>
-                <h5>
+                <h6>
                     <a class="put-black" href="{{ route('site.single.category', $category->slug) }}">{{ $category->title }}</a>
-                </h5>
-                <span class="text-secondary">{{ $category->description }}</span>
+                </h6>
+                <span class="text-secondary"> <small>{{ $category->description }}</small></span>
             </td>
             <td style="text-align: end;" class="text-secondary">
                 <h6><strong>{{ $category->topics->where('status', 0)->count() }}</strong><small style="font-size: 16px;"> / month</small></h6>

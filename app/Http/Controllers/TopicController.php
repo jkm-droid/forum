@@ -84,25 +84,4 @@ class TopicController extends Controller
         return Redirect::back()->with('success', 'topic deleted successfully');
     }
 
-    public static function updateValues(array $values)
-    {
-        $table = Topic::getModel()->getTable();
-
-        $cases = [];
-        $ids = [];
-        $params = [];
-
-        foreach ($values as $id => $value) {
-            $id = (int) $id;
-            $cases[] = "WHEN {$id} then ?";
-            $params[] = $value;
-            $ids[] = $id;
-        }
-
-        $ids = implode(',', $ids);
-        $cases = implode(' ', $cases);
-        $params[] = Carbon::now();
-
-        return DB::update("UPDATE `{$table}` SET `status` = CASE `id` {$cases} END, `updated_at` = ? WHERE `id` in ({$ids})", $params);
-    }
 }

@@ -47,7 +47,7 @@ class AuthController extends Controller
         if(Auth::attempt(array($credentials=>$info['username'], 'password'=>$info['password']))){//, 'is_email_verified'=>1
 
 //            return redirect()->setIntendedUrl(url('/'));
-            return redirect()->route('site.home')->with('success', 'logged in successfully');
+            return redirect()->intended(route('site.home'))->with('success', 'logged in successfully');
         }
 
         return redirect()->route('show.login')->with('error', 'Error, login details are incorrect');

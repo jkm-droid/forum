@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\HelperEvent;
+use App\HelperFunctions\MyHelperClass;
 use App\Models\Activity;
 use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -11,14 +12,16 @@ use Illuminate\Support\Facades\Auth;
 
 class SaveActivityListener
 {
+    private $idGenerator;
+
     /**
      * Create the event listener.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(MyHelperClass $myHelperClass)
     {
-        //
+        $this->idGenerator = $myHelperClass;
     }
 
     /**
@@ -37,7 +40,7 @@ class SaveActivityListener
         $user = User::where('id',Auth::user()->id)->first();
         $activity = new Activity();
         $activity->user_id = $user->id;
-        $activity->activity_id = $eventDetails['activity_id'];
+        $activity->activity_id =  $this->idGenerator->generateUniqueId($user->username,'activities','activity_id');
         $activity->activity_body = $eventDetails['activity_body'];
 
         $activity->save();

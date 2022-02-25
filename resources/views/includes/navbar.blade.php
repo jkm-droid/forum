@@ -32,7 +32,7 @@
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <!-- topic creation form button -->
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('site.show.topic.form') }}" style="font-weight: bold;">
+                    <a class="nav-link" href="{{ route('topic.show.create.form') }}" style="font-weight: bold;">
                         <i class="fa fa-plus"></i> New Topic
                     </a>
                 </li>

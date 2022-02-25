@@ -79,7 +79,7 @@ class Topic extends Model
             $min = " minutes ago";
             $my_time = $diff_time .''. $min;
         }else{
-            $my_time = Carbon::parse($this->created_at)->format('j M, Y');
+            $my_time = Carbon::parse($this->created_at)->format('j M, `y');
         }
 
         return $my_time;

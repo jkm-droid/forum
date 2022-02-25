@@ -1,6 +1,13 @@
 @extends('base.index')
 
 @section('content')
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item">Categories</li>
+            <li class="breadcrumb-item active" aria-current="page">{{ $category->title }}</li>
+        </ol>
+    </nav>
     <h5> {{ $category->title }}</h5>
     <div class="col-md-12">
         @if(count($category_topics) <= 0)

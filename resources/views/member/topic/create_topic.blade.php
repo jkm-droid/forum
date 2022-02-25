@@ -14,7 +14,7 @@
                         </div>
                         <!-- /.card-header -->
 
-                        <form role="form" method="post" action="{{ route('site.new.topic.save') }}" id="form_submit" enctype="multipart/form-data">
+                        <form role="form" method="post" action="{{ route('topic.save') }}" id="form_submit" enctype="multipart/form-data">
                             @csrf
                             <div class="card-body m-1">
                                 <div class="">
@@ -29,7 +29,7 @@
                                 </div>
 
                                 <div class="">
-                                    <div class="col-md-6 mt-3">
+                                    <div class="mt-3">
                                         <label for="category" class="form-label">Topic Category</label>
                                         <select name="category" id="category" class="form-select form-control" aria-label="Default select example" autofocus>
                                             <option value="" disabled selected>Select topic category</option>

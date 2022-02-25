@@ -14,7 +14,7 @@
         <div class="text-center" >
             <a class="btn top-options text-primary" href="{{ route('site.forum.list') }}">Forum List</a>
             <a class="btn top-options text-danger" href="{{ route('site.top.topics') }}">Top Topics</a>
-            <a class="btn top-options text-success" href="{{ route('site.show.topic.form') }}">
+            <a class="btn top-options text-success" href="{{ route('topic.show.create.form') }}">
                 <i class="fa fa-plus"></i> New Topic
             </a>
         </div>
@@ -35,9 +35,9 @@
                             <img style="float: left; margin-right: 10px;" src="/profile_pictures/{{ $topic->user->profile_url }}"
                                  alt="" width="60" height="60">
 
-                            <h5 class="latest-topic-content">
+                            <h6 class="latest-topic-content">
                                 <a class="put-black" id="{{ $topic->id }}" href="{{ route('site.single.topic', $topic->slug) }}">{{ $topic->title }}</a>
-                            </h5>
+                            </h6>
                             <script type="text/javascript">
                                 $.ajax({
                                     url: '/view/status',
@@ -60,7 +60,7 @@
                                 });
                             </script>
 
-                            <h5 class="latest-topic-content text-secondary">
+                            <h6 class="latest-topic-content text-secondary">
                                 <a class="text-secondary" data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
                                    data-bs-placement="top" title="{{ $topic->author }}" data-bs-content="
                                         Joined: {{ $topic->user->joined_date  }}
@@ -72,7 +72,7 @@
                                 <span style="margin-left: 5px; font-size: medium"> {{  \Carbon\Carbon::parse($topic->created_at)->format('j M, y') }}</span>
                                 <button style="padding: 0 0 0 2px" class="btn"><i class="fa fa-thumbs-up"></i> {{ \App\Models\Category::thousandsCurrencyFormat($topic->messages->sum('likes') )}}</button>
                                 <button style="padding: 0 0 0 2px;display: none;" class="btn show-item"><i class="fa fa-comments"></i> {{ $topic->messages->count() }}</button>
-                            </h5>
+                            </h6>
                             @if($topic->tags->count() > 0)
                                 <span class="latest-topic-content">
                                 @foreach($topic->tags as $topic_tag)
@@ -123,10 +123,9 @@
                             @foreach($topic->messages as $topic_message)
                                 @if($loop->last)
 
-
                                     <div class="col-md-8 text-end">
                                         <button class="btn text-secondary" style="padding: 0; font-size: medium;" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ \Carbon\Carbon::parse($topic_message->created_at)->format('j M, Y@H:m') }}">
-                                            {{ $topic_message->formatted_message_time }}
+                                            <small>{{ $topic_message->formatted_message_time }}</small>
                                         </button>
 
                                         <a  class="text-secondary" style="padding: 0; font-size: medium;"  data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
@@ -135,7 +134,7 @@
                                             Level: {{ $topic_message->user->level  }}
                                             Messages: {{ $topic_message->where('author', $topic_message->author)->count() }}
                                             ">
-                                            <strong> {{ $topic_message->author }}</strong>
+                                            <strong><small> {{ $topic_message->author }}</small></strong>
                                         </a>
                                     </div>
 
