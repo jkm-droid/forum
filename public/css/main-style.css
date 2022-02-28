@@ -80,6 +80,9 @@ a{
     border: 2px solid darkgray;
     font-weight: bold;
 }
+.show-on-mobile{
+    display: none;
+}
 /*mobile phone welcome page styling*/
 @media only screen and (max-width: 700px) {
     .change-padding h6{
@@ -134,6 +137,17 @@ a{
 
     .action-buttons{
         text-align: start !important;
+    }
+
+    .latest-topic-content .topic-text{
+        font-size: smaller;
+    }
+
+    .show-on-mobile{
+        display: inline !important;
+    }
+    .topics-messages{
+        margin-left: 50px !important;
     }
 }
 

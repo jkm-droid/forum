@@ -60,18 +60,22 @@
                                 });
                             </script>
 
-                            <h6 class="latest-topic-content text-secondary">
+                            <h6 class="latest-topic-content text-secondary" style="padding: 0 0 0 0;">
                                 <a class="text-secondary" data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
                                    data-bs-placement="top" title="{{ $topic->author }}" data-bs-content="
                                         Joined: {{ $topic->user->joined_date  }}
                                     Level: {{ $topic->user->level  }}
                                     Messages: {{ $topic->where('author', $topic->author)->count() }}
                                     ">
-                                    <strong>{{ $topic->author }}</strong>
+                                    <strong class="topic-text">{{ $topic->author }}</strong>
                                 </a>
-                                <span style="margin-left: 5px; font-size: medium"> {{  \Carbon\Carbon::parse($topic->created_at)->format('j M, y') }}</span>
-                                <button style="padding: 0 0 0 2px" class="btn"><i class="fa fa-thumbs-up"></i> {{ \App\Models\Category::thousandsCurrencyFormat($topic->messages->sum('likes') )}}</button>
-                                <button style="padding: 0 0 0 2px;display: none;" class="btn show-item"><i class="fa fa-comments"></i> {{ $topic->messages->count() }}</button>
+                                <span style="margin-left: 5px;" class="topic-text"> {{  \Carbon\Carbon::parse($topic->created_at)->format('j M, y') }}</span>
+
+                                <span style="padding: 0 0 0 2px" class="btn topic-text">
+                                    <i class="fa fa-thumbs-up ml-2"></i> {{ \App\Models\Category::thousandsCurrencyFormat($topic->messages->sum('likes') )}}
+                                    <i class="fa fa-comments ml-2"></i> {{ $topic->messages->count() }}
+                                </span>
+
                             </h6>
                             @if($topic->tags->count() > 0)
                                 <span class="latest-topic-content">
@@ -147,7 +151,7 @@
                         </div>
                     </div>
 
-                    <hr style="color: lightgrey;">
+                    <hr style="color: #cec1c1;">
                 @endforeach
 
                 <div class="d-flex justify-content-center">

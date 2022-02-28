@@ -23,22 +23,35 @@
                             </button>
                         </h3>
                         <div id="panelsStayOpen-collapseOne-{{ $forum->id }}" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
-                            <div class="accordion-body">
+                            <div class="accordion-body" style="padding-left: 20px">
                                 <div class="row">
                                     @foreach($forum->categories as $forum_category)
-                                        <div class="col-md-7">
+                                        <div class="col-md-6">
+                                            @foreach($forum_category->topics as $topic)
+                                                @if($loop->first)
+                                                    <div style="float: left">
+                                                        <img src="/profile_pictures/{{ $topic->user->profile_url }}" alt="" width="50" height="50">
+                                                    </div>
 
-                                            <a style="font-size: 17px;" href="{{ route('site.single.category', $forum_category->slug) }}">{{ $forum_category->title }}</a><br>
-                                            <small>{{ $forum_category->description }}</small>
+                                                    <a style="font-size: 17px;" href="{{ route('site.single.category', $forum_category->slug) }}">{{ $forum_category->title }}</a><br>
+                                                    <small class="disappear-item">{{ $forum_category->description }}</small>
+
+                                                <span class="show-on-mobile">
+                                                    <strong><small> {{ $topic->author }}</small></strong>
+                                                    <small>{{ \Carbon\Carbon::parse($topic->created_at)->format('j M, `y') }}</small></span>
+                                                @endif
+                                            @endforeach
+
                                         </div>
-                                        <div class="row col-md-2" style="font-size: 12px;">
+                                        <div class="col-md-3 topics-messages" style="font-size: 12px;">
 
-                                            <div class="col-md-5"> {{ $forum_category->topics->count() }} Topics</div>
-                                            <div class="col-md-7">{{ \App\Models\Category::thousandsCurrencyFormat($forum_category->messages->count()) }} Messages</div>
+                                            <span class="col-md-5"> <span class="badge bg-secondary" style="padding: 3px;">{{ $forum_category->topics->count() }}</span> Topics</span>
+                                            <br class="disappear-item">
+                                            <span class="col-md-7"><span class="badge bg-secondary" style="padding: 3px;">{{ \App\Models\Category::thousandsCurrencyFormat($forum_category->messages->count()) }}</span> Messages</span>
 
                                         </div>
 
-                                        <div class="row col-md-3" style="padding-top: 0">
+                                        <div class="row col-md-3 disappear-item" style="padding-top: 0">
                                             @foreach($forum_category->topics as $topic)
                                                 @if($loop->first)
                                                     <div class="col-md-5 d-flex justify-content-end text-end">
@@ -48,7 +61,7 @@
                                                         <button class="btn text-secondary"  style="padding: 0; font-size: small" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ \Carbon\Carbon::parse($topic->created_at)->format('j M, Y@H:m') }}">
                                                             <small>{{ \Carbon\Carbon::parse($topic->created_at)->format('j M, `y') }}</small>
                                                         </button>
-
+                                                        <br>
                                                         <a  class="text-secondary" data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
                                                             data-bs-placement="top" title="{{ $topic->author }}" data-bs-content="
                                                                 Joined: {{ $topic->user->joined_date  }}
@@ -62,7 +75,7 @@
                                             @endforeach
                                         </div>
 
-                                        <hr>
+                                        <hr style="margin-top: 10px">
                                     @endforeach
                                 </div>
                             </div>
