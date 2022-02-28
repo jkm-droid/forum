@@ -24,7 +24,7 @@
                 </h6>
                 <span class="text-secondary"> <small>{{ $category->description }}</small></span>
             </td>
-            <td style="text-align: end;" class="text-secondary">
+            <td style="text-align: end;" class="text-secondary;">
                 <h6><strong>{{ $category->topics->where('status', 0)->count() }}</strong><small style="font-size: 16px;"> / month</small></h6>
             </td>
         </tr>

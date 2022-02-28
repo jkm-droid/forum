@@ -143,9 +143,10 @@ a{
         text-align: start !important;
     }
 
-    .latest-topic-content .topic-text{
+    .topic-text{
         font-size: smaller;
     }
+
 
     .show-on-mobile{
         display: inline !important;

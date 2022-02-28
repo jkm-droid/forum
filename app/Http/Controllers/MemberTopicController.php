@@ -164,7 +164,7 @@ class MemberTopicController extends Controller
             $topic->tags()->detach();
         }
 
-        return redirect()->route('site.home')->with('success', 'Topic edited successfully. Awaiting moderator approval');
+        return redirect()->route('site.home')->with('success', 'Topic edited successfully.');
     }
 
     /**

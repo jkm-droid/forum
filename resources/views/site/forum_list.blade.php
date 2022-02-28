@@ -18,7 +18,8 @@
                 @foreach($forum_list as $forum)
                     <div class="accordion-item">
                         <h3 class="accordion-header" id="panelsStayOpen-headingOne">
-                            <button class="accordion-button" style="padding: 5px; font-size: 20px;" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne-{{ $forum->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                            <button class="accordion-button" style="padding: 5px; font-size: 20px; background-color: lightgrey; color: black" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne-{{ $forum->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
                                 {{ $forum->title }} ({{ $forum->topics->count() }} Topics)
                             </button>
                         </h3>
