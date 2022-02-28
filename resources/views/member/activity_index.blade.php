@@ -1,8 +1,8 @@
 @extends('base.index')
 @section('content')
     <!-- Page Heading -->
-    <nav style="--bs-breadcrumb-divider: '>'; background-color: white;" aria-label="breadcrumb">
-        <ol class="breadcrumb bg-light" >
+    <nav style="--bs-breadcrumb-divider: '/';" aria-label="breadcrumb">
+        <ol class="breadcrumb" >
             <li class="breadcrumb-item"><a href="/">Portal</a></li>
             <li class="breadcrumb-item"><a href="">User</a></li>
             <li class="breadcrumb-item active" aria-current="page">View Activities</li>

@@ -36,16 +36,16 @@
                     <input type="email" name="email" value="{{$user->email}}" class="form-control" placeholder="enter email" id="email" readonly>
                 </div>
 
-                <div class="row g-3">
-                    <div class="col-md-12">
-                        <label for="profile_picture" class="form-label put-black put-bold">Profile Avatar</label><br>
-                        <a href="{{ route('profile.show.edit', $user->username) }}">
-                            <img src="/profile_pictures/{{ $user->profile_url }}" alt="">
-                        </a>
+                <div class="mb-3 row">
+                    <label for="profile_picture" class="form-label put-black put-bold">Profile Avatar</label><br>
+                    <a href="{{ route('profile.show.edit', $user->username) }}">
+                        <img src="/profile_pictures/{{ $user->profile_url }}" alt="">
+                    </a>
+                    <div class="col-sm-10 text-success">
                         Click the image to change your avatar
                     </div>
-
                 </div>
+
                 @if($profile == null)
                     <div class="col-md-12">
                         <label for="location" class="form-label put-black put-bold">Current Location</label><br>
@@ -60,7 +60,7 @@
                     <div class="col-md-12">
                         <label for="dob" class="form-label put-black put-bold">Date of Birth</label>
                         <input type="date" class="form-control" name="dob">
-                        <div id="emailHelp" class="form-text">Date of birth will be unchangeable once created</div>
+                        <div id="emailHelp" class="form-text text-danger">Date of birth will be unchangeable once created</div>
                     </div>
 
                     <div class="col-md-12">
@@ -79,7 +79,7 @@
 
                     <div class="col-md-12">
                         <label for="about" class="form-label put-black put-bold">Bio</label>
-                            <textarea rows="5" type="text" class="form-control" name="about" placeholder="Write a short bio" ></textarea>
+                        <textarea rows="5" type="text" class="form-control" name="about" placeholder="Write a short bio" ></textarea>
                     </div>
 
                 @else
@@ -140,12 +140,10 @@
 
                 <br>
 
-                <div class="col-md-3 d-grid">
-                    <button type="submit" id="submit_button" value="Update My Avatar"  class="btn btn-info">
-                        <i class="fa fa-save"></i>
-                        Update My Profile
-                    </button>
-                </div>
+                <button type="submit" id="submit_button" value="Update My Avatar"  class="btn btn-info">
+                    <i class="fa fa-save"></i>
+                    Update My Profile
+                </button>
 
             </form>
         </div>

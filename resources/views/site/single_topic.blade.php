@@ -1,11 +1,11 @@
 @extends('base.index')
 
 @section('content')
-    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <nav style="--bs-breadcrumb-divider: '/';" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">Home</a></li>
-            <li class="breadcrumb-item">Topics</li>
-            <li class="breadcrumb-item active" aria-current="page">{{ $topic->title }}</li>
+            <li class="breadcrumb-item"><a href="{{ route('site.top.topics') }}">Topics</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ \Illuminate\Support\Str::limit($topic->title, 20, "...") }}</li>
         </ol>
     </nav>
     <h4>{{ $topic->title }}</h4>
@@ -20,7 +20,7 @@
         @if(\Illuminate\Support\Facades\Auth::user()->username == $topic->author)
 
             <button style="padding: 0 0 0 2px" class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="edit this topic">
-                <a href="{{ route('site.show.edit.topic.form', $topic->slug) }}"><i class="fa fa-edit"></i></a>
+                <a href="{{ route('topic.show.edit.form', $topic->slug) }}"><i class="fa fa-edit"></i></a>
             </button>
 
             <button style="padding: 0 0 0 2px"  id="delete-topic" data-id="{{ $topic->id }}" class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="delete this topic">
@@ -50,7 +50,7 @@
                 <td>
                     <img src="/profile_pictures/{{\App\Models\User::where('username', $topic->author)->first()->profile_url }}"
                          alt="" width="17" height="17">
-                    {{  \Carbon\Carbon::parse($topic->created_at)->format('M, y') }}
+                    {{  \Carbon\Carbon::parse($topic->created_at)->format('M, `y') }}
                 </td>
                 <td>likes</td>
                 <td>comments</td>
@@ -76,18 +76,17 @@
         <h5 class="text-secondary"><strong>No Topic Replies Be the first one to reply</strong></h5>
     @else
         <h5 class="text-secondary"><strong>Topic Replies</strong></h5>
-    @endif
 
     <!------------messages section-------------->
     <div>
         @foreach($messages as $t_message)
             <div class="single-topic-message">
-                <div class="row col-md-7">
-                    <div class="col-md-1">
+                <div class="row">
+                    <div class="">
                         <img style="margin-right: 0" class="img-fluid" src="/profile_pictures/{{\App\Models\User::where('username', $t_message->author)->first()->profile_url }}"
                              alt="" width="70" height="60">
                     </div>
-                    <div class="col-md-6 text-start">
+                    <div class="">
                         <h6>{{ \Carbon\Carbon::parse($t_message->created_at)->format('j M, `y') }}</h6>
                         <h6>
                             <a class="text-secondary" data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
@@ -262,7 +261,7 @@
         </div>
     </div>
     <!------------end messages section-------------->
-
+    @endif
     <div class="" id="reply-editor">
         <p id="message-error-box"></p>
         <p id="reply-heading"></p>
@@ -273,7 +272,7 @@
                 <textarea class="form-control summernote" name="body" id="body" rows="4"></textarea>
                 <input type="hidden" id="topic_id" value="{{ $topic->id }}">
 
-                <div class="text-end">
+                <div class="d-flex justify-content-end">
                     <button type="submit" class="btn btn-warning" id="reply-topic-button">
                         <i class="fa fa-reply"></i> Post Reply
                     </button>
@@ -295,6 +294,7 @@
 
     <script>
         $(document).on('click', '#btn_share_topic', function () {
+            console.log("clicked");
             const id = $(this).attr("share-id");
             document.getElementById(id).style.display = 'inline';
         });

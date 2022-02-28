@@ -3,7 +3,7 @@
 @section('content')
     <p id="success-box" class="text-end fixed-top" style="margin-top: 60px; margin-right: 5px;"></p>
 
-    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <nav style="--bs-breadcrumb-divider: '/';" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">Home</a></li>
             <li class="breadcrumb-item active" aria-current="page"></li>
@@ -11,7 +11,7 @@
     </nav>
 
     <section class="main-content">
-        <div class="text-center" >
+        <div class="d-flex justify-content-center" >
             <a class="btn top-options text-primary" href="{{ route('site.forum.list') }}">Forum List</a>
             <a class="btn top-options text-danger" href="{{ route('site.top.topics') }}">Top Topics</a>
             <a class="btn top-options text-success" href="{{ route('topic.show.create.form') }}">
@@ -19,7 +19,7 @@
             </a>
         </div>
 
-        <div class="row">
+        <div class="row mt-2">
             <div class="col-md-2 topic-creation-categories">
                 @include('includes.forum_list')
             </div>
@@ -84,7 +84,7 @@
                             @if(\Illuminate\Support\Facades\Auth::check())
                                 @if($user->username == $topic->author)
                                     <div class="user-actions">
-                                        <a href="{{ route('site.show.edit.topic.form', $topic->slug) }}" class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="edit this topic">
+                                        <a href="{{ route('topic.show.edit.form', $topic->slug) }}" class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="edit this topic">
                                             <i class="fa fa-edit"></i> Edit
                                         </a>
 

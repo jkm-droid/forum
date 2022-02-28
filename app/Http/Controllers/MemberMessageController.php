@@ -178,24 +178,4 @@ class MemberMessageController extends Controller
         return response()->json($data);
     }
 
-    /**
-     * get topic view status based on user_id and topic_id
-     */
-    public function get_topic_view_status(Request $request){
-        $topic_id = $request->topic_id;
-        $user = $this->get_logged_user_details();
-
-        $view = View::where('user_id', $user->id)->where('topic_id',$topic_id)->where('isViewed', 1)->first();
-        $message = '';
-        if ($view){
-            $message = "viewed";
-        }
-
-        $data = array(
-            'status'=>200,
-            'message'=>$message
-        );
-
-        return response()->json($data);
-    }
 }

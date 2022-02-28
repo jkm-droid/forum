@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" id="navbar">
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top position-fixed" id="navbar">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/">Navbar</a>
+        <a class="navbar-brand" href="/"><h1>The Forum</h1></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -62,20 +62,20 @@
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                              aria-labelledby="userDropdown" style="margin-right: 30px">
                             <a class="dropdown-item" href="{{ route('profile.view', $user->user_id) }}">
-                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                <i class="fa fa-user fa-sm text-secondary"></i>
                                 Profile
                             </a>
                             <a class="dropdown-item" href="{{ route('profile.settings', $user->user_id) }}">
-                                <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                <i class="fa fa-cogs fa-sm text-secondary"></i>
                                 Settings
                             </a>
                             <a class="dropdown-item" href="{{ route('member.activity.log') }}">
-                                <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                <i class="fa fa-list fa-sm text-secondary"></i>
                                 Activity Log
                             </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ route('user.logout') }}" >
-                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                <i class="fa fa-sign-out fa-sm text-secondary"></i>
                                 Logout
                             </a>
                         </div>

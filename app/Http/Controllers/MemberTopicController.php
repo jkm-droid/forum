@@ -9,6 +9,7 @@ use App\HelperFunctions\MyHelperClass;
 use App\Models\Admin;
 use App\Models\Tag;
 use App\Models\Topic;
+use App\Models\View;
 use App\Notifications\AdminNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
@@ -64,6 +65,7 @@ class MemberTopicController extends Controller
         $activityDetails = [
             'activity_body'=>'<strong>'.$user->username.'</strong>'." created a new post ".'<strong>'.$topic_info['title'].'</strong>',
         ];
+
         HelperEvent::dispatch($activityDetails);
 
         if ($request->has('tags')  && $request->tags != null) {
@@ -197,6 +199,27 @@ class MemberTopicController extends Controller
             'status'=>202,
             'message'=>'An error occurred'
         );
+        return response()->json($data);
+    }
+
+    /**
+     * get topic view status based on user_id and topic_id
+     */
+    public function get_topic_view_status(Request $request){
+        $topic_id = $request->topic_id;
+        $user = $this->get_logged_user_details();
+
+        $view = View::where('user_id', $user->id)->where('topic_id',$topic_id)->where('isViewed', 1)->first();
+        $message = '';
+        if ($view){
+            $message = "viewed";
+        }
+
+        $data = array(
+            'status'=>200,
+            'message'=>$message
+        );
+
         return response()->json($data);
     }
 }

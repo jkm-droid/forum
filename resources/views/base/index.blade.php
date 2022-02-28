@@ -33,16 +33,14 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
-    <!-- Custom styles for this template-->
-{{--    <link href="{{ asset('admin-assets/css/sb-admin-2.min.css') }}" rel="stylesheet">--}}
-    <link href="{{ asset('admin-assets/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
     <title>Forum</title>
 </head>
 <body>
-<div class="container-fluid" style="padding-top: 70px;">
-    <!---- forum navbar---->
-    @include('includes.navbar')
 
+<!---- forum navbar---->
+@include('includes.navbar')
+
+<div class="container-fluid" style="padding-top: 90px;">
     @yield('content')
 </div>
 
