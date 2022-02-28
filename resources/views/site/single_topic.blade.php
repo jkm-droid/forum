@@ -81,12 +81,11 @@
     <div>
         @foreach($messages as $t_message)
             <div class="single-topic-message">
-                <div class="row">
-                    <div class="">
-                        <img style="margin-right: 0" class="img-fluid" src="/profile_pictures/{{\App\Models\User::where('username', $t_message->author)->first()->profile_url }}"
+                <div class="row col-md-12">
+                    <div class="col-md-12">
+                        <img style="margin-right: 10px; float: left" class="img-fluid" src="/profile_pictures/{{\App\Models\User::where('username', $t_message->author)->first()->profile_url }}"
                              alt="" width="70" height="60">
-                    </div>
-                    <div class="">
+
                         <h6>{{ \Carbon\Carbon::parse($t_message->created_at)->format('j M, `y') }}</h6>
                         <h6>
                             <a class="text-secondary" data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
@@ -223,12 +222,11 @@
                 <div id="{{ $t_message->author }}" style="display: none; border-top: 1px solid #a7c2a7; padding: 5px; background-color: #e7e4e4;">
                     @if($t_message->comments)
                         @foreach($t_message->comments as $tm_comment)
-                            <div class="row col-md-6">
-                                <div class="col-md-1">
-                                    <img class="img-fluid" src="/profile_pictures/{{\App\Models\User::where('username', $tm_comment->author)->first()->profile_url }}"
+                            <div class="row col-md-12">
+                                <div class="col-md-12">
+                                    <img class="img-fluid" style="float: left; margin-right: 10px;" src="/profile_pictures/{{\App\Models\User::where('username', $tm_comment->author)->first()->profile_url }}"
                                          alt="" width="70" height="60">
-                                </div>
-                                <div class="col-md-5 text-start">
+
                                     <h6>
                                         <a class="text-secondary" data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
                                            data-bs-placement="top" title="{{ $tm_comment->author }}" data-bs-content="
@@ -242,12 +240,10 @@
                                     <h6 class="">{{ \Carbon\Carbon::parse($tm_comment->created_at)->format('j M, Y') }}</h6>
                                 </div>
                             </div>
-
-                            <hr style="color: lightgrey;">
                             <p class="" style="">
                                 {!! $tm_comment->body   !!}
                             </p>
-
+                            <hr style="color: lightgrey;">
                         @endforeach
                     @endif
                 </div>
@@ -256,9 +252,13 @@
 
 
         @endforeach
-        <div class="d-flex justify-content-center" style="margin-top: 15px;">
-            {!! $messages->links() !!}
-        </div>
+            <div class="d-flex justify-content-center paginate-desktop">
+                {{ $messages->links() }}
+            </div>
+
+            <div class="d-flex justify-content-center paginate-mobile">
+                {{ $messages->links('pagination.custom_pagination') }}
+            </div>
     </div>
     <!------------end messages section-------------->
     @endif

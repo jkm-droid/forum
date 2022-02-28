@@ -29,7 +29,7 @@
                                         <div class="col-md-6">
                                             @foreach($forum_category->topics as $topic)
                                                 @if($loop->first)
-                                                    <div style="float: left">
+                                                    <div style="float: left; margin-right: 10px;">
                                                         <img src="/profile_pictures/{{ $topic->user->profile_url }}" alt="" width="50" height="50">
                                                     </div>
 

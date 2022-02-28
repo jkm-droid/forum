@@ -154,8 +154,12 @@
                     <hr style="color: #cec1c1;">
                 @endforeach
 
-                <div class="d-flex justify-content-center">
-                    {!! $topics->links() !!}
+                <div class="d-flex justify-content-center paginate-desktop">
+                    {{ $topics->links() }}
+                </div>
+
+                <div class="d-flex justify-content-center paginate-mobile">
+                    {{ $topics->links('pagination.custom_pagination') }}
                 </div>
             </div>
 

@@ -28,7 +28,7 @@ class SiteController extends Controller
      */
     public function show_welcome_page(){
         $categories = Category::where('status',1)->orderBy('created_at', 'DESC')->get();
-        $topics = Topic::where('status',1)->with('category')->orderBy('created_at', 'DESC')->latest()->paginate(20);
+        $topics = Topic::where('status',1)->with('category')->orderBy('created_at', 'DESC')->latest()->paginate(20)->onEachSide(1);
         $forum_list = $this->get_forum_list();
 
 //        if (Auth::check()) {
