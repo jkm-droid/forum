@@ -67,7 +67,7 @@
                                        data-bs-placement="top" title="{{ $topic->author }}" data-bs-content="
                                         Joined: {{ $topic->user->joined_date  }}
                                         Level: {{ $topic->user->level  }}
-                                        Messages: {{ $topic->where('author', $topic->author)->count() }}
+                                        Messages: {{ $topic->user->topics->count() }}
                                         ">
                                         <strong class="topic-text">{{ $topic->author }}</strong>
                                     </a>
@@ -140,7 +140,7 @@
                                                 data-bs-placement="top" title="{{ $topic_message->author }}" data-bs-content="
                                             Joined: {{ $topic_message->user->joined_date  }}
                                                 Level: {{ $topic_message->user->level  }}
-                                                Messages: {{ $topic_message->where('author', $topic_message->author)->count() }}
+                                                Messages: {{ $topic_message->user->messages->count() }}
                                                 ">
                                                 <strong><small> {{ $topic_message->author }}</small></strong>
                                             </a>

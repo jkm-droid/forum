@@ -26,7 +26,7 @@
                                     <a href="{{ route('site.single.topic', $top->slug) }}">{{ $top->title }}</a>
                                 </h6>
                                 <span class="show-on-mobile topic-text">
-                                <img src="/profile_pictures/{{ \App\Models\User::where('username', $top->author)->first()->profile_url }}"
+                                <img src="/profile_pictures/{{ $top->user->profile_url }}"
                                      alt="" width="25" height="25">
                                 <strong><i class=""></i>{{ $top->author }}</strong>
 
@@ -38,9 +38,10 @@
                                 <span style="font-weight: bold; padding: 3px;" class="badge bg-secondary">{{ $top->views }}</span>
                                 <small>views</small>
                             </span>
+                                <br class="show-on-mobile">
                                 @if($top->tags->count() > 0)
                                     @foreach($top->tags as $t_tag)
-                                        <span class="badge bg-secondary">{{ $t_tag->title }}</span>
+                                        <span class="badge bg-secondary" style="padding: 3px">{{ $t_tag->title }}</span>
                                     @endforeach
                                 @endif
                             </div>
@@ -57,9 +58,9 @@
                                     <span style="font-weight: bold; padding: 0">
                                         <a data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
                                            data-bs-placement="left" title="{{ $top->author }}" data-bs-content="
-                                            Joined: {{ \App\Models\User::where('username', $top->author)->first()->joined_date  }}
-                                            Level: {{ \App\Models\User::where('username', $top->author)->first()->level  }}
-                                            Messages: {{ \App\Models\Message::where('author', $top->author)->count() }}
+                                            Joined: {{ $top->user->joined_date  }}
+                                            Level: {{ $top->user->level  }}
+                                            Messages:  {{ $top->user->messages->count() }}
                                             ">
                                         <strong>{{ $top->author }}</strong>
                                     </a>
@@ -72,7 +73,7 @@
                                     </span>
                                     </div>
                                     <div class="col-md-2 text-start">
-                                        <img src="/profile_pictures/{{ \App\Models\User::where('username', $top->author)->first()->profile_url }}"
+                                        <img src="/profile_pictures/{{ $top->user->profile_url }}"
                                              alt="" width="50" height="50">
                                     </div>
                                 </div>

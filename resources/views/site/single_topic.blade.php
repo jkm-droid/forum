@@ -22,7 +22,7 @@
        data-bs-placement="top" title="{{ $topic->author }}" data-bs-content="
                                         Joined: {{ $topic->user->joined_date  }}
         Level: {{ $topic->user->level  }}
-        Messages: {{ $topic->where('author', $topic->author)->count() }}
+        Messages: {{ $topic->user->topics->count() }}
         ">
         <strong> {{ $topic->author }} </strong>
     </a>
@@ -58,7 +58,7 @@
             <tbody>
             <tr>
                 <td>
-                    <img src="/profile_pictures/{{\App\Models\User::where('username', $topic->author)->first()->profile_url }}"
+                    <img src="/profile_pictures/{{ $topic->user->profile_url }}"
                          alt="" width="17" height="17">
                     {{  \Carbon\Carbon::parse($topic->created_at)->format('M, `y') }}
                 </td>
@@ -126,7 +126,7 @@
                                    data-bs-placement="top" title="{{ $t_message->author }}" data-bs-content="
                                         Joined: {{ $t_message->user->joined_date  }}
                                     Level: {{ $t_message->user->level  }}
-                                    Messages: {{ $t_message->where('author', $t_message->author)->count() }}
+                                    Messages: {{ $t_message->user->messages->count() }}
                                     ">
                                     <strong> {{ $t_message->author }} </strong>
                                 </a>
@@ -271,7 +271,7 @@
                                                data-bs-placement="top" title="{{ $tm_comment->author }}" data-bs-content="
                                                     Joined: {{ $tm_comment->message->user->joined_date }}
                                                 Level: {{ $tm_comment->message->user->level  }}
-                                                Messages: {{  $tm_comment->message->where('author', $tm_comment->message->user->username)->count() }}
+                                                Messages: {{  $tm_comment->message->user->messages->count() }}
                                                 ">
                                                 <strong> <i class="fa fa-share"></i>  {{ $tm_comment->author }} says:</strong>
                                             </a>

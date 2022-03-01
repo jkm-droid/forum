@@ -46,9 +46,9 @@
 
                             </h6>
                             @if($topic->tags->count() > 0)
-                                <span class="latest-topic-content">
+                                <span class="latest-topic-content" style="margin-left: 20px;">
                                 @foreach($topic->tags as $topic_tag)
-                                        <span class="badge bg-success">{{ $topic_tag->title }}</span>
+                                        <span class="badge bg-success" style="padding: 3px">{{ $topic_tag->title }}</span>
                                     @endforeach
                                 </span>
                             @endif
