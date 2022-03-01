@@ -10,11 +10,11 @@
                 <div class="col-12">
                     <div class="card card-outline card-dark topic-creation-form">
                         <div class="card-header">
-                            <h2>{{ \Illuminate\Support\Facades\Auth::user()->username }} you are editing your topic</h2>
+                            <h2>{{ $user->username }} you are editing your topic</h2>
                         </div>
                         <!-- /.card-header -->
 
-                        <form role="form" method="post" action="{{ route('topic.update', $topic->id) }}" id="form_submit" enctype="multipart/form-data">
+                        <form role="form" method="post" action="{{ route('topic.update', $topic->topic_id) }}" id="form_submit" enctype="multipart/form-data">
                             @csrf
                             <div class="card-body m-1">
                                 <div class="">
@@ -28,26 +28,23 @@
 
                                 </div>
 
-                                <div class="">
-                                    <div class="col-md-6 mt-3">
-                                        <label for="category" class="form-label">Topic Category</label>
-                                        <select name="category" id="category" class="form-select form-control" aria-label="Default select example" autofocus>
-                                            @if($topic->categories)
-                                                @foreach($topic->categories as $category)
-                                                    <option value="{{ $category->id }}" selected>{{ $category->title }}</option>
-                                                @endforeach
-                                            @endif
-                                            <option value="" disabled>Select topic category</option>
-
-                                            @foreach($categories as $category)
-                                                <option value="{{ $category->id }}">{{ $category->title }}</option>
+                                <div class="mt-3">
+                                    <label for="category" class="form-label">Topic Category</label>
+                                    <select name="category" id="category" class="form-select form-control" aria-label="Default select example" autofocus>
+                                        @if($topic->categories)
+                                            @foreach($topic->categories as $category)
+                                                <option value="{{ $category->id }}" selected>{{ $category->title }}</option>
                                             @endforeach
-                                        </select>
-                                        @if ($errors->has('category'))
-                                            <div class="text-danger form-text">{{ $errors->first('category') }}</div>
                                         @endif
-                                    </div>
+                                        <option value="" disabled>Select topic category</option>
 
+                                        @foreach($categories as $category)
+                                            <option value="{{ $category->id }}">{{ $category->title }}</option>
+                                        @endforeach
+                                    </select>
+                                    @if ($errors->has('category'))
+                                        <div class="text-danger form-text">{{ $errors->first('category') }}</div>
+                                    @endif
                                 </div>
 
                                 <div class="mt-4">

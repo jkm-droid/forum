@@ -50,6 +50,7 @@ class MemberMessageController extends Controller
             $message = new Message();
             $message->body = $message_body;
             $message->user_id = $user->id;
+            $message->message_id = $this->idGenerator->generateUniqueId('forum','messages','message_id');
             $message->author = $user->username;
 
             $details = array();
@@ -101,7 +102,7 @@ class MemberMessageController extends Controller
      * show form to edit message
      */
     public function show_message_edit_form($message_id){
-        $message = Message::where('id',$message_id)->first();
+        $message = Message::where('message_id',$message_id)->first();
         $topic = $message->topic;
 
         return view('member.message.edit_message', compact('message','topic'))
@@ -200,6 +201,7 @@ class MemberMessageController extends Controller
             $message = Message::find($message_id);
             $comment = new Comment();
             $comment->body = $reply_body;
+            $comment->comment_id = $this->idGenerator->generateUniqueId('forum', 'comments','comment_id');
             $comment->author = $user->username;
 
             if($message->comments()->save($comment)) {
@@ -232,6 +234,72 @@ class MemberMessageController extends Controller
      * show form to edit a comment on a certain message
      */
     public function show_message_reply_form($message_reply_id){
+        $comment = Comment::where('comment_id',$message_reply_id)->first();
+        $topic = $comment->message->topic;
 
+        return view('member.message_reply.edit_message_reply', compact('comment','topic'))
+            ->with('categories',$this->get_all_categories())
+            ->with('user', $this->userDetails->get_logged_user_details());
+    }
+
+    /**
+     * update a comment belonging to a certain message
+     */
+    public function update_message_reply(Request $request,$reply_id){
+        $request->validate([
+            'body' => 'required'
+        ]);
+        $user = $this->userDetails->get_logged_user_details();
+        $messageReplyInfo = $request->all();
+        $comment = Comment::where('comment_id',$reply_id)->first();
+        $comment->body = $messageReplyInfo['body'];
+        $comment->updated_at = Carbon::now();
+
+        $comment->update();
+
+        $activityDetails = [
+            'activity_body'=>'<strong>'.$user->username.'</strong>'." updated comment ".'<strong>'.$comment->comment_id,
+        ];
+
+        HelperEvent::dispatch($activityDetails);
+
+        return redirect()->route('site.single.topic', $comment->message->topic->slug)->with('success', 'comment updated successfully');
+    }
+
+    /**
+     * delete a comment
+     */
+    public function delete_message_reply(Request $request){
+        if ($request->ajax()){
+            $commentId = $request->comment_id;
+            $comment = Comment::find($commentId);
+            $user = $this->userDetails->get_logged_user_details();
+
+            if ($comment->delete()) {
+                $status = 200;
+                //save user activity to logs
+                $activityDetails = [
+                    'activity_body'=>'<strong>'.$user->username.'</strong>'." deleted the comment to ".'<strong>'.$comment->message->author."'s".'</strong> message',
+                ];
+
+                HelperEvent::dispatch($activityDetails);
+
+            }else
+                $status = 201;
+
+            $data = array(
+                'status'=>$status,
+                'message'=>'success'
+            );
+
+            return response()->json($data);
+        }
+
+        $data = array(
+            'status'=>202,
+            'message'=>'An error occurred'
+        );
+
+        return response()->json($data);
     }
 }

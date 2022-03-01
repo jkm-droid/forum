@@ -9,18 +9,28 @@
         </ol>
     </nav>
     <h4>{{ $topic->title }}</h4>
-    {{ $topic->category->title }} |
-    @foreach($topic->tags as $t_tag)
-        <span class="text-white badge bg-danger">{{ $t_tag->title }}</span>
-    @endforeach
+    {{ $topic->category->title }}
+    @if(count($topic->tags) > 0)
+        |
+        @foreach($topic->tags as $t_tag)
+            <span class="text-white badge bg-danger">{{ $t_tag->title }}</span>
+        @endforeach
+    @endif
     <br>
-    <img src="/profile_pictures/{{\App\Models\User::where('username', $topic->author)->first()->profile_url }}" alt="" width="60" height="50">
-    {{ $topic->author }}
+    <img src="/profile_pictures/{{ $topic->user->profile_url }}" alt="" width="60" height="50">
+    <a class="text-secondary" data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
+       data-bs-placement="top" title="{{ $topic->author }}" data-bs-content="
+                                        Joined: {{ $topic->user->joined_date  }}
+        Level: {{ $topic->user->level  }}
+        Messages: {{ $topic->where('author', $topic->author)->count() }}
+        ">
+        <strong> {{ $topic->author }} </strong>
+    </a>
     @if(\Illuminate\Support\Facades\Auth::check())
-        @if(\Illuminate\Support\Facades\Auth::user()->username == $topic->author)
+        @if($user->username == $topic->author)
 
             <button style="padding: 0 0 0 2px" class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="edit this topic">
-                <a href="{{ route('topic.show.edit.form', $topic->slug) }}"><i class="fa fa-edit"></i></a>
+                <a href="{{ route('topic.show.edit.form', $topic->topic_id) }}"><i class="fa fa-edit"></i></a>
             </button>
 
             <button style="padding: 0 0 0 2px"  id="delete-topic" data-id="{{ $topic->id }}" class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="delete this topic">
@@ -59,9 +69,33 @@
             </tbody>
         </table>
         <div class="text-center">
-            <button class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="share this topic's link">
-                <i class="fa fa-link"></i>
-            </button>
+            <div class="btn-group" role="group" id="{{ $topic->id }}{{ $topic->author }}" style="display: none;">
+                <a data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" style="padding-left: 5px;"
+                   title="Share this post" data-bs-content="{{ route('site.single.topic', $topic->slug) }}">
+                    <i class="fa fa-link"></i>
+                </a>
+
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{ route('site.single.topic', $topic->slug) }}&quote={{ $topic->title }}"
+                   style="color: #0a53be; padding-left: 5px;">
+                    <i class="fa fa-facebook"></i>
+                </a>
+                <a href="https://twitter.com/intent/tweet?text={{ $topic->title }}&url={{ route('site.single.topic', $topic->slug) }}"
+                   style="color: #0dcaf0; padding-left: 5px;">
+                    <i class="fa fa-twitter"></i>
+                </a>
+                <a href="https://wa.me/?text=Awesome%20Blog!%5Cn%20blog.shahednasser.com"  class="text-success" style="padding-left: 5px">
+                    <i class="fa fa-whatsapp"></i>
+                </a>
+                <a href="https://t.me/share/url?url={{ route('site.single.topic', $topic->slug) }}&text={{ $topic->title }}"
+                   style="padding-left: 5px; padding-right: 5px" class="text-info">
+                    <i class="fa fa-telegram"></i>
+                </a>
+            </div>
+
+            <a id="btn_share_topic" class="btn text-secondary" share-id="{{ $topic->id }}{{ $topic->author }}"
+               data-bs-toggle="tooltip" data-bs-placement="left" title="share this post's link">
+                <i class="fa fa-share-alt"></i> Share
+            </a>
 
             <button class="btn  btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="bookmark this topic">
                 <i class="fa fa-bookmark"></i>
@@ -77,81 +111,86 @@
     @else
         <h5 class="text-secondary"><strong>Topic Replies</strong></h5>
 
-    <!------------messages section-------------->
-    <div>
-        @foreach($messages as $t_message)
-            <div class="single-topic-message">
-                <div class="row col-md-12">
-                    <div class="col-md-12">
-                        <img style="margin-right: 10px; float: left" class="img-fluid" src="/profile_pictures/{{\App\Models\User::where('username', $t_message->author)->first()->profile_url }}"
-                             alt="" width="70" height="60">
+        <!------------messages section-------------->
+        <div>
+            @foreach($messages as $t_message)
+                <div class="single-topic-message">
+                    <div class="row col-md-12">
+                        <div class="col-md-12">
+                            <img style="margin-right: 10px; float: left" class="img-fluid" src="/profile_pictures/{{ $t_message->user->profile_url }}"
+                                 alt="" width="70" height="60">
 
-                        <h6>{{ \Carbon\Carbon::parse($t_message->created_at)->format('j M, `y') }}</h6>
-                        <h6>
-                            <a class="text-secondary" data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
-                               data-bs-placement="top" title="{{ $t_message->author }}" data-bs-content="
+                            <h6>{{ \Carbon\Carbon::parse($t_message->created_at)->format('j M, `y') }}</h6>
+                            <h6>
+                                <a class="text-secondary" data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
+                                   data-bs-placement="top" title="{{ $t_message->author }}" data-bs-content="
                                         Joined: {{ $t_message->user->joined_date  }}
-                                Level: {{ $t_message->user->level  }}
-                                Messages: {{ $t_message->where('author', $t_message->author)->count() }}
-                                ">
-                                <strong> {{ $t_message->author }} </strong>
-                            </a>
-                        </h6>
+                                    Level: {{ $t_message->user->level  }}
+                                    Messages: {{ $t_message->where('author', $t_message->author)->count() }}
+                                    ">
+                                    <strong> {{ $t_message->author }} </strong>
+                                </a>
+                            </h6>
+                        </div>
+
                     </div>
 
-                </div>
+                    <hr style="color: lightgrey;">
+                    <p>{!! $t_message->body  !!}</p>
+                    <div class="text-end action-buttons">
+                        @if(\Illuminate\Support\Facades\Auth::check())
+                            @if($user->username == $t_message->author)
 
-                <hr style="color: lightgrey;">
-                <p>{!! $t_message->body  !!}</p>
-                <div class="text-end action-buttons">
-                    @if(\Illuminate\Support\Facades\Auth::check())
-                        @if(\Illuminate\Support\Facades\Auth::user()->username == $t_message->author)
+                                <a class="text-secondary" href="{{ route('message.edit.form', $t_message->message_id) }}" data-bs-toggle="tooltip" data-bs-placement="left" title="edit this reply">
+                                    <i class="fa fa-edit"></i> edit
+                                </a>
 
-                            <button class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="edit this reply">
-                                <i class="fa fa-edit"></i> Edit
-                            </button>
+                                <button id="delete-message" data-id="{{ $t_message->id }}" class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="delete this reply">
+                                    <i class="fa fa-trash"></i> delete
+                                </button>
 
-                            <button id="delete-reply" data-id="{{ $t_message->id }}" class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="delete this reply">
-                                <i class="fa fa-trash"></i> Delete
-                            </button>
-
+                            @endif
                         @endif
-                    @endif
 
-                    <button class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="like">
-                        {{ $t_message->comments->count() }} Reactions
-                    </button>
-
-                    <div class="btn-group" role="group" id="{{ $t_message->id }}{{ $t_message->author }}" style="display: none;">
-                        <a type="button" class="btn" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" title="Share this post" data-bs-content="{{ route('site.single.topic', $topic->slug) }}">
-                            <i class="fa fa-link"></i>
-                        </a>
-
-                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ route('site.single.topic', $topic->slug) }}&quote={{ $topic->title }}" type="button" class="btn" style="color: #0a53be;">
-                            <i class="fa fa-facebook"></i>
-                        </a>
-                        <a href="https://twitter.com/intent/tweet?text={{ $topic->title }}&url={{ route('site.single.topic', $topic->slug) }}" type="button" class="btn" style="color: #0dcaf0;">
-                            <i class="fa fa-twitter"></i>
-                        </a>
-                        <a href="https://wa.me/?text=Awesome%20Blog!%5Cn%20blog.shahednasser.com" type="button" class="btn text-success">
-                            <i class="fa fa-whatsapp"></i>
-                        </a>
-                        <a href="https://t.me/share/url?url={{ route('site.single.topic', $topic->slug) }}&text={{ $topic->title }}" type="button" class="btn text-info">
-                            <i class="fa fa-telegram"></i>
-                        </a>
-
-                    </div>
-
-                    <button id="btn_share_topic" class="btn text-secondary" share-id="{{ $t_message->id }}{{ $t_message->author }}" data-bs-toggle="tooltip" data-bs-placement="left" title="share this post's link">
-                        <i class="fa fa-share-alt"></i> Share
-                    </button>
-                    @if(\Illuminate\Support\Facades\Auth::check())
-                        <button id="{{ $t_message->id }}"  class="btn text-secondary" data-bs-toggle="tooltip" like-id="{{ $t_message->id }}" like-author="{{ $t_message->author }}" data-bs-placement="left" title="like">
-                            <span id="{{ $t_message->author }}{{ $t_message->id }}">{{ $t_message->likes }}</span> <i class="fa fa-heart"></i>
+                        <button class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="like">
+                            {{ $t_message->comments->count() }} Reactions
                         </button>
 
-                        <script>
-                            // function like(){
+                        <div class="btn-group" role="group" id="{{ $t_message->id }}{{ $t_message->author }}" style="display: none;">
+                            <a data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" style="padding-left: 5px;"
+                               title="Share this post" data-bs-content="{{ route('site.single.topic', $topic->slug) }}">
+                                <i class="fa fa-link"></i>
+                            </a>
+
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ route('site.single.topic', $topic->slug) }}&quote={{ $topic->title }}"
+                               style="color: #0a53be; padding-left: 5px;">
+                                <i class="fa fa-facebook"></i>
+                            </a>
+                            <a href="https://twitter.com/intent/tweet?text={{ $topic->title }}&url={{ route('site.single.topic', $topic->slug) }}"
+                               style="color: #0dcaf0; padding-left: 5px;">
+                                <i class="fa fa-twitter"></i>
+                            </a>
+                            <a href="https://wa.me/?text=Awesome%20Blog!%5Cn%20blog.shahednasser.com"  class="text-success" style="padding-left: 5px">
+                                <i class="fa fa-whatsapp"></i>
+                            </a>
+                            <a href="https://t.me/share/url?url={{ route('site.single.topic', $topic->slug) }}&text={{ $topic->title }}"
+                               style="padding-left: 5px; padding-right: 5px" class="text-info">
+                                <i class="fa fa-telegram"></i>
+                            </a>
+
+                        </div>
+
+                        <a id="btn_share_message" class="btn text-secondary" share-id="{{ $t_message->id }}{{ $t_message->author }}"
+                           data-bs-toggle="tooltip" data-bs-placement="left" title="share this post's link">
+                            <i class="fa fa-share-alt"></i> Share
+                        </a>
+                        @if(\Illuminate\Support\Facades\Auth::check())
+                            <button id="{{ $t_message->id }}"  class="btn text-secondary" data-bs-toggle="tooltip" like-id="{{ $t_message->id }}" like-author="{{ $t_message->author }}" data-bs-placement="left" title="like">
+                                <span id="{{ $t_message->author }}{{ $t_message->id }}">{{ $t_message->likes }}</span> <i class="fa fa-heart"></i>
+                            </button>
+
+                            <script>
+                                // function like(){
                                 $(document).on('click', '#'+{{ $t_message->id }}, function(){
                                     const id = $(this).attr("like-id");
                                     const author = $(this).attr("like-author");
@@ -182,76 +221,91 @@
                                         }
                                     });
                                 });
-                            // }
-                        </script>
-                        <button reply-id="{{ $t_message->id }}" reply-body="{!! $t_message->body !!}" id="btn_post_reply" class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="write a comment">
-                            <i class="fa fa-reply"></i> Reply
-                        </button>
-                    @else
-                        <button class="btn text-secondary disabled" data-bs-toggle="tooltip" data-bs-placement="left" title="like">
-                            {{ $t_message->likes }} <i class="fa fa-heart"></i>
-                        </button>
+                                // }
+                            </script>
+                            <button reply-id="{{ $t_message->id }}" reply-body="{!! $t_message->body !!}" id="btn_post_reply" class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="write a comment">
+                                <i class="fa fa-reply"></i> Reply
+                            </button>
+                        @else
+                            <button class="btn text-secondary disabled" data-bs-toggle="tooltip" data-bs-placement="left" title="like">
+                                {{ $t_message->likes }} <i class="fa fa-heart"></i>
+                            </button>
 
-                        <button class="btn text-secondary disabled" data-bs-toggle="tooltip" data-bs-placement="left" title="bookmark this post">
-                            <i class="fa fa-bookmark"></i>
-                        </button>
+                            <button class="btn text-secondary disabled" data-bs-toggle="tooltip" data-bs-placement="left" title="bookmark this post">
+                                <i class="fa fa-bookmark"></i>
+                            </button>
 
-                        <button  id="btn_post_reply" class="btn text-secondary disabled" data-bs-toggle="tooltip" data-bs-placement="left" title="write a comment">
-                            <i class="fa fa-reply"></i> Reply
-                        </button>
-                    @endif
-                </div>
-
-                <!---comments sections--->
-                @if($t_message->comments->count() > 0)
-                    <div class="text-center">
-                        <button id="btn_show_reactions" comment-id="{{ $t_message->author }}"   class="btn {{ $t_message->id }}" >view reactions</button>
+                            <button  id="btn_post_reply" class="btn text-secondary disabled" data-bs-toggle="tooltip" data-bs-placement="left" title="write a comment">
+                                <i class="fa fa-reply"></i> Reply
+                            </button>
+                        @endif
                     </div>
-                @endif
 
-                <script>
-                    // function showComment() {
-                    $(document).on('click', '#btn_show_reactions', function () {
-                        const id = $(this).attr("comment-id");
-                        document.getElementById('btn_show_reactions').style.display = 'none';
-                        document.getElementById(id).style.display = 'block';
-                    });
-                    // }
-                </script>
-
-                <div id="{{ $t_message->author }}" style="display: none; border-top: 1px solid #a7c2a7; padding: 5px; background-color: #e7e4e4;">
-                    @if($t_message->comments)
-                        @foreach($t_message->comments as $tm_comment)
-                            <div class="row col-md-12">
-                                <div class="col-md-12">
-                                    <img class="img-fluid" style="float: left; margin-right: 10px;" src="/profile_pictures/{{\App\Models\User::where('username', $tm_comment->author)->first()->profile_url }}"
-                                         alt="" width="70" height="60">
-
-                                    <h6>
-                                        <a class="text-secondary" data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
-                                           data-bs-placement="top" title="{{ $tm_comment->author }}" data-bs-content="
-                                                    Joined: {{ \App\Models\User::where('username', $tm_comment->author)->first()->joined_date  }}
-                                            Level: {{ \App\Models\User::where('username', $tm_comment->author)->first()->level  }}
-                                            Messages: {{ \App\Models\Message::where('author', $tm_comment->author)->count() }}
-                                            ">
-                                            <strong> <i class="fa fa-share"></i>  {{ $tm_comment->author }} says:</strong>
-                                        </a>
-                                    </h6>
-                                    <h6 class="">{{ \Carbon\Carbon::parse($tm_comment->created_at)->format('j M, Y') }}</h6>
-                                </div>
-                            </div>
-                            <p class="" style="">
-                                {!! $tm_comment->body   !!}
-                            </p>
-                            <hr style="color: lightgrey;">
-                        @endforeach
+                    <!---comments sections--->
+                    @if($t_message->comments->count() > 0)
+                        <div class="text-center">
+                            <button id="btn_show_reactions" comment-id="{{ $t_message->author }}"   class="btn {{ $t_message->id }}" >view reactions</button>
+                        </div>
                     @endif
+
+                    <script>
+                        // function showComment() {
+                        $(document).on('click', '#btn_show_reactions', function () {
+                            const id = $(this).attr("comment-id");
+                            document.getElementById('btn_show_reactions').style.display = 'none';
+                            document.getElementById(id).style.display = 'block';
+                        });
+                        // }
+                    </script>
+
+                    <div id="{{ $t_message->author }}" style="display: none; border-top: 1px solid #a7c2a7; padding: 5px; background-color: #e7e4e4;">
+                        @if($t_message->comments)
+                            @foreach($t_message->comments as $tm_comment)
+                                <div class="row col-md-12">
+                                    <div class="col-md-12">
+                                        <img class="img-fluid" style="float: left; margin-right: 10px;" src="/profile_pictures/{{ $tm_comment->message->user->profile_url }}"
+                                             alt="" width="70" height="60">
+
+                                        <h6>
+                                            <a class="text-secondary" data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
+                                               data-bs-placement="top" title="{{ $tm_comment->author }}" data-bs-content="
+                                                    Joined: {{ $tm_comment->message->user->joined_date }}
+                                                Level: {{ $tm_comment->message->user->level  }}
+                                                Messages: {{  $tm_comment->message->where('author', $tm_comment->message->user->username)->count() }}
+                                                ">
+                                                <strong> <i class="fa fa-share"></i>  {{ $tm_comment->author }} says:</strong>
+                                            </a>
+                                        </h6>
+                                        <h6 class="">{{ \Carbon\Carbon::parse($tm_comment->created_at)->format('j M, Y') }}</h6>
+                                    </div>
+                                </div>
+                                <p>
+                                    {!! $tm_comment->body   !!}
+                                </p>
+                                @if(\Illuminate\Support\Facades\Auth::check())
+                                    @if($user->username == $tm_comment->author)
+                                        <span class="d-flex justify-content-end topic-text">
+                                        <a href="{{ route('message.show.edit.reply.form',$tm_comment->comment_id) }}" class="text-secondary" data-bs-toggle="tooltip"
+                                           data-bs-placement="left" title="edit this reply">
+                                            <i class="fa fa-edit"></i> Edit
+                                        </a>
+
+                                        <button id="delete-comment-reply" data-id="{{ $tm_comment->id }}" class="btn text-secondary" data-bs-toggle="tooltip"
+                                                data-bs-placement="left" title="delete this reply" style="padding: 0;margin-left: 10px; margin-right: 10px;">
+                                            <i class="fa fa-trash"></i> Delete
+                                        </button>
+                                    </span>
+                                    @endif
+                                @endif
+                                <hr style="color: lightgrey;">
+                            @endforeach
+                        @endif
+                    </div>
+                    <!-----end comments sections--->
                 </div>
-                <!-----end comments sections--->
-            </div>
 
 
-        @endforeach
+            @endforeach
             <div class="d-flex justify-content-center paginate-desktop">
                 {{ $messages->links() }}
             </div>
@@ -259,8 +313,8 @@
             <div class="d-flex justify-content-center paginate-mobile">
                 {{ $messages->links('pagination.custom_pagination') }}
             </div>
-    </div>
-    <!------------end messages section-------------->
+        </div>
+        <!------------end messages section-------------->
     @endif
     <div class="" id="reply-editor">
         <p id="message-error-box"></p>
@@ -294,6 +348,15 @@
 
     <script>
         $(document).on('click', '#btn_share_topic', function () {
+            console.log("clicked");
+            const id = $(this).attr("share-id");
+            document.getElementById(id).style.display = 'inline';
+        });
+
+    </script>
+
+    <script>
+        $(document).on('click', '#btn_share_message', function () {
             console.log("clicked");
             const id = $(this).attr("share-id");
             document.getElementById(id).style.display = 'inline';
@@ -478,7 +541,7 @@
 
     <script type="text/javascript">
 
-        $(document).on('click', '#delete-reply',function(e) {
+        $(document).on('click', '#delete-message',function(e) {
             // e.preventDefault();
 
             if (confirm("Are you sure want to delete this reply?")) {
@@ -486,7 +549,7 @@
                 const replyId = $(this).attr("data-id");
 
                 $.ajax({
-                    url: '/delete/message',
+                    url: '/ajax/delete/message',
                     type: 'POST',
                     data: {
                         "_token": "{{ csrf_token() }}",
@@ -514,6 +577,54 @@
                             toastr.error("Oops! An error occurred");
                         }
 
+                    },
+
+                    failure: function (response) {
+                        console.log("something went wrong");
+                    }
+                });
+            }
+        });
+
+    </script>
+
+    <script type="text/javascript">
+
+        $(document).on('click', '#delete-comment-reply',function(e) {
+            // e.preventDefault();
+
+            if (confirm("Are you sure want to delete this comment?")) {
+
+                const comment_id = $(this).attr("data-id");
+
+                $.ajax({
+                    url: '/message/delete/reply',
+                    type: 'POST',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        'comment_id': comment_id,
+                    },
+                    success: function (response) {
+                        console.log(response);
+                        history.scrollRestoration = "manual";
+                        $(this).scrollTop(0);
+
+                        if(response.status === 200){
+                            toastr.options =
+                                {
+                                    "closeButton" : true,
+                                    "progressBar" : true
+                                }
+                            toastr.success("comment deleted successfully");
+                        }else{
+                            toastr.options =
+                                {
+                                    "closeButton" : true,
+                                    "progressBar" : true
+                                }
+                            toastr.error("Oops! an error occurred");
+                        }
+                        location.reload();
                     },
 
                     failure: function (response) {

@@ -53,6 +53,7 @@ class MemberTopicController extends Controller
 
         $topic = new Topic();
         $topic->user_id = $user->id;
+        $topic->topic_id = $this->idGenerator->generateUniqueId('forum','topics','topic_id');
         $topic->title = $topic_info['title'];
         $topic->body = $topic_info['body'];
         $topic->category_id = $topic_info['category'];
@@ -100,8 +101,8 @@ class MemberTopicController extends Controller
     /**
      * show form to edit a topic
      */
-    public function show_edit_topic_form($slug){
-        $topic = Topic::where('slug', $slug)->first();
+    public function show_edit_topic_form($topic_id){
+        $topic = Topic::where('topic_id', $topic_id)->first();
 
         return view('member.topic.edit_topic', compact('topic'))
             ->with('user', $this->get_logged_user_details())
@@ -122,7 +123,7 @@ class MemberTopicController extends Controller
         $slug = str_replace($this->special_character, "", $topic_info['title']);
         $user = $this->userDetails->get_logged_user_details();
 
-        $topic =  Topic::find($topic_id);
+        $topic =  Topic::where('topic_id',$topic_id)->first();
         $topic->title = $topic_info['title'];
         $topic->body = $topic_info['body'];
         $topic->category_id = $topic_info['category'];

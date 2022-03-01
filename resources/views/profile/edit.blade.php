@@ -46,10 +46,10 @@
 
             <br>
 
-            <div class="col-md-6 offset-md-3 d-grid">
-                <input type="submit" id="submit_button" value="Update My Avatar"  class="btn btn-info">
-            </div>
-
+            <button type="submit" id="submit_button" value=""  class="btn btn-info">
+                <i class="fa fa-save"></i>
+                Update My Avatar
+            </button>
         </form>
     </div>
 

@@ -71,7 +71,6 @@ class SiteController extends Controller
         //register views
         if (Auth::check()) {
             $user = $this->get_logged_user_details();
-
             if (!$user->views()->where('topic_id', $topic->id)->first()) {
                 $topic->views = $topic->views + 2;
                 $topic->update();

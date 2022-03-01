@@ -16,7 +16,7 @@ class CreateActivitiesTable extends Migration
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->string('activity_id');
+            $table->string('activity_id')->unique();
             $table->longText('activity_body');
             $table->timestamps();
 

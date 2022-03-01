@@ -7,7 +7,7 @@
             <a href="{{ route('message.edit.form', $message->id) }}" class="put-black"><i class="fa fa-edit"></i> edit</a>
             <button class="btn" type="submit" style="padding: 0"><i class="fa fa-trash"></i>delete</button>
         </form>
-        {{ $message->body }}
+        {!! $message->body !!}
         <br>
         <span class="topic-text">
             <i class="fa fa-clock-o"></i>
