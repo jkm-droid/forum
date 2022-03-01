@@ -19,7 +19,8 @@
                     <div class="accordion-item">
                         <h3 class="accordion-header" id="panelsStayOpen-headingOne">
                             <button class="accordion-button" style="padding: 5px; font-size: 20px; background-color: lightgrey; color: black" type="button"
-                                    data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne-{{ $forum->id }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                    data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne-{{ $forum->id }}" aria-expanded="true"
+                                    aria-controls="panelsStayOpen-collapseOne">
                                 {{ $forum->title }} ({{ $forum->topics->count() }} Topics)
                             </button>
                         </h3>
@@ -44,11 +45,11 @@
                                             @endforeach
 
                                         </div>
-                                        <div class="col-md-3 topics-messages" style="font-size: 12px;">
+                                        <div class="col-md-3 topics-messages topic-text">
 
-                                            <span class="col-md-5"> <span class="badge bg-secondary" style="padding: 3px;">{{ $forum_category->topics->count() }}</span> Topics</span>
+                                            <span class="col-md-5"> <span class="badge bg-secondary" style="padding: 3px 3px 2px;">{{ $forum_category->topics->count() }}</span> Topics</span>
                                             <br class="disappear-item">
-                                            <span class="col-md-7"><span class="badge bg-secondary" style="padding: 3px;">{{ \App\Models\Category::thousandsCurrencyFormat($forum_category->messages->count()) }}</span> Messages</span>
+                                            <span class="col-md-7"><span class="badge bg-secondary" style="padding: 3px 3px 2px;">{{ \App\Models\Category::thousandsCurrencyFormat($forum_category->messages->count()) }}</span> Messages</span>
 
                                         </div>
 

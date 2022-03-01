@@ -42,6 +42,13 @@ class Message extends Model
     }
 
     /**
+     * get message category
+     */
+    public function category(){
+        return $this->hasOneThrough(Category::class,Topic::class);
+    }
+
+    /**
      * get the message likes
      */
 

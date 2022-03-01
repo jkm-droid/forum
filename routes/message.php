@@ -10,16 +10,20 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::name("message.")->group(function (){
+    //messages to a given topic/thread
+    Route::post('/save/message/', [MemberMessageController::class, 'save_message'])->name('save');
+    Route::get('/edit/message/{message_id}', [MemberMessageController::class, 'show_message_edit_form'])->name('edit.form');
+    Route::put('/update/message/{message_id}', [MemberMessageController::class, 'update_message'])->name('update');
+    Route::post('/ajax/delete/message', [MemberMessageController::class, 'ajax_delete_message'])->name('delete');
+    Route::delete('/post/delete/{message_id}', [MemberMessageController::class, 'post_delete_message'])->name('delete');
 
-    Route::post('/save/message/', [MemberMessageController::class, 'save_new_message'])->name('save');
-    Route::post('/edit/message/', [MemberMessageController::class, 'edit_message'])->name('edit');
-    //replies/comments
-    Route::post('/post/reply/', [MemberMessageController::class, 'save_new_message_reply'])->name('save.reply');
-    Route::post('/reply/delete', [MemberMessageController::class, 'delete_message_reply'])->name('reply.delete');
+    //replies/comments to a given message
+    Route::post('/message/save/reply', [MemberMessageController::class, 'save_message_reply'])->name('save.reply');
+    Route::get('/message/edit/reply/{reply_id}', [MemberMessageController::class, 'show_message_reply_form'])->name('show.edit.reply.form');
+    Route::put('/message/update/reply/{reply_id}', [MemberMessageController::class, 'update_message_reply'])->name('update.reply');
+    Route::post('/message/delete/reply/', [MemberMessageController::class, 'delete_message_reply'])->name('delete.reply');
 
-    /**
-     * message likes
-     */
+    //message likes
     Route::post('message/like',[LikeController::class, 'like_message'])->name('like');
 
 });

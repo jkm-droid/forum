@@ -11,9 +11,11 @@ use App\Models\Message;
 use App\Models\Topic;
 use App\Models\View;
 use App\Notifications\MemberNotification;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
 class MemberMessageController extends Controller
@@ -30,10 +32,10 @@ class MemberMessageController extends Controller
     }
 
     /**
-     * create a new message
+     * save a message belonging to a certain topic
      */
 
-    public function save_new_message(Request $request){
+    public function save_message(Request $request){
         $validator = Validator::make($request->all(),[
             'body'=>'required',
         ]);
@@ -56,7 +58,6 @@ class MemberMessageController extends Controller
 
                 //save user activity to logs
                 $activityDetails = [
-                    'activity_id'=> $this->idGenerator->generateUniqueId($user->username,'activities','activity_id'),
                     'activity_body'=>'<strong>'.$user->username.'</strong>'." reacted to ".'<strong>'.$topic->author.'</strong>'." post ".'<strong>'.$topic->title.'</strong>',
                 ];
                 HelperEvent::dispatch($activityDetails);
@@ -97,10 +98,96 @@ class MemberMessageController extends Controller
     }
 
     /**
+     * show form to edit message
+     */
+    public function show_message_edit_form($message_id){
+        $message = Message::where('id',$message_id)->first();
+        $topic = $message->topic;
+
+        return view('member.message.edit_message', compact('message','topic'))
+            ->with('categories',$this->get_all_categories())
+            ->with('user', $this->userDetails->get_logged_user_details());
+    }
+
+    /**
+     * update message
+     */
+    public function update_message(Request $request, $message_id){
+        $request->validate([
+            'body' => 'required'
+        ]);
+        $messageInfo = $request->all();
+        $message = Message::where('message_id',$message_id)->first();
+        $user = $this->userDetails->get_logged_user_details();
+
+        $message->body = $messageInfo['body'];
+        $message->updated_at = Carbon::now();
+
+        $message->update();
+
+        $activityDetails = [
+            'activity_body'=>'<strong>'.$user->username.'</strong>'." updated message ".'<strong>'.$message->message_id.'</strong>',
+        ];
+        HelperEvent::dispatch($activityDetails);
+
+        return redirect()->route('profile.view',$user->user_id)->with('success','message updated successfully');
+    }
+
+    /**
+     * delete a message belonging to a certain topic
+     */
+    public function ajax_delete_message(Request $request){
+        if ($request->ajax()){
+            $message_id = $request->reply_id;
+            $message = Message::find($message_id);
+            $user = $this->userDetails->get_logged_user_details();
+
+            if ($message->delete()) {
+                $status = 200;
+                //save user activity to logs
+                $activityDetails = [
+                    'activity_body'=>'<strong>'.$user->username.'</strong>'." deleted the reaction ".'<strong>'.$message->body.'</strong>',
+                ];
+
+                HelperEvent::dispatch($activityDetails);
+
+            }else
+                $status = 201;
+
+            $data = array(
+                'status'=>$status,
+                'message'=>'success'
+            );
+
+            return response()->json($data);
+        }
+
+        $data = array(
+            'status'=>202,
+            'message'=>'An error occurred'
+        );
+        return response()->json($data);
+    }
+
+    public function post_delete_message($message_id){
+        $message = Message::where('message_id',$message_id)->first();
+        $user = $this->userDetails->get_logged_user_details();
+        $message->delete();
+
+        //save user activity to logs
+        $activityDetails = [
+            'activity_body'=>'<strong>'.$user->username.'</strong>'." deleted message ".'<strong>'.$message->message_id.'</strong>',
+        ];
+        HelperEvent::dispatch($activityDetails);
+
+        return Redirect::back()->with('info', 'message deleted successfully');
+    }
+
+
+    /**
      * create a new reply/comment
      */
-
-    public function save_new_message_reply(Request $request){
+    public function save_message_reply(Request $request){
         $validator = Validator::make($request->all(),[
             'body'=>'required',
         ]);
@@ -119,7 +206,6 @@ class MemberMessageController extends Controller
                 $status = 200;
                 //save user activity to logs
                 $activityDetails = [
-                    'activity_id'=> $this->idGenerator->generateUniqueId($user->username,'activities','activity_id'),
                     'activity_body'=>'<strong>'.$user->username.'</strong>'." reacted to ".'<strong>'.$message->author.'</strong>'."post",
                 ];
                 HelperEvent::dispatch($activityDetails);
@@ -143,39 +229,9 @@ class MemberMessageController extends Controller
     }
 
     /**
-     * delete a particular reply
+     * show form to edit a comment on a certain message
      */
-    public function delete_message_reply(Request $request){
-        if ($request->ajax()){
-            $reply_id = $request->reply_id;
-            $message = Message::find($reply_id);
-            $user = $this->userDetails->get_logged_user_details();
+    public function show_message_reply_form($message_reply_id){
 
-            if ($message->delete()) {
-                $status = 200;
-                //save user activity to logs
-                $activityDetails = [
-                    'activity_id'=> $this->idGenerator->generateUniqueId($user->username,'activities','activity_id'),
-                    'activity_body'=>'<strong>'.$user->username.'</strong>'." deleted the reaction ".'<strong>'.$message->body.'</strong>',
-                ];
-                HelperEvent::dispatch($activityDetails);
-
-            }else
-                $status = 201;
-
-            $data = array(
-                'status'=>$status,
-                'message'=>'success'
-            );
-
-            return response()->json($data);
-        }
-
-        $data = array(
-            'status'=>202,
-            'message'=>'An error occurred'
-        );
-        return response()->json($data);
     }
-
 }

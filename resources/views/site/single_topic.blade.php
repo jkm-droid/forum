@@ -373,7 +373,7 @@
             if(body !== "" ) {
 
                 $.ajax({
-                    url: '/post/reply/',
+                    url: '/message/save/reply/',
                     type: 'POST',
                     data: {
                         "_token": "{{ csrf_token() }}",
@@ -486,7 +486,7 @@
                 const replyId = $(this).attr("data-id");
 
                 $.ajax({
-                    url: '/reply/delete',
+                    url: '/delete/message',
                     type: 'POST',
                     data: {
                         "_token": "{{ csrf_token() }}",

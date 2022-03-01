@@ -21,6 +21,7 @@
 
         <div class="row mt-2">
             <div class="col-md-2 topic-creation-categories">
+                @include('includes.member')
                 @include('includes.forum_list')
             </div>
 

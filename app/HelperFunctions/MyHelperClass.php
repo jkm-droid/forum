@@ -4,6 +4,7 @@ namespace App\HelperFunctions;
 
 use App\Models\Activity;
 use App\Models\Country;
+use App\Models\Message;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -83,6 +84,15 @@ class MyHelperClass
      */
     public function checkIfIdExists($id, $table, $column){
         return DB::table($table)->where($column,'=',$id)->exists();
+    }
+
+    /**
+     * get messages created by user
+     */
+    public function get_user_messages(){
+        $user = $this->get_logged_user_details();
+
+        return Message::where('user_id', $user->id)->paginate(10);
     }
 
 }

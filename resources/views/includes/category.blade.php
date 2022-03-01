@@ -1,12 +1,5 @@
-@if(\Illuminate\Support\Facades\Auth::check())
-    @include('includes.member')
-@else
-    <div class="text-start">
-        <a class="btn top-options" href="{{ route('user.show.register') }}">
-            <i class="fa fa-user"></i> Sign Up Now!
-        </a>
-    </div>
-@endif
+
+@include('includes.member')
 
 <table class="table">
     <thead>

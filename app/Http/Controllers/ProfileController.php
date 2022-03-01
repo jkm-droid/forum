@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\HelperEvent;
 use App\HelperFunctions\GetRepetitiveItems;
 use App\HelperFunctions\MyHelperClass;
 use App\Models\Country;
+use App\Models\Message;
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -18,13 +20,12 @@ class ProfileController extends Controller
 
     use GetRepetitiveItems;
 
-    private $userDetails, $idGenerator, $activity;
+    private $userDetails, $idGenerator, $messages;
 
     public function __construct(MyHelperClass $myHelperClass){
         $this->middleware('auth');
         $this->userDetails = $myHelperClass;
-        $this->idGenerator = $myHelperClass;
-        $this->activity = $myHelperClass;
+        $this->messages = $myHelperClass;
     }
 
     /**
@@ -32,9 +33,11 @@ class ProfileController extends Controller
      */
     public function view_profile($user_id){
         $user = User::where('user_id', $user_id)->first();
-        if($user_id == Auth::user()->user_id) {
 
+        if($user_id == Auth::user()->user_id) {
             return view('profile.view')->with('user', $user)
+                ->with('forum_list', $this->get_forum_list())
+                ->with('messages', $this->messages->get_user_messages())
                 ->with('categories', $this->get_all_categories());
         }
 
@@ -68,8 +71,12 @@ class ProfileController extends Controller
 
         $user->update();
 
-        $activity_id = $this->idGenerator->generateUniqueId('up-forum','activities','activity_id');
-        $this->activity->saveUserActivity($user->username." updated the profile image", $activity_id);
+        //save user activity to logs
+        $activityDetails = [
+            'activity_body'=>'<strong>'.$user->username.'</strong>'." updated the profile image ",
+        ];
+
+        HelperEvent::dispatch($activityDetails);
 
         return redirect()->route('profile.view', $user_id)->with('success', 'Profile updated successfully');
     }
@@ -77,12 +84,11 @@ class ProfileController extends Controller
     /**
      * profile settings / update extra user information
      */
-
     public function profile_settings($user_id){
         $user = $this->get_user($user_id);
         $countries = Country::get();
         $profile = Profile::where('user_id',$user->id)->first();
-//dd($profile);
+
         return view('profile.settings', compact('user','countries'))
             ->with('profile',$profile)
             ->with('categories', $this->get_all_categories());
@@ -98,7 +104,7 @@ class ProfileController extends Controller
     public function update_profile_settings(Request $request, $user_id){
         $profileInfo = $request->all();
         $user = $this->get_user($user_id);
-//dd($profileInfo);
+
         $country = $dob = $website = $gender = $about = "";
         if ($request->has('dob')){
             $dob = $profileInfo['dob'];
@@ -131,8 +137,12 @@ class ProfileController extends Controller
             ]
         );
 
-        $activity_id = $this->idGenerator->generateUniqueId('up-forum','activities','activity_id');
-        $this->activity->saveUserActivity($user->username." added additional profile details", $activity_id);
+        //save user activity to logs
+        $activityDetails = [
+            'activity_body'=>'<strong>'.$user->username.'</strong>'." added additional profile details ",
+        ];
+
+        HelperEvent::dispatch($activityDetails);
 
         return redirect()->route('profile.settings',$user->user_id)->with('info','Profile Updated Successfully');
     }
