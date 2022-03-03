@@ -141,7 +141,7 @@
                         @if(\Illuminate\Support\Facades\Auth::check())
                             @if($user->username == $t_message->author)
 
-                                <a class="text-secondary" href="{{ route('message.edit.form', $t_message->message_id) }}" data-bs-toggle="tooltip" data-bs-placement="left" title="edit this reply">
+                                <a class="text-secondary" href="{{ route('message.show.edit.form', $t_message->message_id) }}" data-bs-toggle="tooltip" data-bs-placement="left" title="edit this reply">
                                     <i class="fa fa-edit"></i> edit
                                 </a>
 

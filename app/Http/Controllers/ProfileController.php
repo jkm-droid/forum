@@ -37,6 +37,7 @@ class ProfileController extends Controller
         if($user_id == Auth::user()->user_id) {
             return view('profile.view')->with('user', $user)
                 ->with('forum_list', $this->get_forum_list())
+                ->with('i', (request()->input('page',1) - 1) * 10)
                 ->with('messages', $this->messages->get_user_messages())
                 ->with('categories', $this->get_all_categories());
         }

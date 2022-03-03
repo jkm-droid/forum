@@ -3,10 +3,12 @@
 namespace App\Providers;
 
 use App\Events\AdminEvent;
+use App\Events\ContentCreationEvent;
 use App\Events\HelperEvent;
 use App\Events\MemberEvent;
 use App\Events\ProcessUserPost;
 use App\Listeners\AdminListener;
+use App\Listeners\ContentCreationListener;
 use App\Listeners\MemberListener;
 use App\Listeners\ProcessUserPostListener;
 use App\Listeners\SaveActivityListener;
@@ -42,6 +44,10 @@ class EventServiceProvider extends ServiceProvider
         ProcessUserPost::class => [
             ProcessUserPostListener::class,
         ],
+
+        ContentCreationEvent::class => [
+            ContentCreationListener::class,
+        ]
     ];
 
     /**

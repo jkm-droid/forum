@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ContentCreationEvent;
 use App\Events\HelperEvent;
 use App\Events\MemberEvent;
 use App\HelperFunctions\GetRepetitiveItems;
@@ -10,13 +11,15 @@ use App\Models\Comment;
 use App\Models\Message;
 use App\Models\Topic;
 use App\Models\View;
-use App\Notifications\MemberNotification;
+use App\Notifications\CommentNotification;
+use App\Notifications\MessageNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class MemberMessageController extends Controller
 {
@@ -64,20 +67,21 @@ class MemberMessageController extends Controller
                 HelperEvent::dispatch($activityDetails);
 
                 $details = [
-                    'receiver'=>$topic->user->email,
-                    'topic_author'=>$topic->author,
-                    'post_title'=> $topic->title,
-                    'message_author'=>$user->username,
-                    'time'=>$message->created_at,
-                    'subject'=>"New post reaction: ".$topic->title,
+                    'topic' => $topic,
+                    'user' => $user,
+                    'purpose' => 'message'
                 ];
                 Log::channel('daily')->info("controller");
                 Log::channel('daily')->info($topic->user);
                 //send email notification to the topic's author
-                MemberEvent::dispatch($details);
+                ContentCreationEvent::dispatch($details);
 
                 //send in-app notification
-                Notification::send($topic->user, new MemberNotification($details));
+                Notification::send($topic->user, new MessageNotification([
+                    'title' => 'New post reaction from '.$topic->author,
+                    'time' => $message->created_at,
+                    'message' => 'Your post <strong>'.$topic->title.'</strong> has new reaction from <strong>'.$user->username.'</strong>'
+                ]));
 
             }else
                 $status = $topic->user;
@@ -211,6 +215,13 @@ class MemberMessageController extends Controller
                     'activity_body'=>'<strong>'.$user->username.'</strong>'." reacted to ".'<strong>'.$message->author.'</strong>'."post",
                 ];
                 HelperEvent::dispatch($activityDetails);
+
+                //send in-app notification
+                Notification::send($message->user,new CommentNotification([
+                    'title' => 'New comment from '.$user->username,
+                    'time' => Carbon::now(),
+                    'message' => 'Your thread <strong>'.Str::limit($message->body,'100','...').'</strong> has a new comment from <strong>'.$user->username.'</strong>'
+                ]));
             }else
                 $status = 201;
 

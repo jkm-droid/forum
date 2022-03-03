@@ -92,7 +92,7 @@ class MyHelperClass
     public function get_user_messages(){
         $user = $this->get_logged_user_details();
 
-        return Message::where('user_id', $user->id)->paginate(10);
+        return Message::where('user_id', $user->id)->orderBy('created_at','desc')->paginate(10);
     }
 
 }

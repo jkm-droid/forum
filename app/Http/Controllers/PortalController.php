@@ -19,7 +19,7 @@ use App\Models\TopicTag;
 use App\Models\User;
 use App\Models\View;
 use App\Notifications\AdminNotification;
-use App\Notifications\MemberNotification;
+use App\Notifications\MessageNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;

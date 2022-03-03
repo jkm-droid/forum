@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 Route::name("message.")->group(function (){
     //messages to a given topic/thread
     Route::post('/save/message/', [MemberMessageController::class, 'save_message'])->name('save');
-    Route::get('/edit/message/{message_id}', [MemberMessageController::class, 'show_message_edit_form'])->name('edit.form');
+    Route::get('/edit/message/{message_id}', [MemberMessageController::class, 'show_message_edit_form'])->name('show.edit.form');
     Route::put('/update/message/{message_id}', [MemberMessageController::class, 'update_message'])->name('update');
     Route::post('/ajax/delete/message', [MemberMessageController::class, 'ajax_delete_message'])->name('delete');
     Route::delete('/post/delete/{message_id}', [MemberMessageController::class, 'post_delete_message'])->name('delete');
