@@ -16,6 +16,7 @@ Route::name('site.')->group(function(){
     Route::get('/topic/{slug}', [SiteController::class, 'show_topic'])->name('single.topic');
     Route::get('/view/forum/list', [SiteController::class, 'show_forum_list'])->name('forum.list');
     Route::get('/view/top_topics', [SiteController::class, 'show_top_topics'])->name('top.topics');
+    Route::get('read/message/{message_id}', [SiteController::class,'get_single_message'])->name('single.message');
 });
 
 /**

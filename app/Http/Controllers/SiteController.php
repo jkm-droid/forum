@@ -28,7 +28,7 @@ class SiteController extends Controller
      */
     public function show_welcome_page(){
         $categories = Category::where('status',1)->orderBy('created_at', 'DESC')->get();
-        $topics = Topic::where('status',1)->with('category')->orderBy('created_at', 'DESC')->latest()->paginate(20)->onEachSide(1);
+        $topics = Topic::where('status',1)->with('category')->orderBy('created_at', 'DESC')->latest()->paginate(10)->onEachSide(1);
         $forum_list = $this->get_forum_list();
 
 //        if (Auth::check()) {
@@ -43,7 +43,7 @@ class SiteController extends Controller
 
         return view('site.welcome', compact('categories', 'topics','forum_list'))
             ->with('user', $this->get_logged_user_details())
-            ->with('i', (request()->input('page',1) - 1) * 20);
+            ->with('i', (request()->input('page',1) - 1) * 10);
 //            ->with('isViewed', $isViewed);
     }
 
@@ -104,6 +104,16 @@ class SiteController extends Controller
             ->with('user', $this->get_logged_user_details())
             ->with('forum_list', $this->get_forum_list())
             ->with('categories', $this->get_all_categories());
+    }
+
+    /**
+     * get a single message alongside its comments
+     */
+    public function get_single_message($message_id){
+        $message = Message::where('message_id', $message_id)->first();
+
+        return view('site.single_message', compact('message'))
+            ->with('user', $this->get_logged_user_details());
     }
 
     /**

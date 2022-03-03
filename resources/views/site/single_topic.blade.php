@@ -126,7 +126,7 @@
                                    data-bs-placement="top" title="{{ $t_message->author }}" data-bs-content="
                                         Joined: {{ $t_message->user->joined_date  }}
                                     Level: {{ $t_message->user->level  }}
-                                    Messages: {{ $t_message->user->messages->count() }}
+                                    Messages: {{ $t_message->where('author',$t_message->user->username)->count() }}
                                     ">
                                     <strong> {{ $t_message->author }} </strong>
                                 </a>
@@ -136,7 +136,7 @@
                     </div>
 
                     <hr style="color: lightgrey;">
-                    <p>{!! $t_message->body  !!}</p>
+                    <p>{!! $t_message->body  !!}<a href="{{ route('site.single.message',$t_message->message_id) }}">Read</a></p>
                     <div class="text-end action-buttons">
                         @if(\Illuminate\Support\Facades\Auth::check())
                             @if($user->username == $t_message->author)
@@ -158,22 +158,22 @@
 
                         <div class="btn-group" role="group" id="{{ $t_message->id }}{{ $t_message->author }}" style="display: none;">
                             <a data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" style="padding-left: 5px;"
-                               title="Share this post" data-bs-content="{{ route('site.single.topic', $topic->slug) }}">
+                               title="Share this post" data-bs-content="{{ route('site.single.message', $t_message->message_id) }}">
                                 <i class="fa fa-link"></i>
                             </a>
 
-                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ route('site.single.topic', $topic->slug) }}&quote={{ $topic->title }}"
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ route('site.single.message', $t_message->message_id) }}&quote={{ $topic->title }}"
                                style="color: #0a53be; padding-left: 5px;">
                                 <i class="fa fa-facebook"></i>
                             </a>
-                            <a href="https://twitter.com/intent/tweet?text={{ $topic->title }}&url={{ route('site.single.topic', $topic->slug) }}"
+                            <a href="https://twitter.com/intent/tweet?text={{ \Illuminate\Support\Str::limit($t_message->body,'100','...') }}&url={{ route('site.single.message', $t_message->message_id) }}"
                                style="color: #0dcaf0; padding-left: 5px;">
                                 <i class="fa fa-twitter"></i>
                             </a>
                             <a href="https://wa.me/?text=Awesome%20Blog!%5Cn%20blog.shahednasser.com"  class="text-success" style="padding-left: 5px">
                                 <i class="fa fa-whatsapp"></i>
                             </a>
-                            <a href="https://t.me/share/url?url={{ route('site.single.topic', $topic->slug) }}&text={{ $topic->title }}"
+                            <a href="https://t.me/share/url?url={{ route('site.single.message', $t_message->message_id) }}&text={{ \Illuminate\Support\Str::limit($t_message->body,'100','...')  }}"
                                style="padding-left: 5px; padding-right: 5px" class="text-info">
                                 <i class="fa fa-telegram"></i>
                             </a>
@@ -271,7 +271,7 @@
                                                data-bs-placement="top" title="{{ $tm_comment->author }}" data-bs-content="
                                                     Joined: {{ $tm_comment->message->user->joined_date }}
                                                 Level: {{ $tm_comment->message->user->level  }}
-                                                Messages: {{  $tm_comment->message->user->messages->count() }}
+                                                Messages: {{  $t_message->where('author',$tm_comment->author)->count() }}
                                                 ">
                                                 <strong> <i class="fa fa-share"></i>  {{ $tm_comment->author }} says:</strong>
                                             </a>
@@ -471,8 +471,8 @@
                     }
                 });
             }else{
-                let content = '<small class="text-center put-red">' + "Error!Email cannot be empty" + '</small>';
-                $("#message-box").html(content);
+                let content = '<small class="text-center put-red">' + "Error!Comment body cannot be empty" + '</small>';
+                $("#message-error-box").html(content);
             }
         });
 
@@ -532,8 +532,8 @@
                     }
                 });
             }else{
-                let content = '<small class="text-center put-red">' + "Error!Email cannot be empty" + '</small>';
-                $("#message-box").html(content);
+                let content = '<small class="text-center put-red">' + "Error!Thread body cannot be empty" + '</small>';
+                $("#message-error-box").html(content);
             }
         });
 
