@@ -6,7 +6,7 @@
             <li class="breadcrumb-item"><a href="/">Home</a></li>
             <li class="breadcrumb-item"><a href="{{ route('site.top.topics') }}">Topics</a></li>
             <li class="breadcrumb-item">Messages</li>
-            <li class="breadcrumb-item active" aria-current="page">{{ \Illuminate\Support\Str::limit($message->body, 20, "...") }}</li>
+            <li class="breadcrumb-item active" aria-current="page">{!! substr(strip_tags($message->body),0,20) !!}</li>
         </ol>
     </nav>
 
@@ -381,4 +381,5 @@
             });
 
         </script>
+
 @endsection

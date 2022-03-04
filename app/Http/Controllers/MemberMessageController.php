@@ -71,8 +71,7 @@ class MemberMessageController extends Controller
                     'user' => $user,
                     'purpose' => 'message'
                 ];
-                Log::channel('daily')->info("controller");
-                Log::channel('daily')->info($topic->user);
+
                 //send email notification to the topic's author
                 ContentCreationEvent::dispatch($details);
 
@@ -215,6 +214,15 @@ class MemberMessageController extends Controller
                     'activity_body'=>'<strong>'.$user->username.'</strong>'." reacted to ".'<strong>'.$message->author.'</strong>'."post",
                 ];
                 HelperEvent::dispatch($activityDetails);
+
+                $details = [
+                    'message' => $message,
+                    'user' => $user,
+                    'purpose' => 'comment'
+                ];
+
+                //send email notification to the topic's author
+                ContentCreationEvent::dispatch($details);
 
                 //send in-app notification
                 Notification::send($message->user,new CommentNotification([

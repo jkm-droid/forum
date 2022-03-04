@@ -173,7 +173,7 @@ a{
     padding-left: 70px;
 }
 
-.single-topic-table{
+.single-topic-table , .single-message-table{
     padding: 0;
     background-color: lightgrey;
     border-radius: 5px;
