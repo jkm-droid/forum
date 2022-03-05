@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Http\Controllers\BookMarkController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
@@ -31,3 +32,12 @@ Route::name('profile.')->group(function (){
  */
 Route::get('notifications/all', [NotificationController::class, 'show_all_notifications'])->name('notifications.view.all');
 Route::post('notifications/mark_as_read/{notification_id}', [NotificationController::class, 'mark_as_read'])->name('notifications.mark.as.read');
+
+/**
+ * bookmarks
+ */
+Route::name('bookmark.')->group(function () {
+    Route::post('bookmark/topic_message', [BookMarkController::class, 'bookmark_topic_message'])->name('save');
+    Route::post('bookmark/status', [BookMarkController::class, 'get_bookmark_status'])->name('status');
+    Route::get('bookmarks/{user_id}', [BookMarkController::class, 'get_user_bookmarks'])->name('all.bookmarks');
+});

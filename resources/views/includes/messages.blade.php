@@ -1,12 +1,13 @@
 @if(count($messages) > 0)
     @foreach($messages as $message)
-
-        <form method="post" action="{{ route('message.delete', $message->id) }}" style="padding: 0">
-            @csrf
-            @method('delete')
-            <a href="{{ route('message.show.edit.form', $message->id) }}" class="put-black"><i class="fa fa-edit"></i> edit</a>
-            <button class="btn" type="submit" style="padding: 0"><i class="fa fa-trash"></i>delete</button>
-        </form>
+        @if($message->user->username == $user->username)
+            <form method="post" action="{{ route('message.delete', $message->message_id) }}" style="padding: 0">
+                @csrf
+                @method('delete')
+                <a href="{{ route('message.show.edit.form', $message->message_id) }}" class="put-black"><i class="fa fa-edit"></i> edit</a>
+                <button class="btn" type="submit" style="padding: 0"><i class="fa fa-trash"></i>delete</button>
+            </form>
+        @endif
         {!! $message->body !!}
         <br>
         <span class="topic-text">

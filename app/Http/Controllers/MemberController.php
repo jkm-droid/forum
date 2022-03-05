@@ -24,7 +24,7 @@ class MemberController extends Controller
         $user = $this->userDetails->get_logged_user_details();
         $activities = Activity::where('user_id',$user->id)->orderBy('created_at', 'desc')->get();
 
-        return view('member.activity_index', compact('activities'))
+        return view('member.profile.activity_logs', compact('activities'))
             ->with('forum_list',$this->get_forum_list())
             ->with('user', $user);
     }

@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Events\HelperEvent;
 use App\HelperFunctions\GetRepetitiveItems;
 use App\HelperFunctions\MyHelperClass;
+use App\Models\BookMark;
 use App\Models\Country;
 use App\Models\Message;
 use App\Models\Profile;
+use App\Models\Topic;
 use App\Models\User;
+use App\Models\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -26,6 +29,7 @@ class ProfileController extends Controller
         $this->middleware('auth');
         $this->userDetails = $myHelperClass;
         $this->messages = $myHelperClass;
+        $this->idGenerator = $myHelperClass;
     }
 
     /**
@@ -35,7 +39,7 @@ class ProfileController extends Controller
         $user = User::where('user_id', $user_id)->first();
 
         if($user_id == Auth::user()->user_id) {
-            return view('profile.view')->with('user', $user)
+            return view('member.profile.view')->with('user', $user)
                 ->with('forum_list', $this->get_forum_list())
                 ->with('i', (request()->input('page',1) - 1) * 10)
                 ->with('messages', $this->messages->get_user_messages())
@@ -51,7 +55,7 @@ class ProfileController extends Controller
     public function show_profile_edit_form($user_id){
         $user = $this->get_user($user_id);
 
-        return view('profile.edit')->with('user', $user)
+        return view('member.profile.edit')->with('user', $user)
             ->with('categories', $this->get_all_categories());
     }
 
@@ -79,7 +83,7 @@ class ProfileController extends Controller
 
         HelperEvent::dispatch($activityDetails);
 
-        return redirect()->route('profile.view', $user_id)->with('success', 'Profile updated successfully');
+        return redirect()->route('member.profile.view', $user_id)->with('success', 'Profile updated successfully');
     }
 
     /**
@@ -90,7 +94,7 @@ class ProfileController extends Controller
         $countries = Country::get();
         $profile = Profile::where('user_id',$user->id)->first();
 
-        return view('profile.settings', compact('user','countries'))
+        return view('member.profile.settings', compact('user','countries'))
             ->with('profile',$profile)
             ->with('categories', $this->get_all_categories());
     }

@@ -80,12 +80,12 @@
 
                                 </h6>
                                 @if($topic->tags->count() > 0)
-                                <span class="latest-topic-content" style="margin-left: 20px;">
+                                    <span class="latest-topic-content" style="margin-left: 20px;">
                                     @foreach($topic->tags as $topic_tag)
-                                        <small>
+                                            <small>
                                             <span class="badge bg-success" style="padding: 3px;">{{ $topic_tag->title }}</span>
                                         </small>
-                                    @endforeach
+                                        @endforeach
                                 </span>
                                 @endif
 
@@ -142,7 +142,15 @@
                                                 Level: {{ $topic_message->user->level  }}
                                                 Messages: {{ $topic_message->user->messages->count() }}
                                                 ">
-                                                <strong><small> {{ $topic_message->author }}</small></strong>
+                                                <strong>
+                                                    <small>
+                                                        @if(\Illuminate\Support\Str::contains($topic_message->author,'.'))
+                                                            {{ strtok($topic_message->author,'.') }}
+                                                        @else
+                                                            {{ $topic_message->author }}
+                                                        @endif
+                                                    </small>
+                                                </strong>
                                             </a>
                                         </div>
 

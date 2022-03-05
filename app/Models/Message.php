@@ -42,6 +42,13 @@ class Message extends Model
     }
 
     /**
+     * get the bookmarks owned by the user
+     */
+    public function bookmarks(){
+        return $this->hasMany(BookMark::class);
+    }
+
+    /**
      * get message category
      */
     public function category(){

@@ -65,6 +65,10 @@
                                 <i class="fa fa-user fa-sm text-secondary"></i>
                                 Profile
                             </a>
+                            <a class="dropdown-item" href="{{ route('bookmark.all.bookmarks', $user->user_id) }}">
+                                <i class="fa fa-bookmark fa-sm text-secondary"></i>
+                                Bookmarks
+                            </a>
                             <a class="dropdown-item" href="{{ route('profile.settings', $user->user_id) }}">
                                 <i class="fa fa-cogs fa-sm text-secondary"></i>
                                 Settings

@@ -70,7 +70,15 @@
                                                                 Level: {{ $topic->user->level  }}
                                                                 Messages: {{ $topic->where('author', $topic->author)->count() }}
                                                             ">
-                                                            <strong><small> {{ $topic->author }}</small></strong>
+                                                            <strong>
+                                                                <small>
+                                                                    @if(\Illuminate\Support\Str::contains($topic->author,'.'))
+                                                                        {{ strtok($topic->author,'.') }}
+                                                                    @else
+                                                                        {{ $topic->author }}
+                                                                    @endif
+                                                                </small>
+                                                            </strong>
                                                         </a>
                                                     </div>
                                                 @endif

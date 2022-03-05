@@ -22,7 +22,7 @@
                     @foreach($top_topics as $top)
                         <div class="row">
                             <div class="col-md-7" style="margin-bottom: 10px; ">
-                                <h6 style="padding: 0">
+                                <h6 style="padding: 0" class="underline-text">
                                     <a href="{{ route('site.single.topic', $top->slug) }}">{{ $top->title }}</a>
                                 </h6>
                                 <span class="show-on-mobile topic-text">

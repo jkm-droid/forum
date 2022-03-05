@@ -96,11 +96,33 @@
                data-bs-toggle="tooltip" data-bs-placement="left" title="share this post's link">
                 <i class="fa fa-share-alt"></i> Share
             </a>
+            @if(\Illuminate\Support\Facades\Auth::check())
+                <button class="btn  btn-lg text-secondary" id="bookmark-topic" bookmark-topic="{{ $topic->id }}" data-bs-toggle="tooltip" data-bs-placement="left" title="bookmark this topic">
+                    <i class="fa fa-bookmark"></i>
+                </button>
+                <script type="text/javascript">
+                    $.ajax({
+                        url: '/bookmark/status',
+                        type: 'POST',
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            'topic_id': {{ $topic->id }},
+                            'role' : 'topic'
+                        },
+                        success: function (response) {
+                            console.log(response);
+                            if(response.message === "bookmarked"){
+                                document.getElementById('bookmark-topic').disabled = true;
+                                document.getElementById('bookmark-topic').className = 'btn  btn-lg text-success';
+                            }
+                        },
 
-            <button class="btn  btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="bookmark this topic">
-                <i class="fa fa-bookmark"></i>
-            </button>
-
+                        failure: function (response) {
+                            console.log("something went wrong");
+                        }
+                    });
+                </script>
+            @endif
             <a href="#reply-editor" class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="write a comment/message about this topic">
                 <i class="fa fa-reply"></i> Reply
             </a>
@@ -116,21 +138,56 @@
             @foreach($messages as $t_message)
                 <div class="single-topic-message">
                     <div class="row col-md-12">
-                        <div class="col-md-12">
-                            <img style="margin-right: 10px; float: left" class="img-fluid" src="/profile_pictures/{{ $t_message->user->profile_url }}"
-                                 alt="" width="70" height="60">
+                        <div class="row col-md-12">
+                            <div class="col-md-6">
 
-                            <h6>{{ \Carbon\Carbon::parse($t_message->created_at)->format('j M, `y') }}</h6>
-                            <h6>
-                                <a class="text-secondary" data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
-                                   data-bs-placement="top" title="{{ $t_message->author }}" data-bs-content="
+                                <img style="margin-right: 10px; float: left" class="img-fluid" src="/profile_pictures/{{ $t_message->user->profile_url }}"
+                                     alt="" width="70" height="60">
+
+                                <h6>{{ \Carbon\Carbon::parse($t_message->created_at)->format('j M, `y') }}</h6>
+                                <h6>
+                                    <a class="text-secondary" data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"
+                                       data-bs-placement="top" title="{{ $t_message->author }}" data-bs-content="
                                         Joined: {{ $t_message->user->joined_date  }}
-                                    Level: {{ $t_message->user->level  }}
-                                    Messages: {{ $t_message->where('author',$t_message->user->username)->count() }}
-                                    ">
-                                    <strong> {{ $t_message->author }} </strong>
-                                </a>
-                            </h6>
+                                        Level: {{ $t_message->user->level  }}
+                                        Messages: {{ $t_message->where('author',$t_message->user->username)->count() }}
+                                        ">
+                                        <strong> {{ $t_message->author }} </strong>
+                                    </a>
+                                </h6>
+
+                            </div>
+                            <div class="col-md-6">
+                                @if(\Illuminate\Support\Facades\Auth::check())
+                                    <button style="float: right;" onclick="bookMark({{ $t_message->id }})"  class="btn btn-lg text-secondary" id="{{$t_message->id}}" bookmark-message="{{ $t_message->id }}"
+                                            data-bs-toggle="tooltip" data-bs-placement="left" title="bookmark this topic">
+                                        <i class="fa fa-bookmark"></i>
+                                    </button>
+                                    <script type="text/javascript">
+                                        $.ajax({
+                                            url: '/bookmark/status',
+                                            type: 'POST',
+                                            data: {
+                                                "_token": "{{ csrf_token() }}",
+                                                'message_id': {{ $t_message->id }},
+                                                'role' : 'message'
+                                            },
+                                            success: function (response) {
+                                                console.log(response);
+                                                if(response.message === "bookmarked"){
+                                                    document.getElementById({{ $t_message->id }}).disabled = true;
+                                                    document.getElementById({{ $t_message->id }}).className = 'btn  btn-lg text-success';
+                                                }
+                                            },
+
+                                            failure: function (response) {
+                                                console.log("something went wrong");
+                                            }
+                                        });
+                                    </script>
+                                @endif
+
+                            </div>
                         </div>
 
                     </div>
@@ -190,7 +247,6 @@
                             </button>
 
                             <script>
-                                // function like(){
                                 $(document).on('click', '#'+{{ $t_message->id }}, function(){
                                     const id = $(this).attr("like-id");
                                     const author = $(this).attr("like-author");
@@ -221,7 +277,6 @@
                                         }
                                     });
                                 });
-                                // }
                             </script>
                             <button reply-id="{{ $t_message->id }}" reply-body="{!! $t_message->body !!}" id="btn_post_reply" class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="write a comment">
                                 <i class="fa fa-reply"></i> Reply
@@ -384,6 +439,7 @@
                                 "progressBar" : true
                             }
                         toastr.success("Message Liked successfully");
+                        location.reload();
                     }else{
                         toastr.options =
                             {
@@ -392,7 +448,6 @@
                             }
                         toastr.error("Oops! An error occurred");
                     }
-
                 },
 
                 failure: function (response) {
@@ -634,5 +689,98 @@
             }
         });
 
+    </script>
+
+    <script type="text/javascript">
+        //bookmark topic
+
+        $('#bookmark-topic').click(function(e){
+            e.preventDefault();
+
+            const topicId = $(this).attr("bookmark-topic");
+            console.log(topicId);
+            $.ajax({
+                url: '/bookmark/topic_message',
+                type: 'POST',
+                data: {
+                    "_token" : "{{ csrf_token() }}",
+                    'topic_id' : topicId,
+                    'role' : 'topic',
+                },
+                success: function (response) {
+                    console.log(response);
+                    let content = "";
+
+                    if(response.status === 200){
+                        toastr.options =
+                            {
+                                "closeButton" : true,
+                                "progressBar" : true
+                            }
+                        toastr.success("Reply sent successfully");
+                    }else{
+                        toastr.options =
+                            {
+                                "closeButton" : true,
+                                "progressBar" : true
+                            }
+                        toastr.error("Oops! An error occurred");
+                    }
+
+                    history.scrollRestoration = "manual";
+                    $(this).scrollTop(0);
+                    location.reload();
+                },
+
+                failure: function (response) {
+                    console.log("something went wrong");
+                }
+            });
+
+        });
+
+    </script>
+
+    <script type="text/javascript">
+        //bookmark message
+        function bookMark(messageId) {
+            const message_Id = messageId;
+            console.log(messageId);
+            $.ajax({
+                url: '/bookmark/topic_message',
+                type: 'POST',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    'message_id': message_Id,
+                    'role': 'message',
+                },
+                success: function (response) {
+                    console.log(response);
+
+                    if (response.status === 200) {
+                        toastr.options =
+                            {
+                                "closeButton": true,
+                                "progressBar": true
+                            }
+                        toastr.success(response.message);
+                        location.reload();
+
+                    } else {
+                        toastr.options =
+                            {
+                                "closeButton": true,
+                                "progressBar": true
+                            }
+                        toastr.error("Oops! An error occurred");
+                    }
+
+                },
+
+                failure: function (response) {
+                    console.log("something went wrong");
+                }
+            });
+        }
     </script>
 @endsection

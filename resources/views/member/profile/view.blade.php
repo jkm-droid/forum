@@ -1,13 +1,21 @@
 @extends('base.index')
 
 @section('content')
+    <!-- Page Heading -->
+    <nav style="--bs-breadcrumb-divider: '/';" aria-label="breadcrumb">
+        <ol class="breadcrumb" >
+            <li class="breadcrumb-item"><a href="/">Portal</a></li>
+            <li class="breadcrumb-item"><a href="">User</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Topics & Threads</li>
+        </ol>
+    </nav>
 
     <div class="row col-md-12">
-        <div class="col-md-2 profile-section profile-image" style="margin-right: 0">
+        <div class="col-md-2" style="margin-right: 0;">
 
             <a href="{{ route('profile.show.edit', $user->user_id) }}" class="put-black" data-bs-toggle="tooltip"
                data-bs-placement="top" title="click to change avatar">
-                <img class="image img-fluid" src="/profile_pictures/{{ $user->profile_url }}" alt="">
+                <img class="img-fluid profile-image-mobile" src="/profile_pictures/{{ $user->profile_url }}" alt="">
             </a>
             <span class="disappear-item">
                  @include('includes.forum_list')
@@ -32,7 +40,7 @@
                 <tbody>
                 <tr>
                     <td>
-                        {{ \App\Models\Message::where('author',$user->username)->count() }}
+                        {{ $user->messages->count() }}
                     </td>
                     <td>25</td>
                     <td>{{ $user->rating }}%</td>

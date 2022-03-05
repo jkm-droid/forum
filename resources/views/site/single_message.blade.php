@@ -173,7 +173,7 @@
             </form>
     </div>
         @else
-            <h4 class="text-center put-red">you should have an account to reply in this section
+            <h4 class="text-center put-red">you should have an account to reply in the forum
                 <a href="{{ route('user.show.register') }}">create one</a>
             </h4>
         @endif

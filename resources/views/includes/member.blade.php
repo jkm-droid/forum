@@ -1,9 +1,9 @@
 @if(\Illuminate\Support\Facades\Auth::check())
     <div class="logged-user-profile">
-        <div class="col-md-6 profile-section profile-image">
+        <div class="col-md-6">
             <a href="{{ route('profile.show.edit', $user->user_id) }}" class="put-black" data-bs-toggle="tooltip"
                data-bs-placement="top" title="click to change avatar">
-                <img class="image img-fluid" src="/profile_pictures/{{ $user->profile_url }}" alt="">
+                <img  style="width: fit-content;" src="/profile_pictures/{{ $user->profile_url }}" alt="">
             </a>
         </div>
         <div class="col-md-6 logged-user-details">
