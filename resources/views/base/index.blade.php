@@ -61,6 +61,7 @@
 <script src="{{ asset('admin-assets/js/sb-admin-2.min.js') }}"></script>
 <!-- Summernote -->
 <script src="{{ asset('summernote/summernote-bs4.min.js') }}"></script>
+<script src="{{ asset('js/scroll.js') }}"></script>
 
 <script>
     var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))

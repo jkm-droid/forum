@@ -159,7 +159,8 @@
                             </div>
                             <div class="col-md-6">
                                 @if(\Illuminate\Support\Facades\Auth::check())
-                                    <button style="float: right;" onclick="bookMark({{ $t_message->id }})"  class="btn btn-lg text-secondary" id="{{$t_message->id}}" bookmark-message="{{ $t_message->id }}"
+                                    <button style="float: right;" onclick="bookMark({{ $t_message->id }})"  class="btn btn-lg text-secondary"
+                                            id="{{$t_message->author}}" bookmark-message="{{ $t_message->id }}"
                                             data-bs-toggle="tooltip" data-bs-placement="left" title="bookmark this topic">
                                         <i class="fa fa-bookmark"></i>
                                     </button>
@@ -175,8 +176,8 @@
                                             success: function (response) {
                                                 console.log(response);
                                                 if(response.message === "bookmarked"){
-                                                    document.getElementById({{ $t_message->id }}).disabled = true;
-                                                    document.getElementById({{ $t_message->id }}).className = 'btn  btn-lg text-success';
+                                                    document.getElementById('{{$t_message->author}}').disabled = true;
+                                                    document.getElementById('{{$t_message->author}}').className = 'btn  btn-lg text-success';
                                                 }
                                             },
 
@@ -260,7 +261,6 @@
                                             'message_id': id,
                                         },
                                         success: function (response) {
-                                            console.log(response.likeCount);
                                             if(response.status === 200){
                                                 toastr.options =
                                                     {
@@ -270,6 +270,10 @@
                                                 toastr.success("Message Liked successfully");
                                                 document.getElementById(id_author).innerHTML = response.likeCount;
                                             }
+                                            setTimeout(function (){
+                                                location.reload();
+                                                scrollToPosition();
+                                            },4000);
                                         },
 
                                         failure: function (response) {
@@ -278,6 +282,36 @@
                                     });
                                 });
                             </script>
+
+                            <button style="display: none;" onclick="bookMark({{ $t_message->id }})"  class="btn btn-lg text-secondary"
+                                    id="{{$t_message->message_id}}" bookmark-message="{{ $t_message->id }}"
+                                    data-bs-toggle="tooltip" data-bs-placement="left" title="bookmark this topic">
+                                <i class="fa fa-bookmark"></i>
+                            </button>
+
+                            <script type="text/javascript">
+                                $.ajax({
+                                    url: '/bookmark/status',
+                                    type: 'POST',
+                                    data: {
+                                        "_token": "{{ csrf_token() }}",
+                                        'message_id': {{ $t_message->id }},
+                                        'role' : 'message'
+                                    },
+                                    success: function (response) {
+                                        console.log(response);
+                                        if(response.message === "bookmarked"){
+                                            document.getElementById('{{ $t_message->message_id }}').disabled = true;
+                                            document.getElementById('{{ $t_message->message_id }}').className = 'btn  btn-lg text-success';
+                                        }
+                                    },
+
+                                    failure: function (response) {
+                                        console.log("something went wrong");
+                                    }
+                                });
+                            </script>
+
                             <button reply-id="{{ $t_message->id }}" reply-body="{!! $t_message->body !!}" id="btn_post_reply" class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="write a comment">
                                 <i class="fa fa-reply"></i> Reply
                             </button>
@@ -419,45 +453,6 @@
 
     </script>
 
-    <script type="text/javascript">
-        $(document).on('click', '#btn_like_message', function () {
-            const messageId = $(this).attr("like-id");
-
-            $.ajax({
-                url: '/message/like',
-                type: 'POST',
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    'message_id': messageId,
-                },
-                success: function (response) {
-                    console.log(response);
-                    if(response.status === 200){
-                        toastr.options =
-                            {
-                                "closeButton" : true,
-                                "progressBar" : true
-                            }
-                        toastr.success("Message Liked successfully");
-                        location.reload();
-                    }else{
-                        toastr.options =
-                            {
-                                "closeButton" : true,
-                                "progressBar" : true
-                            }
-                        toastr.error("Oops! An error occurred");
-                    }
-                },
-
-                failure: function (response) {
-                    console.log("something went wrong");
-                }
-            });
-        });
-
-    </script>
-
     <script>
         $(document).on('click', '#btn_post_reply', function(){
             document.getElementById('reply-editor').scrollIntoView();
@@ -516,9 +511,10 @@
                             toastr.error("Oops! An error occurred");
                         }
 
-                        history.scrollRestoration = "manual";
-                        $(this).scrollTop(0);
-                        location.reload();
+                        setTimeout(function (){
+                            location.reload();
+                            scrollToPosition();
+                        },4000);
                     },
 
                     failure: function (response) {
@@ -576,10 +572,11 @@
                                 }
                             toastr.error("Oops! An error occurred");
                         }
+                        setTimeout(function (){
+                            location.reload();
+                            scrollToPosition();
+                        },4000);
 
-                        history.scrollRestoration = "manual";
-                        $(this).scrollTop(0);
-                        location.reload();
                     },
 
                     failure: function (response) {
@@ -612,9 +609,6 @@
                     },
                     success: function (response) {
                         console.log(response);
-                        history.scrollRestoration = "manual";
-                        $(this).scrollTop(0);
-                        location.reload();
 
                         if(response.status === 200){
                             toastr.options =
@@ -631,6 +625,11 @@
                                 }
                             toastr.error("Oops! An error occurred");
                         }
+
+                        setTimeout(function (){
+                            location.reload();
+                            scrollToPosition();
+                        },4000);
 
                     },
 
@@ -661,8 +660,6 @@
                     },
                     success: function (response) {
                         console.log(response);
-                        history.scrollRestoration = "manual";
-                        $(this).scrollTop(0);
 
                         if(response.status === 200){
                             toastr.options =
@@ -679,7 +676,11 @@
                                 }
                             toastr.error("Oops! an error occurred");
                         }
-                        location.reload();
+
+                        setTimeout(function (){
+                            location.reload();
+                            scrollToPosition();
+                        },4000);
                     },
 
                     failure: function (response) {
@@ -727,9 +728,10 @@
                         toastr.error("Oops! An error occurred");
                     }
 
-                    history.scrollRestoration = "manual";
-                    $(this).scrollTop(0);
-                    location.reload();
+                    setTimeout(function (){
+                        location.reload();
+                        scrollToPosition();
+                    },4000);
                 },
 
                 failure: function (response) {
@@ -764,7 +766,11 @@
                                 "progressBar": true
                             }
                         toastr.success(response.message);
-                        location.reload();
+
+                        setTimeout(function (){
+                            location.reload();
+                            scrollToPosition();
+                        },4000);
 
                     } else {
                         toastr.options =
@@ -783,4 +789,5 @@
             });
         }
     </script>
+
 @endsection

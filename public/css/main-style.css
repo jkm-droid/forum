@@ -154,7 +154,9 @@ a{
         font-size: smaller;
     }
 
-
+    .hide-on-mobile{
+        display: none !important;
+    }
     .show-on-mobile{
         display: inline !important;
     }

@@ -106,8 +106,8 @@ class BookMarkController extends Controller
      */
     public function get_user_bookmarks($user_id){
         $user = User::where('user_id', $user_id)->first();
-        $topic_bookmarks = BookMark::where('user_id',$user->id)->whereNotNull('topic_id')->get();
-        $message_bookmarks = BookMark::where('user_id',$user->id)->whereNotNull('message_id')->get();
+        $topic_bookmarks = BookMark::where('user_id',$user->id)->whereNotNull('topic_id')->paginate(10);
+        $message_bookmarks = BookMark::where('user_id',$user->id)->whereNotNull('message_id')->paginate(10);
 
         return view('member.bookmark.bookmarks',compact('topic_bookmarks','message_bookmarks'))
             ->with('forum_list', $this->get_forum_list())

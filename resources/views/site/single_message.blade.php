@@ -217,6 +217,10 @@
                             toastr.error("Oops! An error occurred");
                         }
 
+                        setTimeout(function (){
+                            location.reload();
+                            scrollToPosition();
+                        },4000);
                     },
 
                     failure: function (response) {
@@ -268,9 +272,10 @@
                                 toastr.error("Oops! An error occurred");
                             }
 
-                            history.scrollRestoration = "manual";
-                            $(this).scrollTop(0);
-                            location.reload();
+                            setTimeout(function (){
+                                location.reload();
+                                scrollToPosition();
+                            },4000);
                         },
 
                         failure: function (response) {
@@ -302,10 +307,6 @@
                             'reply_id': replyId,
                         },
                         success: function (response) {
-                            console.log(response);
-                            history.scrollRestoration = "manual";
-                            $(this).scrollTop(0);
-                            location.reload();
 
                             if(response.status === 200){
                                 toastr.options =
@@ -322,7 +323,10 @@
                                     }
                                 toastr.error("Oops! An error occurred");
                             }
-
+                            setTimeout(function (){
+                                location.reload();
+                                scrollToPosition();
+                            },4000);
                         },
 
                         failure: function (response) {
@@ -351,10 +355,6 @@
                             'comment_id': comment_id,
                         },
                         success: function (response) {
-                            console.log(response);
-                            history.scrollRestoration = "manual";
-                            $(this).scrollTop(0);
-
                             if(response.status === 200){
                                 toastr.options =
                                     {
@@ -370,7 +370,10 @@
                                     }
                                 toastr.error("Oops! an error occurred");
                             }
-                            location.reload();
+                            setTimeout(function (){
+                                location.reload();
+                                scrollToPosition();
+                            },4000);
                         },
 
                         failure: function (response) {
