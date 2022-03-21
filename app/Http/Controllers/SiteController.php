@@ -28,7 +28,7 @@ class SiteController extends Controller
      */
     public function show_welcome_page(){
         $categories = Category::where('status',1)->orderBy('created_at', 'DESC')->get();
-        $topics = Topic::where('status',1)->with('category')->orderBy('created_at', 'DESC')->latest()->paginate(10)->onEachSide(1);
+        $topics = Topic::where('status',1)->with('category')->orderBy('created_at', 'DESC')->latest()->paginate(20);
         $forum_list = $this->get_forum_list();
 
 //        if (Auth::check()) {
@@ -43,7 +43,7 @@ class SiteController extends Controller
 
         return view('site.welcome', compact('categories', 'topics','forum_list'))
             ->with('user', $this->get_logged_user_details())
-            ->with('i', (request()->input('page',1) - 1) * 10);
+            ->with('i', (request()->input('page',1) - 1) * 20);
 //            ->with('isViewed', $isViewed);
     }
 
@@ -54,9 +54,11 @@ class SiteController extends Controller
 
     public function show_single_category($slug){
         $category = Category::where('slug', $slug)->first();
-        $category_topics = Topic::where('status', 1)->where('category_id', $category->id)->orderBy('created_at', 'DESC')->get();
+        $category_topics = Topic::where('status', 1)->where('category_id', $category->id)->orderBy('created_at', 'DESC')->paginate(20);
 
         return view('site.single_category',compact('category','category_topics'))
+            ->with('i', (request()->input('page',1) - 1) * 20)
+            ->with('forum_list', $this->get_forum_list())
             ->with('user', $this->get_logged_user_details());
     }
 
@@ -90,6 +92,7 @@ class SiteController extends Controller
         return view('site.single_topic', compact('topic', 'messages'))
             ->with('i', (request()->input('page',1) - 1) * 10)
             ->with('user', $this->get_logged_user_details())
+            ->with('forum_list', $this->get_forum_list())
             ->with('categories', $this->get_all_categories());
     }
 
@@ -113,6 +116,7 @@ class SiteController extends Controller
         $message = Message::where('message_id', $message_id)->first();
 
         return view('site.single_message', compact('message'))
+            ->with('forum_list', $this->get_forum_list())
             ->with('user', $this->get_logged_user_details());
     }
 

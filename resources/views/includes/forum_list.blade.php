@@ -3,7 +3,7 @@
     @foreach($forum_list as $forum)
         <div class="accordion-item">
             <h6 class="accordion-header" id="panelsStayOpen-headingOne">
-                <button class="accordion-button text-dark" style="font-size: 18px; padding: 5px; background-color: lightgrey;" type="button" data-bs-toggle="collapse"
+                <button class="accordion-button text-white" style="font-size: 18px; padding: 5px; background-color: #272e38;" type="button" data-bs-toggle="collapse"
                         data-bs-target="#panelsStayOpen-collapseOne-{{ $forum->id }}" aria-expanded="true"
                         aria-controls="panelsStayOpen-collapseOne">
                     {{ $forum->title }}

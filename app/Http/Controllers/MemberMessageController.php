@@ -24,6 +24,7 @@ use Illuminate\Support\Str;
 class MemberMessageController extends Controller
 {
     use GetRepetitiveItems;
+
     private $userDetails, $activity, $idGenerator;
 
     public function __construct(MyHelperClass $myHelperClass){
@@ -110,6 +111,7 @@ class MemberMessageController extends Controller
 
         return view('member.message.edit_message', compact('message','topic'))
             ->with('categories',$this->get_all_categories())
+            ->with('forum_list', $this->get_forum_list())
             ->with('user', $this->userDetails->get_logged_user_details());
     }
 
@@ -258,6 +260,7 @@ class MemberMessageController extends Controller
 
         return view('member.message_reply.edit_message_reply', compact('comment','topic'))
             ->with('categories',$this->get_all_categories())
+            ->with('forum_list', $this->get_forum_list())
             ->with('user', $this->userDetails->get_logged_user_details());
     }
 

@@ -1,12 +1,29 @@
 @extends('base.index')
 
 @section('content')
+    <!-- Page Heading -->
+    <nav style="--bs-breadcrumb-divider: '/';" aria-label="breadcrumb">
+        <ol class="breadcrumb" >
+            <li class="breadcrumb-item"><a href="/">Profile</a></li>
+            <li class="breadcrumb-item"><a href="">User</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Change Avatar</li>
+        </ol>
+    </nav>
+
 <div class="row mt-4">
    <div class="col-md-3 disappear-item">
        @include('includes.category')
    </div>
 
+    <div class="col-md-2 show-on-mobile" style="margin-right: 0; display: none;">
+        @include('includes.profile.picture')
+    </div>
+
     <div class="col-md-9">
+         <span style="display: none;" class="show-on-mobile">
+                @include('includes.profile.description')
+            </span>
+
         <h3>Change Avatar</h3>
 
         @if ($errors->any())

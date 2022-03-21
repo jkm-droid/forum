@@ -34,14 +34,20 @@ class BookMarkController extends Controller
 
             if ($role== "topic"){
                 $topic_id = $request->topic_id;
-                $bookmark->user_id = $user->id;
-                $bookmark->topic_id = $topic_id;
+                $checkBookmark = BookMark::where('user_id',$user->id)->where('topic_id',$topic_id)->first();
+                if (!$checkBookmark) {
+                    $bookmark->user_id = $user->id;
+                    $bookmark->topic_id = $topic_id;
+                }
             }
 
             if ($role== "message"){
                 $message_id = $request->message_id;
-                $bookmark->user_id = $user->id;
-                $bookmark->message_id = $message_id;
+                $checkBookmark = BookMark::where('user_id',$user->id)->where('message_id',$message_id)->first();
+                if (!$checkBookmark) {
+                    $bookmark->user_id = $user->id;
+                    $bookmark->message_id = $message_id;
+                }
             }
             $bookmark->status = 1;
             if ($bookmark->save()) {

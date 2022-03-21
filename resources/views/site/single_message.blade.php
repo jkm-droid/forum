@@ -6,7 +6,7 @@
             <li class="breadcrumb-item"><a href="/">Home</a></li>
             <li class="breadcrumb-item"><a href="{{ route('site.top.topics') }}">Topics</a></li>
             <li class="breadcrumb-item">Messages</li>
-            <li class="breadcrumb-item active" aria-current="page">{!! substr(strip_tags($message->body),0,20) !!}</li>
+            <li class="breadcrumb-item active" aria-current="page">{!! substr(strip_tags($message->body),0,15) !!}</li>
         </ol>
     </nav>
 
@@ -90,11 +90,37 @@
                 <i class="fa fa-share-alt"></i> Share
             </a>
 
-            <button class="btn  btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="bookmark this message">
-                <i class="fa fa-bookmark"></i>
+            <button onclick="bookMark({{ $message->id }})"  class="btn text-secondary"
+                    id="{{$message->message_id}}" bookmark-message="{{ $message->id }}"
+                    data-bs-toggle="tooltip" data-bs-placement="left" title="bookmark this message">
+                <i class="fa fa-bookmark"></i><span style="font-size:medium" id="bookmark-status">Save</span>
             </button>
 
-            <a href="#reply-editor" class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="write a comment/message about this message">
+            <script type="text/javascript">
+                $.ajax({
+                    url: '/bookmark/status',
+                    type: 'POST',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        'message_id': {{ $message->id }},
+                        'role' : 'message'
+                    },
+                    success: function (response) {
+                        console.log(response);
+                        if(response.message === "bookmarked"){
+                            document.getElementById('{{ $message->message_id }}').disabled = true;
+                            document.getElementById('{{ $message->message_id }}').className = 'btn text-success';
+                            document.getElementById('bookmark-status').innerText = 'Saved';
+                        }
+                    },
+
+                    failure: function (response) {
+                        console.log("something went wrong");
+                    }
+                });
+            </script>
+
+            <a href="#reply-editor" class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="write a comment/message about this message">
                 <i class="fa fa-reply"></i> Reply
             </a>
         </div>

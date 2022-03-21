@@ -22,7 +22,7 @@ Route::name('member.')->group(function() {
 Route::name('profile.')->group(function (){
     Route::get('profile/view/{user_id}', [ProfileController::class, 'view_profile'])->name('view');
     Route::get('profile/edit/{user_id}', [ProfileController::class, 'show_profile_edit_form'])->name('show.edit');
-    Route::put('profile/update/{user_id}', [ProfileController::class, 'update_profile'])->name('update');
+    Route::put('profile/update/{user_id}', [ProfileController::class, 'update_profile_picture'])->name('update');
     Route::get('profile/settings/{user_id}', [ProfileController::class, 'profile_settings'])->name('settings');
     Route::put('profile/settings/update/{user_id}', [ProfileController::class, 'update_profile_settings'])->name('settings.update');
 });

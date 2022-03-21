@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-xs-12 ">
+    <div class="col-xs-12 bookmarks-tab">
         <nav>
             <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
                 <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Topics</a>
@@ -8,7 +8,7 @@
             </div>
         </nav>
         <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
-            <div class="tab-pane fade show active underline-text" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <div class="tab-pane fade show active underline-text" style="margin-left: 2px;" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                 @if(count( $topic_bookmarks) > 0)
                     @foreach( $topic_bookmarks as  $topic_bookmark)
                         @if(  $topic_bookmark->topic->user->username == $user->username)
@@ -23,7 +23,7 @@
                             {{ $topic_bookmark->topic->title }}
                         </a>
                         <br>
-                        <span class="topic-text">
+                        <span class="topic-text ml-2">
                         <i class="fa fa-clock-o"></i>
                         {{  $topic_bookmark->topic->created_at }}
                             @if( $topic_bookmark->topic->likes > 0)
@@ -53,7 +53,8 @@
                     </div>
                 @endif
             </div>
-            <div class="tab-pane fade underline-text" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+
+            <div class="tab-pane fade underline-text" style="margin-left: 2px;" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                 @if(count( $message_bookmarks) > 0)
                     @foreach( $message_bookmarks as  $message_bookmark)
                         @if( $message_bookmark->message->user->username == $user->username)
@@ -64,10 +65,10 @@
                                 <button class="btn" type="submit" style="padding: 0"><i class="fa fa-trash"></i>delete</button>
                             </form>
                         @endif
-                        <a href="{{ route('site.single.message',$message_bookmark->message->message_id) }}">
+                        <a style="padding-bottom: 0" href="{{ route('site.single.message',$message_bookmark->message->message_id) }}">
                             {!!  $message_bookmark->message->body !!}
                         </a>
-                        <br>
+                        <br/>
                         <span class="topic-text">
                         <i class="fa fa-clock-o"></i>
                         {{  $message_bookmark->message->created_at }}

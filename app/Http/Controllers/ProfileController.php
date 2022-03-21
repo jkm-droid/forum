@@ -56,13 +56,14 @@ class ProfileController extends Controller
         $user = $this->get_user($user_id);
 
         return view('member.profile.edit')->with('user', $user)
+            ->with('forum_list', $this->get_forum_list())
             ->with('categories', $this->get_all_categories());
     }
 
     /**
      * Update the user's profile
      **/
-    public function update_profile(Request $request, $user_id){
+    public function update_profile_picture(Request $request, $user_id){
         $user = $this->get_user($user_id);
 
         if ($request->hasFile('profile_picture')){
@@ -96,6 +97,7 @@ class ProfileController extends Controller
 
         return view('member.profile.settings', compact('user','countries'))
             ->with('profile',$profile)
+            ->with('forum_list', $this->get_forum_list())
             ->with('categories', $this->get_all_categories());
     }
 
@@ -107,6 +109,10 @@ class ProfileController extends Controller
      * update the extra profile settings
      */
     public function update_profile_settings(Request $request, $user_id){
+        $request->validate([
+            'about' => 'max:255'
+        ]);
+
         $profileInfo = $request->all();
         $user = $this->get_user($user_id);
 
@@ -131,9 +137,11 @@ class ProfileController extends Controller
             $about = $profileInfo['about'];
         }
 
+        $id = $this->idGenerator->generateUniqueId($user->username,'profiles','profile_id');
         Profile::updateOrCreate(
             ['user_id'=>$user->id],
             [
+                'profile_id' => $id,
                 'country'=>$country,
                 'dob'=>$dob,
                 'website'=>$website,

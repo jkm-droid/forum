@@ -97,8 +97,8 @@
                 <i class="fa fa-share-alt"></i> Share
             </a>
             @if(\Illuminate\Support\Facades\Auth::check())
-                <button class="btn  btn-lg text-secondary" id="bookmark-topic" bookmark-topic="{{ $topic->id }}" data-bs-toggle="tooltip" data-bs-placement="left" title="bookmark this topic">
-                    <i class="fa fa-bookmark"></i>
+                <button class="btn text-secondary" id="bookmark-topic" bookmark-topic="{{ $topic->id }}" data-bs-toggle="tooltip" data-bs-placement="left" title="bookmark this topic">
+                    <i class="fa fa-bookmark"></i><span style="font-size:medium" id="bookmark-status">Save</span>
                 </button>
                 <script type="text/javascript">
                     $.ajax({
@@ -114,6 +114,7 @@
                             if(response.message === "bookmarked"){
                                 document.getElementById('bookmark-topic').disabled = true;
                                 document.getElementById('bookmark-topic').className = 'btn  btn-lg text-success';
+                                document.getElementById('bookmark-status').innerText = 'Saved';
                             }
                         },
 
@@ -123,7 +124,7 @@
                     });
                 </script>
             @endif
-            <a href="#reply-editor" class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="write a comment/message about this topic">
+            <a href="#reply-editor" class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="write a comment/message about this topic">
                 <i class="fa fa-reply"></i> Reply
             </a>
         </div>
@@ -159,7 +160,7 @@
                             </div>
                             <div class="col-md-6">
                                 @if(\Illuminate\Support\Facades\Auth::check())
-                                    <button style="float: right;" onclick="bookMark({{ $t_message->id }})"  class="btn btn-lg text-secondary"
+                                    <button style="float: right;" onclick="bookMark({{ $t_message->id }})"  class="btn btn-lg text-secondary disappear-item"
                                             id="{{$t_message->author}}" bookmark-message="{{ $t_message->id }}"
                                             data-bs-toggle="tooltip" data-bs-placement="left" title="bookmark this topic">
                                         <i class="fa fa-bookmark"></i>
@@ -177,7 +178,7 @@
                                                 console.log(response);
                                                 if(response.message === "bookmarked"){
                                                     document.getElementById('{{$t_message->author}}').disabled = true;
-                                                    document.getElementById('{{$t_message->author}}').className = 'btn  btn-lg text-success';
+                                                    document.getElementById('{{$t_message->author}}').className = 'btn btn-lg text-success disappear-item';
                                                 }
                                             },
 
@@ -210,8 +211,8 @@
                             @endif
                         @endif
 
-                        <button class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="like">
-                            {{ $t_message->comments->count() }} Reactions
+                        <button class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="message reactions">
+                            {{ $t_message->comments->count() }} <i class="fa fa-comment"></i><span class="disappear-item">reactions</span>
                         </button>
 
                         <div class="btn-group" role="group" id="{{ $t_message->id }}{{ $t_message->author }}" style="display: none;">
@@ -240,11 +241,13 @@
 
                         <a id="btn_share_message" class="btn text-secondary" share-id="{{ $t_message->id }}{{ $t_message->author }}"
                            data-bs-toggle="tooltip" data-bs-placement="left" title="share this post's link">
-                            <i class="fa fa-share-alt"></i> Share
+                            <i class="fa fa-share-alt"></i> <span class="disappear-item">share</span>
                         </a>
                         @if(\Illuminate\Support\Facades\Auth::check())
-                            <button id="{{ $t_message->id }}"  class="btn text-secondary" data-bs-toggle="tooltip" like-id="{{ $t_message->id }}" like-author="{{ $t_message->author }}" data-bs-placement="left" title="like">
-                                <span id="{{ $t_message->author }}{{ $t_message->id }}">{{ $t_message->likes }}</span> <i class="fa fa-heart"></i>
+                            <button id="{{ $t_message->id }}"  class="btn text-secondary" data-bs-toggle="tooltip" like-id="{{ $t_message->id }}"
+                                    like-author="{{ $t_message->author }}" data-bs-placement="left" title="message likes">
+                                <span id="{{ $t_message->author }}{{ $t_message->id }}">{{ $t_message->likes }}</span>
+                                <i class="fa fa-heart"></i><span class="disappear-item">likes</span>
                             </button>
 
                             <script>
@@ -283,10 +286,10 @@
                                 });
                             </script>
 
-                            <button style="display: none;" onclick="bookMark({{ $t_message->id }})"  class="btn btn-lg text-secondary"
+                            <button style="display: none;" onclick="bookMark({{ $t_message->id }})"  class="btn text-secondary show-on-mobile"
                                     id="{{$t_message->message_id}}" bookmark-message="{{ $t_message->id }}"
-                                    data-bs-toggle="tooltip" data-bs-placement="left" title="bookmark this topic">
-                                <i class="fa fa-bookmark"></i>
+                                    data-bs-toggle="tooltip" data-bs-placement="left" title="bookmark this message">
+                                <i class="fa fa-bookmark"></i><span class="disappear-item">save</span>
                             </button>
 
                             <script type="text/javascript">
@@ -302,7 +305,7 @@
                                         console.log(response);
                                         if(response.message === "bookmarked"){
                                             document.getElementById('{{ $t_message->message_id }}').disabled = true;
-                                            document.getElementById('{{ $t_message->message_id }}').className = 'btn  btn-lg text-success';
+                                            document.getElementById('{{ $t_message->message_id }}').className = 'btn text-success show-on-mobile';
                                         }
                                     },
 
@@ -312,16 +315,17 @@
                                 });
                             </script>
 
-                            <button reply-id="{{ $t_message->id }}" reply-body="{!! $t_message->body !!}" id="btn_post_reply" class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="write a comment">
+                            <button reply-id="{{ $t_message->id }}" reply-body="{!! $t_message->body !!}" id="btn_post_reply" class="btn text-secondary"
+                                    data-bs-toggle="tooltip" data-bs-placement="left" title="write a comment">
                                 <i class="fa fa-reply"></i> Reply
                             </button>
                         @else
                             <button class="btn text-secondary disabled" data-bs-toggle="tooltip" data-bs-placement="left" title="like">
-                                {{ $t_message->likes }} <i class="fa fa-heart"></i>
+                                {{ $t_message->likes }} <i class="fa fa-heart"></i><span class="disappear-item">likes</span>
                             </button>
 
                             <button class="btn text-secondary disabled" data-bs-toggle="tooltip" data-bs-placement="left" title="bookmark this post">
-                                <i class="fa fa-bookmark"></i>
+                                <i class="fa fa-bookmark"></i><span class="disappear-item">save</span>
                             </button>
 
                             <button  id="btn_post_reply" class="btn text-secondary disabled" data-bs-toggle="tooltip" data-bs-placement="left" title="write a comment">
@@ -718,7 +722,7 @@
                                 "closeButton" : true,
                                 "progressBar" : true
                             }
-                        toastr.success("Reply sent successfully");
+                        toastr.success("topic bookmarked successfully");
                     }else{
                         toastr.options =
                             {

@@ -1,12 +1,30 @@
 @extends('base.index')
 
 @section('content')
+    <!-- Page Heading -->
+    <nav style="--bs-breadcrumb-divider: '/';" aria-label="breadcrumb">
+        <ol class="breadcrumb" >
+            <li class="breadcrumb-item"><a href="/">Profile</a></li>
+            <li class="breadcrumb-item"><a href="">User</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Settings</li>
+        </ol>
+    </nav>
+
     <div class="row mt-4">
         <div class="col-md-3 disappear-item">
             @include('includes.category')
         </div>
 
+        <div class="col-md-2 show-on-mobile" style="margin-right: 0; display: none;">
+            @include('includes.profile.picture')
+        </div>
+
+
         <div class="col-md-9">
+            <span style="display: none;" class="show-on-mobile">
+                @include('includes.profile.description')
+            </span>
+
             <h3>Account Settings</h3>
 
             @if ($errors->any())
@@ -38,7 +56,7 @@
 
                 <div class="mb-3 row">
                     <label for="profile_picture" class="form-label put-black put-bold">Profile Avatar</label><br>
-                    <a href="{{ route('profile.show.edit', $user->username) }}">
+                    <a href="{{ route('profile.show.edit', $user->user_id) }}">
                         <img src="/profile_pictures/{{ $user->profile_url }}" alt="">
                     </a>
                     <div class="col-sm-10 text-success">

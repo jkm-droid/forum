@@ -34,6 +34,7 @@ class MemberTopicController extends Controller
     public function show_create_new_topic_form(){
         return view('member.topic.create_topic')
             ->with('user', $this->get_logged_user_details())
+            ->with('forum_list', $this->get_forum_list())
             ->with('categories', $this->get_all_categories());
     }
 
@@ -106,6 +107,7 @@ class MemberTopicController extends Controller
 
         return view('member.topic.edit_topic', compact('topic'))
             ->with('user', $this->get_logged_user_details())
+            ->with('forum_list', $this->get_forum_list())
             ->with('categories', $this->get_all_categories());
     }
 

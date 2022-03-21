@@ -2,11 +2,12 @@
 
 @section('content')
 
-    <div class="auth-box col-md-6 container">
+    <div class="auth-box col-md-4 container">
 
         <div class="text-center">
             <h3 class="put-black"><a href="/" class="h3">Forum</a></h3>
         </div>
+
         @if ($message = Session::get('success'))
             <p class="alert alert-success">{{ $message }}</p>
         @endif

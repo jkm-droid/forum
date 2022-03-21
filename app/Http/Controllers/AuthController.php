@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\HelperFunctions\GetRepetitiveItems;
 use App\HelperFunctions\MyHelperClass;
 use App\Jobs\EmailVerificationJob;
 use App\Models\User;
@@ -18,6 +19,7 @@ use App\HelperFunctions\MakeAvatars;
 
 class AuthController extends Controller
 {
+    use GetRepetitiveItems;
     private $idGenerator;
 
     public function __construct(MyHelperClass $myHelperClass){
@@ -29,7 +31,8 @@ class AuthController extends Controller
      * show the login page
      * */
     public function show_login_page(){
-        return view('user.login');
+        return view('user.login')
+            ->with('forum_list', $this->get_forum_list());
     }
 
     /**
@@ -58,7 +61,8 @@ class AuthController extends Controller
      * */
     public function show_register_page()
     {
-        return view('user.register');
+        return view('user.register')
+            ->with('forum_list', $this->get_forum_list());
     }
 
     /**
@@ -157,7 +161,8 @@ class AuthController extends Controller
     }
 
     public function show_forgot_pass_form(){
-        return view('user.forgot_pass');
+        return view('user.forgot_pass')
+            ->with('forum_list', $this->get_forum_list());
     }
 
     public function submit_forgot_pass_form(Request $request){
@@ -182,7 +187,8 @@ class AuthController extends Controller
     }
 
     public function show_reset_pass_form($token){
-        return view('user.reset_pass', ['token'=>$token]);
+        return view('user.reset_pass', ['token'=>$token])
+            ->with('forum_list', $this->get_forum_list());
     }
 
     public function reset_pass(Request $request){

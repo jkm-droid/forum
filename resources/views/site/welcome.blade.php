@@ -92,11 +92,11 @@
                                 @if(\Illuminate\Support\Facades\Auth::check())
                                     @if($user->username == $topic->author)
                                         <div class="user-actions">
-                                            <a href="{{ route('topic.show.edit.form', $topic->topic_id) }}" class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="edit this topic">
+                                            <a href="{{ route('topic.show.edit.form', $topic->topic_id) }}" class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="edit this topic">
                                                 <i class="fa fa-edit"></i> Edit
                                             </a>
 
-                                            <button id="delete-topic" data-id="{{ $topic->id }}" class="btn btn-lg text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="delete this topic">
+                                            <button id="delete-topic" data-id="{{ $topic->id }}" class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="delete this topic">
                                                 <i class="fa fa-trash"></i> Delete
                                             </button>
                                         </div>
