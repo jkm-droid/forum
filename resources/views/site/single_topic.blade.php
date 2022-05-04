@@ -337,21 +337,11 @@
                     <!---comments sections--->
                     @if($t_message->comments->count() > 0)
                         <div class="text-center">
-                            <button id="btn_show_reactions" comment-id="{{ $t_message->author }}"   class="btn {{ $t_message->id }}" >view reactions</button>
+                            <button id="btn_show_reactions" comment-id="{{ $t_message->author }}"   class="btn comment-btn-{{ $t_message->author }}" >view reactions</button>
                         </div>
                     @endif
 
-                    <script>
-                        // function showComment() {
-                        $(document).on('click', '#btn_show_reactions', function () {
-                            const id = $(this).attr("comment-id");
-                            document.getElementById('btn_show_reactions').style.display = 'none';
-                            document.getElementById(id).style.display = 'block';
-                        });
-                        // }
-                    </script>
-
-                    <div id="{{ $t_message->author }}" style="display: none; border-top: 1px solid #a7c2a7; padding: 5px; background-color: #e7e4e4;">
+                    <div id="comment-{{ $t_message->author }}" style="display: none; border-top: 1px solid #a7c2a7; padding: 5px; background-color: #e7e4e4;">
                         @if($t_message->comments)
                             @foreach($t_message->comments as $tm_comment)
                                 <div class="row col-md-12">
@@ -438,6 +428,15 @@
     {{--        </div>--}}
     {{--    </div>--}}
 
+    <script>
+        $(document).on('click', '#btn_show_reactions', function () {
+            const id = $(this).attr("comment-id");
+            const btnId = "comment-"+id;
+            const btnClass = "comment-btn-"+id;
+            $('.'+btnClass).css('display','none');
+            document.getElementById(btnId).style.display = 'block';
+        });
+    </script>
 
     <script>
         $(document).on('click', '#btn_share_topic', function () {
@@ -450,8 +449,8 @@
 
     <script>
         $(document).on('click', '#btn_share_message', function () {
-            console.log("clicked");
             const id = $(this).attr("share-id");
+            console.log(id);
             document.getElementById(id).style.display = 'inline';
         });
 

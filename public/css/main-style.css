@@ -176,6 +176,10 @@ a{
     .profile-image-mobile{
         max-height: 200px;
     }
+
+    .full-width{
+        width: 100% !important;
+    }
 }
 
 /*single topic customization*/

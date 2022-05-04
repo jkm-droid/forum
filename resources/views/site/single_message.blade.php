@@ -411,4 +411,51 @@
 
         </script>
 
+    <script type="text/javascript">
+        //bookmark message
+        function bookMark(messageId) {
+            const message_Id = messageId;
+            console.log(messageId);
+            $.ajax({
+                url: '/bookmark/topic_message',
+                type: 'POST',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    'message_id': message_Id,
+                    'role': 'message',
+                },
+                success: function (response) {
+                    console.log(response);
+
+                    if (response.status === 200) {
+                        toastr.options =
+                            {
+                                "closeButton": true,
+                                "progressBar": true
+                            }
+                        toastr.success(response.message);
+
+                        setTimeout(function (){
+                            location.reload();
+                            scrollToPosition();
+                        },4000);
+
+                    } else {
+                        toastr.options =
+                            {
+                                "closeButton": true,
+                                "progressBar": true
+                            }
+                        toastr.error("Oops! An error occurred");
+                    }
+
+                },
+
+                failure: function (response) {
+                    console.log("something went wrong");
+                }
+            });
+        }
+    </script>
+
 @endsection

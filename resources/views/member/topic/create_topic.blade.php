@@ -10,7 +10,7 @@
                 <div class="col-12">
                     <div class="card card-outline card-dark topic-creation-form">
                         <div class="card-header">
-                            <h2>{{ \Illuminate\Support\Facades\Auth::user()->username }} you are creating  a new thread</h2>
+                            <h4><strong class="put-black">{{ $user->username }}</strong> you are creating  a new thread</h4>
                         </div>
                         <!-- /.card-header -->
 

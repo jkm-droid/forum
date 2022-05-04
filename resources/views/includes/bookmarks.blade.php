@@ -66,9 +66,9 @@
                             </form>
                         @endif
                         <a style="padding-bottom: 0" href="{{ route('site.single.message',$message_bookmark->message->message_id) }}">
-                            {!!  $message_bookmark->message->body !!}
+                            {!!  trim($message_bookmark->message->body) !!}
                         </a>
-                        <br/>
+
                         <span class="topic-text">
                         <i class="fa fa-clock-o"></i>
                         {{  $message_bookmark->message->created_at }}
