@@ -16,7 +16,7 @@
             <h5>Forum List</h5>
             <div class="accordion" id="accordionPanelsStayOpenExample">
                 @foreach($forum_list as $forum)
-                    <div class="accordion-item">
+                    <div class="" >
                         <h4 class="accordion-header" id="panelsStayOpen-headingOne">
                             <button class="accordion-button" style="padding: 5px; background-color: lightgrey; color: black" type="button"
                                     data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne-{{ $forum->id }}" aria-expanded="true"

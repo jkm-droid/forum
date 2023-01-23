@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\PasswordManagementController;
 use App\Http\Controllers\SiteController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,22 +27,22 @@ Route::name('user.')->group(function(){
     /**
      * user authentication
      */
-    Route::get('user/login', [AuthController::class, 'show_login_page'])->name('show.login');
+    Route::get('user/login', [AuthController::class, 'loginPage'])->name('show.login');
     Route::post('login', [AuthController::class, 'login'])->name('login');
-    Route::get('user/register', [AuthController::class, 'show_register_page'])->name('show.register');
+    Route::get('user/register', [AuthController::class, 'registerPage'])->name('show.register');
     Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
     /**
      * password resetting
      */
-    Route::get('user/forgot_pass', [AuthController::class, 'show_forgot_pass_form'])->name('show.forgot_pass_form');
-    Route::post('forgot_pass', [AuthController::class, 'submit_forgot_pass_form'])->name('forgot_submit');
-    Route::get('user/reset_pass/{token}', [AuthController::class, 'show_reset_pass_form'])->name('show.reset_form');
-    Route::post('reset_pass', [AuthController::class, 'reset_pass'])->name('reset_pass');
+    Route::get('user/forgot_pass', [PasswordManagementController::class, 'forgotPassForm'])->name('show.forgot_pass_form');
+    Route::post('forgot_pass', [PasswordManagementController::class, 'submitForgotPassForm'])->name('forgot_submit');
+    Route::get('user/reset_pass/{token}', [PasswordManagementController::class, 'resetPassForm'])->name('show.reset_form');
+    Route::post('reset_pass', [PasswordManagementController::class, 'resetPass'])->name('reset_pass');
 
     /**
      * email verification
      */
-    Route::get('account/verify/{token}', [AuthController::class, 'verify_user_email'])->name('verify.email');
+    Route::get('account/verify/{token}', [AuthController::class, 'verifyEmail'])->name('verify.email');
 });

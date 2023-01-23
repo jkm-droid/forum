@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Events\AdminEvent;
 use App\Events\HelperEvent;
-use App\HelperFunctions\GetRepetitiveItems;
-use App\HelperFunctions\MyHelperClass;
+use App\Helpers\GetRepetitiveItems;
+use App\Helpers\HelperService;
 use App\Models\Admin;
 use App\Models\Tag;
 use App\Models\Topic;
@@ -19,7 +19,7 @@ class MemberTopicController extends Controller
     use GetRepetitiveItems;
     private $userDetails, $activity, $idGenerator;
 
-    public function __construct(MyHelperClass $myHelperClass){
+    public function __construct(HelperService $myHelperClass){
         $this->middleware('auth');
         $this->special_character = array("!", "@", "#", "$", "%", "^", "&", "*", "(", ")", ",", "/", "{", "}", "[", "]", "?");
         $this->userDetails = $myHelperClass;

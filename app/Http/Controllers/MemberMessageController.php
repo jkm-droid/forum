@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Events\ContentCreationEvent;
 use App\Events\HelperEvent;
 use App\Events\MemberEvent;
-use App\HelperFunctions\GetRepetitiveItems;
-use App\HelperFunctions\MyHelperClass;
+use App\Helpers\GetRepetitiveItems;
+use App\Helpers\HelperService;
 use App\Models\Comment;
 use App\Models\Message;
 use App\Models\Topic;
@@ -27,7 +27,7 @@ class MemberMessageController extends Controller
 
     private $userDetails, $activity, $idGenerator;
 
-    public function __construct(MyHelperClass $myHelperClass){
+    public function __construct(HelperService $myHelperClass){
         $this->middleware('auth');
         $this->special_character = array("!", "@", "#", "$", "%", "^", "&", "*", "(", ")", ",", "/", "{", "}", "[", "]", "?");
         $this->userDetails = $myHelperClass;

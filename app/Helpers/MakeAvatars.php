@@ -1,10 +1,11 @@
 <?php
 
-namespace App\HelperFunctions;
+namespace App\Helpers;
 
 class MakeAvatars
 {
-    public function makeAvatar($fontPath, $dest, $char){
+    public function makeAvatar($fontPath, $dest, $char)
+    {
         $path = $dest;
         $image = imagecreate(200,200);
         $red = rand(0,255);
@@ -15,6 +16,7 @@ class MakeAvatars
         imagettftext($image,100,0,50,150,$textcolor,$fontPath,$char);
         imagepng($image,$path);
         imagedestroy($image);
+
         return $path;
     }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\HelperFunctions\GetRepetitiveItems;
-use App\HelperFunctions\MyHelperClass;
+use App\Helpers\GetRepetitiveItems;
+use App\Helpers\HelperService;
 use App\Models\Activity;
 use Illuminate\Http\Request;
 
@@ -12,7 +12,7 @@ class MemberController extends Controller
     use GetRepetitiveItems;
     private $userDetails, $activity;
 
-    public function __construct(MyHelperClass $myHelperClass){
+    public function __construct(HelperService $myHelperClass){
         $this->middleware('auth');
         $this->userDetails = $myHelperClass;
         $this->activity = $myHelperClass;

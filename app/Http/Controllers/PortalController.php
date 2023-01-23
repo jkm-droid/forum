@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Events\AdminEvent;
 use App\Events\HelperEvent;
 use App\Events\MemberEvent;
-use App\HelperFunctions\GetRepetitiveItems;
-use App\HelperFunctions\MyHelperClass;
+use App\Helpers\GetRepetitiveItems;
+use App\Helpers\HelperService;
 use App\Jobs\AdminJob;
 use App\Jobs\NewMessageJob;
 use App\Models\Activity;
@@ -32,7 +32,7 @@ class PortalController extends Controller
     use GetRepetitiveItems;
     private $userDetails, $activity, $idGenerator;
 
-    public function __construct(MyHelperClass $myHelperClass){
+    public function __construct(HelperService $myHelperClass){
         $this->middleware('auth');
         $this->special_character = array("!", "@", "#", "$", "%", "^", "&", "*", "(", ")", ",", "/", "{", "}", "[", "]", "?");
         $this->userDetails = $myHelperClass;

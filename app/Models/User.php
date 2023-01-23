@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\HelperFunctions\GetRepetitiveItems;
+use App\Helpers\GetRepetitiveItems;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

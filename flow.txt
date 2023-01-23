@@ -1,0 +1,5 @@
+Add logging(Serilog)
+Add repository manager
+Add global middleware
+Add mediatR
+Add shared infrastructure

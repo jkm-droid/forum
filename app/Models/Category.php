@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\HelperFunctions\GetRepetitiveItems;
+use App\Helpers\GetRepetitiveItems;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

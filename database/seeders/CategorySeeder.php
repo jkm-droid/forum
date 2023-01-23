@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\HelperFunctions\MakeAvatars;
-use App\HelperFunctions\MyHelperClass;
+use App\Helpers\MakeAvatars;
+use App\Helpers\HelperService;
 use App\Models\Admin;
 use App\Models\ForumList;
 use Carbon\Carbon;
@@ -21,7 +21,7 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        $helper = new MyHelperClass();
+        $helper = new HelperService();
 
 //        $faker = Faker::create('App\ForumList');
 //        for ($i = 1; $i <= 6; $i++) {

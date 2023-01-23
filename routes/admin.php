@@ -1,12 +1,12 @@
 <?php
 
-use App\Http\Controllers\AdminAuthController;
-use App\Http\Controllers\AdminNotificationsController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ForumController;
-use App\Http\Controllers\TopicController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Auth\AdminAuthController;
+use App\Http\Controllers\Auth\AdminNotificationsController;
+use App\Http\Controllers\Auth\CategoryController;
+use App\Http\Controllers\Auth\DashboardController;
+use App\Http\Controllers\Auth\ForumController;
+use App\Http\Controllers\Auth\TopicController;
+use App\Http\Controllers\Auth\UserController;
 use Illuminate\Support\Facades\Route;
 
 /**

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\HelperFunctions\GetRepetitiveItems;
+use App\Helpers\GetRepetitiveItems;
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Message;

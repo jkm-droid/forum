@@ -1,6 +1,6 @@
 <?php
 
-namespace App\HelperFunctions;
+namespace App\Helpers;
 
 use App\Models\Category;
 use App\Models\ForumList;

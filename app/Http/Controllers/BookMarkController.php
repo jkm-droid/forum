@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Events\HelperEvent;
-use App\HelperFunctions\GetRepetitiveItems;
-use App\HelperFunctions\MyHelperClass;
+use App\Helpers\GetRepetitiveItems;
+use App\Helpers\HelperService;
 use App\Models\BookMark;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -15,7 +15,7 @@ class BookMarkController extends Controller
 
     private $userDetails, $idGenerator, $messages;
 
-    public function __construct(MyHelperClass $myHelperClass){
+    public function __construct(HelperService $myHelperClass){
         $this->middleware('auth');
         $this->userDetails = $myHelperClass;
         $this->messages = $myHelperClass;

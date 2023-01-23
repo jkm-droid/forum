@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\HelperFunctions\MyHelperClass;
+use App\Helpers\HelperService;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,7 +12,7 @@ class AdminNotificationsController extends Controller
 {
     private $adminDetails, $activity, $idGenerator;
 
-    public function __construct(MyHelperClass $myHelperClass){
+    public function __construct(HelperService $myHelperClass){
         $this->middleware('auth:admin');
         $this->adminDetails = $myHelperClass;
         $this->activity = $myHelperClass;

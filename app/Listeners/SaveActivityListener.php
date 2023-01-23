@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\HelperEvent;
-use App\HelperFunctions\MyHelperClass;
+use App\Helpers\HelperService;
 use App\Models\Activity;
 use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -19,7 +19,7 @@ class SaveActivityListener
      *
      * @return void
      */
-    public function __construct(MyHelperClass $myHelperClass)
+    public function __construct(HelperService $myHelperClass)
     {
         $this->idGenerator = $myHelperClass;
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\HelperFunctions;
+namespace App\Helpers;
 
 use App\Models\Activity;
 use App\Models\Country;
@@ -9,7 +9,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class MyHelperClass
+class HelperService
 {
 
     /**
@@ -51,7 +51,7 @@ class MyHelperClass
         $table = $db_table;
         $column = $column_name;
         $number = mt_rand(1000000, 9999999);
-        $string = $this->random_str(5);
+        $string = $this->randomStr(5);
 
         $id = $start_string.''.$number.''.$string;
         if ($this->checkIfIdExists($id, $table, $column)){
@@ -64,10 +64,8 @@ class MyHelperClass
     /**
      * generate a secure string
      */
-    public function random_str(
-        int $length = 64,
-        string $keyspace = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-    ): string {
+    public function randomStr(int $length = 64,string $keyspace = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+    {
         if ($length < 1) {
             throw new \RangeException("Length must be a positive integer");
         }
