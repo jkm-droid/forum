@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Forum;
 
 use App\Events\AdminEvent;
 use App\Events\HelperEvent;
 use App\Helpers\GetRepetitiveItems;
 use App\Helpers\HelperService;
+use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\Tag;
 use App\Models\Topic;
@@ -14,13 +15,13 @@ use App\Notifications\AdminNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 
-class MemberTopicController extends Controller
+class TopicController extends Controller
 {
     use GetRepetitiveItems;
     private $userDetails, $activity, $idGenerator;
 
     public function __construct(HelperService $myHelperClass){
-        $this->middleware('auth');
+        $this->middleware('auth')->except('get_topic_view_status');
         $this->special_character = array("!", "@", "#", "$", "%", "^", "&", "*", "(", ")", ",", "/", "{", "}", "[", "]", "?");
         $this->userDetails = $myHelperClass;
         $this->activity = $myHelperClass;

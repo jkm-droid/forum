@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Forum\Member\Forum\Auth\AuthController;
-use App\Http\Controllers\Forum\Member\Forum\Auth\PasswordManagementController;
-use App\Http\Controllers\Forum\Member\Forum\Forum\SiteController;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\PasswordManagementController;
+use App\Http\Controllers\Forum\SiteController;
 use Illuminate\Support\Facades\Route;
 
 /**

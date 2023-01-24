@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Http\Controllers\Forum\Member\Forum\Forum;
+namespace App\Http\Controllers\Forum;
 
 use App\Helpers\GetRepetitiveItems;
-use App\Http\Controllers\Forum\Member\Forum\Controller;
-use App\Services\Forum\ForumManagementService;
+use App\Http\Controllers\Controller;
+use App\Services\Forum\ForumService;
 
 class SiteController extends Controller
 {
     use GetRepetitiveItems;
 
     /**
-     * @var ForumManagementService
+     * @var ForumService
      */
     private $_forumService;
 
-    public function __construct(ForumManagementService $forumService){
+    public function __construct(ForumService $forumService){
         $this->_forumService = $forumService;
     }
 

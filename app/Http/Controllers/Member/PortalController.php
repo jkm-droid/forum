@@ -1,31 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Member;
 
-use App\Events\AdminEvent;
-use App\Events\HelperEvent;
-use App\Events\MemberEvent;
 use App\Helpers\GetRepetitiveItems;
 use App\Helpers\HelperService;
-use App\Jobs\AdminJob;
-use App\Jobs\NewMessageJob;
-use App\Models\Activity;
-use App\Models\Admin;
-use App\Models\Comment;
-use App\Models\Message;
-use App\Models\Tag;
-use App\Models\Topic;
-use App\Models\TopicTag;
-use App\Models\User;
-use App\Models\View;
-use App\Notifications\AdminNotification;
-use App\Notifications\MessageNotification;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Controller;
 
 class PortalController extends Controller
 {

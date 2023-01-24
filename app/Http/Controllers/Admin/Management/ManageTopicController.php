@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin\Member\Forum\Admin\Management;
 
+use App\Http\Controllers\Admin\Member\Forum\Controller;
 use App\Models\Topic;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 
-class TopicController extends Controller
+class ManageTopicController extends Controller
 {
     public function __construct(){
         $this->middleware('auth:admin');

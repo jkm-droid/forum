@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Member;
 
 use App\Events\HelperEvent;
 use App\Helpers\GetRepetitiveItems;
@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redirect;
+use App\Http\Controllers\Controller;
 use Symfony\Component\Console\Input\Input;
 
 class ProfileController extends Controller

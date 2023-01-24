@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Forum\Forum;
+namespace App\Http\Controllers\Forum;
 
-use App\Http\Controllers\Forum\Controller;
+use App\Http\Controllers\Controller;
 use App\Services\Forum\LikeService;
 use Illuminate\Http\Request;
 

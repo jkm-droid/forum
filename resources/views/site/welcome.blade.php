@@ -40,27 +40,29 @@
                                 <h6 class="latest-topic-content">
                                     <a class="put-black" id="{{ $topic->id }}" href="{{ route('site.single.topic', $topic->slug) }}">{{ $topic->title }}</a>
                                 </h6>
-                                <script type="text/javascript">
-                                    $.ajax({
-                                        url: '/view/status',
-                                        type: 'POST',
-                                        data: {
-                                            "_token": "{{ csrf_token() }}",
-                                            'topic_id': {{ $topic->id }},
-                                        },
-                                        success: function (response) {
-                                            if(response.message === "viewed"){
-                                                document.getElementById({{ $topic->id }}).style.color = 'blue';
-                                            }else{
-                                                document.getElementById({{ $topic->id }}).style.fontWeight = 'bold';
-                                            }
-                                        },
+                                @if(\Illuminate\Support\Facades\Auth::check())
+                                    <script type="text/javascript">
+                                        $.ajax({
+                                            url: '/view/status',
+                                            type: 'POST',
+                                            data: {
+                                                "_token": "{{ csrf_token() }}",
+                                                'topic_id': {{ $topic->id }},
+                                            },
+                                            success: function (response) {
+                                                if(response.message === "viewed"){
+                                                    document.getElementById({{ $topic->id }}).style.color = 'blue';
+                                                }else{
+                                                    document.getElementById({{ $topic->id }}).style.fontWeight = 'bold';
+                                                }
+                                            },
 
-                                        failure: function (response) {
-                                            console.log("something went wrong");
-                                        }
-                                    });
-                                </script>
+                                            failure: function (response) {
+                                                console.log("something went wrong");
+                                            }
+                                        });
+                                    </script>
+                                @endif
 
                                 <h6 class="latest-topic-content text-secondary" style="padding: 0 0 0 0;">
                                     <a class="text-secondary" data-bs-container="body" data-bs-trigger="hover focus" data-bs-toggle="popover"

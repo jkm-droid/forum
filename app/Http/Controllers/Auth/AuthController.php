@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Forum\Member\Forum\Auth;
+namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Forum\Member\Forum\Controller;
+use App\Http\Controllers\Controller;
 use App\Services\Member\MemberAuthService;
 use Illuminate\Http\Request;
 

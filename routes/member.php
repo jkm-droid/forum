@@ -1,10 +1,10 @@
 <?php
 
 
-use App\Http\Controllers\Forum\Member\Forum\BookMarkController;
-use App\Http\Controllers\Forum\Member\Forum\MemberController;
-use App\Http\Controllers\Forum\Member\Forum\NotificationController;
-use App\Http\Controllers\Forum\Member\Forum\ProfileController;
+use App\Http\Controllers\Admin\Member\Forum\BookMarkController;
+use App\Http\Controllers\Member\NotificationController;
+use App\Http\Controllers\Member\ProfileController;
+use App\Http\Controllers\Member\SystemLogsController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
  */
 Route::name('member.')->group(function() {
     //user activity log
-    Route::get('activity_log', [MemberController::class, 'view_system_activities'])->name('activity.log');
+    Route::get('activity_log', [SystemLogsController::class, 'view_system_activities'])->name('activity.log');
 });
 
 /**

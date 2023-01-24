@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Member;
 
 use App\Helpers\GetRepetitiveItems;
 use App\Helpers\HelperService;
 use App\Models\Activity;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class SystemLogsController extends Controller

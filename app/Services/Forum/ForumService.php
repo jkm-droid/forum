@@ -9,7 +9,7 @@ use App\Models\Topic;
 use App\Models\View;
 use Illuminate\Support\Facades\Auth;
 
-class ForumManagementService
+class ForumService
 {
     use GetRepetitiveItems;
 
@@ -19,20 +19,9 @@ class ForumManagementService
         $topics = Topic::where('status',1)->with('category')->orderBy('created_at', 'DESC')->latest()->paginate(20);
         $forum_list = $this->get_forum_list();
 
-//        if (Auth::check()) {
-//            $user = $this->get_logged_user_details();
-//
-//            $view = View::where('user_id', $user->id)->where('topic_id', $topic->id)->first();
-//            if ($view->isViewed == 1)
-//                $isViewed = 1;
-//            else
-//                $isViewed = 0;
-//        }
-
         return view('site.welcome', compact('categories', 'topics','forum_list'))
             ->with('user', $this->get_logged_user_details())
             ->with('i', (request()->input('page',1) - 1) * 20);
-//            ->with('isViewed', $isViewed);
     }
 
     public function singleCategory($slug)
