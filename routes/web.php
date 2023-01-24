@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\Auth\PasswordManagementController;
-use App\Http\Controllers\SiteController;
+use App\Http\Controllers\Forum\Member\Forum\Auth\AuthController;
+use App\Http\Controllers\Forum\Member\Forum\Auth\PasswordManagementController;
+use App\Http\Controllers\Forum\Member\Forum\Forum\SiteController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -12,12 +12,12 @@ Route::name('site.')->group(function(){
     /**
      * guest users
      */
-    Route::get('/', [SiteController::class, 'show_welcome_page'])->name('home');
-    Route::get('/category/{slug}', [SiteController::class, 'show_single_category'])->name('single.category');
-    Route::get('/topic/{slug}', [SiteController::class, 'show_topic'])->name('single.topic');
-    Route::get('/view/forum/list', [SiteController::class, 'show_forum_list'])->name('forum.list');
-    Route::get('/view/top_topics', [SiteController::class, 'show_top_topics'])->name('top.topics');
-    Route::get('read/message/{message_id}', [SiteController::class,'get_single_message'])->name('single.message');
+    Route::get('/', [SiteController::class, 'showWelcomePage'])->name('home');
+    Route::get('/category/{slug}', [SiteController::class, 'showSingleCategory'])->name('single.category');
+    Route::get('/topic/{slug}', [SiteController::class, 'showTopic'])->name('single.topic');
+    Route::get('/view/forum/list', [SiteController::class, 'showForumList'])->name('forum.list');
+    Route::get('/view/top_topics', [SiteController::class, 'showTopTopics'])->name('top.topics');
+    Route::get('read/message/{message_id}', [SiteController::class, 'getSingleMessage'])->name('single.message');
 });
 
 /**

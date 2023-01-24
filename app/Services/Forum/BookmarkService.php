@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Services\Forum;
 
 use App\Events\HelperEvent;
 use App\Helpers\GetRepetitiveItems;
@@ -9,27 +9,25 @@ use App\Models\BookMark;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class BookMarkController extends Controller
+class BookmarkService
 {
     use GetRepetitiveItems;
+    /**
+     * @var HelperService
+     */
+    private $_helperService;
 
-    private $userDetails, $idGenerator, $messages;
-
-    public function __construct(HelperService $myHelperClass){
-        $this->middleware('auth');
-        $this->userDetails = $myHelperClass;
-        $this->messages = $myHelperClass;
-        $this->idGenerator = $myHelperClass;
+    public function __construct(HelperService $helperService)
+    {
+        $this->_helperService = $helperService;
     }
 
-    /**
-     * bookmark topic and messages
-     */
-    public function bookmark_topic_message(Request $request){
+    public function bookmarkTopicMessage($request)
+    {
         if ($request->ajax()){
-            $user = $this->userDetails->get_logged_user_details();
+            $user = $this->_helperService->get_logged_user_details();
             $bookmark = new BookMark();
-            $bookmark->bookmark_id = $this->idGenerator->generateUniqueId('forum','book_marks','bookmark_id');
+            $bookmark->bookmark_id = $this->_helperService->generateUniqueId('forum','book_marks','bookmark_id');
             $role = $request->role;
 
             if ($role== "topic"){
@@ -77,10 +75,7 @@ class BookMarkController extends Controller
         return response()->json($data);
     }
 
-    /**
-     * get bookmark status
-     */
-    public function get_bookmark_status(Request $request){
+    public function getBookmarkStatus($request){
         $user = $this->get_logged_user_details();
         $role = $request->role;
         $bookmark = '';
@@ -107,10 +102,8 @@ class BookMarkController extends Controller
         return response()->json($data);
     }
 
-    /**
-     * get user bookmarked messages and topics
-     */
-    public function get_user_bookmarks($user_id){
+    public function getUserBookmarks($user_id)
+    {
         $user = User::where('user_id', $user_id)->first();
         $topic_bookmarks = BookMark::where('user_id',$user->id)->whereNotNull('topic_id')->paginate(10);
         $message_bookmarks = BookMark::where('user_id',$user->id)->whereNotNull('message_id')->paginate(10);

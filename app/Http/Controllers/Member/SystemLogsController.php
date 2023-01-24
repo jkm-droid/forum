@@ -7,7 +7,7 @@ use App\Helpers\HelperService;
 use App\Models\Activity;
 use Illuminate\Http\Request;
 
-class MemberController extends Controller
+class SystemLogsController extends Controller
 {
     use GetRepetitiveItems;
     private $userDetails, $activity;

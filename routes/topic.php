@@ -1,7 +1,7 @@
 <?php
 
 
-use App\Http\Controllers\Auth\MemberTopicController;
+use App\Http\Controllers\Forum\Member\Forum\MemberTopicController;
 use Illuminate\Support\Facades\Route;
 
 

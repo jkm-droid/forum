@@ -1,10 +1,10 @@
 <?php
 
 
-use App\Http\Controllers\BookMarkController;
-use App\Http\Controllers\MemberController;
-use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Forum\Member\Forum\BookMarkController;
+use App\Http\Controllers\Forum\Member\Forum\MemberController;
+use App\Http\Controllers\Forum\Member\Forum\NotificationController;
+use App\Http\Controllers\Forum\Member\Forum\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 

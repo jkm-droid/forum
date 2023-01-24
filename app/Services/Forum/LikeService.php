@@ -1,20 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Services\Forum;
 
 use App\Models\Like;
 use App\Models\Message;
-use App\Models\Topic;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class LikeController extends Controller
+class LikeService
 {
-    public function __construct(){
-        $this->middleware('auth');
-    }
-
-    public function like_message(Request $request){
+    public function likeMessage($request){
         $message_id = $request->message_id;
         $message = Message::where('id', $message_id)->first();
 
@@ -27,7 +21,7 @@ class LikeController extends Controller
             $message->update();
 
             $like = new Like();
-            $like->user_id = Auth::user()->id;
+            $like->user_id = Auth::user()->getAuthIdentifier();
             $like->message_id = $message_id;
 
             //like saved

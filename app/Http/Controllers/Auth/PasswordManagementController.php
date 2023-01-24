@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Forum\Member\Forum\Auth;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Forum\Member\Forum\Controller;
 use App\Models\User;
 use App\Services\Member\PasswordManagementService;
 use Carbon\Carbon;

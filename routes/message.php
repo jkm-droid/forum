@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Auth\LikeController;
-use App\Http\Controllers\Auth\MemberMessageController;
+use App\Http\Controllers\Forum\Member\Forum\LikeController;
+use App\Http\Controllers\Forum\Member\Forum\MemberMessageController;
 use Illuminate\Support\Facades\Route;
 
 

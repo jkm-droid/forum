@@ -1,32 +1,20 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Services\Forum;
 
 use App\Helpers\GetRepetitiveItems;
 use App\Models\Category;
-use App\Models\Comment;
 use App\Models\Message;
-use App\Models\Tag;
 use App\Models\Topic;
-use App\Models\User;
 use App\Models\View;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 
-class SiteController extends Controller
+class ForumManagementService
 {
     use GetRepetitiveItems;
 
-    public function __construct(){
-//        $this->middleware('auth');
-    }
-
-    /**
-     *show home page with alongside all categories
-     * and latest topics
-     */
-    public function show_welcome_page(){
+    public function welcomePage()
+    {
         $categories = Category::where('status',1)->orderBy('created_at', 'DESC')->get();
         $topics = Topic::where('status',1)->with('category')->orderBy('created_at', 'DESC')->latest()->paginate(20);
         $forum_list = $this->get_forum_list();
@@ -47,12 +35,8 @@ class SiteController extends Controller
 //            ->with('isViewed', $isViewed);
     }
 
-    /**
-     * show a single category based on its slug alongside
-     * all its topics
-     */
-
-    public function show_single_category($slug){
+    public function singleCategory($slug)
+    {
         $category = Category::where('slug', $slug)->first();
         $category_topics = Topic::where('status', 1)->where('category_id', $category->id)->orderBy('created_at', 'DESC')->paginate(20);
 
@@ -62,11 +46,7 @@ class SiteController extends Controller
             ->with('user', $this->get_logged_user_details());
     }
 
-    /**
-     * show a single topic alongside the body, messages and comments
-     */
-
-    public function show_topic($slug)
+    public function showTopic($slug)
     {
         $topic = Topic::where('slug', $slug)->first();
 
@@ -96,11 +76,8 @@ class SiteController extends Controller
             ->with('categories', $this->get_all_categories());
     }
 
-    /**
-     * show all the top topics, rank them based on their messages
-     */
-
-    public function show_top_topics(){
+    public function topTopics()
+    {
         $top_topics = Topic::where('status',1)->orderBy('views', 'DESC')->take(20)->get();
 
         return view('site.top_topics', compact('top_topics'))
@@ -109,10 +86,8 @@ class SiteController extends Controller
             ->with('categories', $this->get_all_categories());
     }
 
-    /**
-     * get a single message alongside its comments
-     */
-    public function get_single_message($message_id){
+    public function getSingleMessage($message_id)
+    {
         $message = Message::where('message_id', $message_id)->first();
 
         return view('site.single_message', compact('message'))
@@ -120,11 +95,8 @@ class SiteController extends Controller
             ->with('user', $this->get_logged_user_details());
     }
 
-    /**
-     * show all the categories
-     */
-
-    public function show_forum_list(){
+    public function forumList()
+    {
         $forum_list = $this->get_forum_list();
 
         return view('site.forum_list', compact('forum_list'))

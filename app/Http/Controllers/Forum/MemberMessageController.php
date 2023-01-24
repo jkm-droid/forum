@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Forum;
 
 use App\Events\ContentCreationEvent;
 use App\Events\HelperEvent;
 use App\Events\MemberEvent;
 use App\Helpers\GetRepetitiveItems;
 use App\Helpers\HelperService;
+use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use App\Models\Message;
 use App\Models\Topic;
@@ -23,16 +24,10 @@ use Illuminate\Support\Str;
 
 class MemberMessageController extends Controller
 {
-    use GetRepetitiveItems;
 
-    private $userDetails, $activity, $idGenerator;
-
-    public function __construct(HelperService $myHelperClass){
+    public function __construct()
+    {
         $this->middleware('auth');
-        $this->special_character = array("!", "@", "#", "$", "%", "^", "&", "*", "(", ")", ",", "/", "{", "}", "[", "]", "?");
-        $this->userDetails = $myHelperClass;
-        $this->activity = $myHelperClass;
-        $this->idGenerator = $myHelperClass;
     }
 
     /**
