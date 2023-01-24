@@ -21,7 +21,7 @@ class TopicController extends Controller
     private $userDetails, $activity, $idGenerator;
 
     public function __construct(HelperService $myHelperClass){
-        $this->middleware('auth')->except('get_topic_view_status');
+        $this->middleware('auth');
         $this->special_character = array("!", "@", "#", "$", "%", "^", "&", "*", "(", ")", ",", "/", "{", "}", "[", "]", "?");
         $this->userDetails = $myHelperClass;
         $this->activity = $myHelperClass;
