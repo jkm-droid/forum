@@ -5,7 +5,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">Home</a></li>
             <li class="breadcrumb-item"><a href="{{ route('site.top.topics') }}">Topics</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ \Illuminate\Support\Str::limit($topic->title, 20, "...") }}</li>
+            <li class="breadcrumb-item active" aria-current="page">{{ $topic->title }}</li>
         </ol>
     </nav>
     <h4>{{ $topic->title }}</h4>
@@ -225,17 +225,17 @@
                                style="color: #0a53be; padding-left: 5px;">
                                 <i class="fa fa-facebook"></i>
                             </a>
-                            <a href="https://twitter.com/intent/tweet?text={{ \Illuminate\Support\Str::limit($t_message->body,'100','...') }}&url={{ route('site.single.message', $t_message->message_id) }}"
-                               style="color: #0dcaf0; padding-left: 5px;">
-                                <i class="fa fa-twitter"></i>
-                            </a>
+{{--                            <a href="https://twitter.com/intent/tweet?text={{ \Illuminate\Support\Str::limit($t_message->body,'100','...') }}&url={{ route('site.single.message', $t_message->message_id) }}"--}}
+{{--                               style="color: #0dcaf0; padding-left: 5px;">--}}
+{{--                                <i class="fa fa-twitter"></i>--}}
+{{--                            </a>--}}
                             <a href="https://wa.me/?text=Awesome%20Blog!%5Cn%20blog.shahednasser.com"  class="text-success" style="padding-left: 5px">
                                 <i class="fa fa-whatsapp"></i>
                             </a>
-                            <a href="https://t.me/share/url?url={{ route('site.single.message', $t_message->message_id) }}&text={{ \Illuminate\Support\Str::limit($t_message->body,'100','...')  }}"
-                               style="padding-left: 5px; padding-right: 5px" class="text-info">
-                                <i class="fa fa-telegram"></i>
-                            </a>
+{{--                            <a href="https://t.me/share/url?url={{ route('site.single.message', $t_message->message_id) }}&text={{ \Illuminate\Support\Str::limit($t_message->body,'100','...')  }}"--}}
+{{--                               style="padding-left: 5px; padding-right: 5px" class="text-info">--}}
+{{--                                <i class="fa fa-telegram"></i>--}}
+{{--                            </a>--}}
 
                         </div>
 
@@ -425,8 +425,8 @@
             </h4>
         @endif
     </div>
-    {{--        </div>--}}
-    {{--    </div>--}}
+            </div>
+        </div>
 
     <script>
         $(document).on('click', '#btn_show_reactions', function () {

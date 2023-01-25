@@ -8,6 +8,7 @@ use App\Models\Message;
 use App\Models\Topic;
 use App\Models\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class ForumService
 {
@@ -38,6 +39,7 @@ class ForumService
     public function showTopic($slug)
     {
         $topic = Topic::where('slug', $slug)->first();
+        $topic->title = substr($topic->title,0,20);
 
         //register views
         if (Auth::check()) {

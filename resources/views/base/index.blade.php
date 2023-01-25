@@ -45,7 +45,7 @@
     @yield('content')
 </div>
 
-@include('includes/footer')
+@include('includes.footer')
 
 <!-- Bootstrap core JavaScript-->
 <script src="{{ asset('admin-assets/vendor/jquery/jquery.min.js') }}"></script>
