@@ -34,7 +34,7 @@ class MessageService
     {
         $message = Message::where('message_id', $message_id)->first();
 
-        return view('site.single_message', compact('message'))
+        return view('site.messages.single_message', compact('message'))
             ->with('forum_list', $this->get_forum_list())
             ->with('user', $this->get_logged_user_details());
     }

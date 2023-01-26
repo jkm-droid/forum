@@ -17,7 +17,7 @@ Route::name('site.')->group(function(){
      */
     Route::get('/', [ForumController::class, 'showWelcomePage'])->name('home');
     Route::get('/category/{slug}', [CategoryController::class, 'showSingleCategory'])->name('single.category');
-    Route::get('/topic/{slug}', [TopicController::class, 'showTopic'])->name('single.topic');
+    Route::get('/topic/{slug}', [TopicController::class, 'showSingleTopic'])->name('single.topic');
     Route::get('/view/forum/list', [ForumController::class, 'showForumList'])->name('forum.list');
     Route::get('/view/top_topics', [TopicController::class, 'showTopTopics'])->name('top.topics');
     Route::get('read/message/{message_id}', [MessageController::class, 'getSingleMessage'])->name('single.message');

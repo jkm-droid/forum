@@ -219,7 +219,7 @@ class TopicService
 
         $messages = Message::where('topic_id', $topic->id)->latest()->paginate(10);
 
-        return view('site.single_topic', compact('topic', 'messages'))
+        return view('site.topics.single_topic', compact('topic', 'messages'))
             ->with('i', (request()->input('page',1) - 1) * 10)
             ->with('user', $this->get_logged_user_details())
             ->with('forum_list', $this->get_forum_list())
@@ -230,7 +230,7 @@ class TopicService
     {
         $top_topics = Topic::where('status',1)->orderBy('views', 'DESC')->take(20)->get();
 
-        return view('site.top_topics', compact('top_topics'))
+        return view('site.topics.top_topics', compact('top_topics'))
             ->with('user', $this->get_logged_user_details())
             ->with('forum_list', $this->get_forum_list())
             ->with('categories', $this->get_all_categories());

@@ -20,7 +20,7 @@ class ForumService
         $topics = Topic::where('status',1)->with('category')->orderBy('created_at', 'DESC')->latest()->paginate(20);
         $forum_list = $this->get_forum_list();
 
-        return view('site.welcome', compact('categories', 'topics','forum_list'))
+        return view('site.forum.welcome', compact('categories', 'topics','forum_list'))
             ->with('user', $this->get_logged_user_details())
             ->with('i', (request()->input('page',1) - 1) * 20);
     }
@@ -29,7 +29,7 @@ class ForumService
     {
         $forum_list = $this->get_forum_list();
 
-        return view('site.forum_list', compact('forum_list'))
+        return view('site.forum.forum_list', compact('forum_list'))
             ->with('user', $this->get_logged_user_details())
             ->with('categories', $this->get_all_categories());
     }

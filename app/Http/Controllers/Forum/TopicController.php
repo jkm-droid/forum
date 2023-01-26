@@ -25,14 +25,13 @@ class TopicController extends Controller
 
     public function __construct(TopicService $topicService)
     {
-        $this->middleware('auth')->except('showTopic','showTopTopics');
+        $this->middleware('auth')->except('showSingleTopic','showTopTopics');
         $this->_topicService = $topicService;
     }
 
     /**
      * show the form to create a new topic/thread
      */
-
     public function show_create_new_topic_form()
     {
         return $this->_topicService->createNewTopicForm();
@@ -73,7 +72,7 @@ class TopicController extends Controller
     /**
      * show a single topic alongside the body, messages and comments
      */
-    public function showTopic($slug)
+    public function showSingleTopic($slug)
     {
         return $this->_topicService->showTopic($slug);
     }
