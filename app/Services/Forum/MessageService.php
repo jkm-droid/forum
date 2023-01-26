@@ -30,6 +30,15 @@ class MessageService
         $this->_helperService = $helperService;
     }
 
+    public function getSingleMessage($message_id)
+    {
+        $message = Message::where('message_id', $message_id)->first();
+
+        return view('site.single_message', compact('message'))
+            ->with('forum_list', $this->get_forum_list())
+            ->with('user', $this->get_logged_user_details());
+    }
+
     public function saveMessage($request)
     {
         $validator = Validator::make($request->all(),[

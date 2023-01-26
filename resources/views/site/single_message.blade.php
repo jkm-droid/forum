@@ -68,21 +68,22 @@
                     <i class="fa fa-link"></i>
                 </a>
 
-                <a href="https://www.facebook.com/sharer/sharer.php?u={{ route('site.single.message', $message->message_id) }}&quote={{ \Illuminate\Support\Str::limit($message->body,'100','...') }}"
-                   style="color: #0a53be; padding-left: 5px;">
-                    <i class="fa fa-facebook"></i>
-                </a>
-                <a href="https://twitter.com/intent/tweet?text={{ \Illuminate\Support\Str::limit($message->body,'100','...')  }}&url={{ route('site.single.message', $message->message_id) }}"
-                   style="color: #0dcaf0; padding-left: 5px;">
-                    <i class="fa fa-twitter"></i>
-                </a>
+{{--                <a href="https://www.facebook.com/sharer/sharer.php?u={{ route('site.single.message', $message->message_id) }}&quote={{ \Illuminate\Support\Str::limit($message->body,'100','...') }}"--}}
+{{--                   style="color: #0a53be; padding-left: 5px;">--}}
+{{--                    <i class="fa fa-facebook"></i>--}}
+{{--                </a>--}}
+{{--                --}}
+{{--                <a href="https://twitter.com/intent/tweet?text={{ \Illuminate\Support\Str::limit($message->body,'100','...')  }}&url={{ route('site.single.message', $message->message_id) }}"--}}
+{{--                   style="color: #0dcaf0; padding-left: 5px;">--}}
+{{--                    <i class="fa fa-twitter"></i>--}}
+{{--                </a>--}}
                 <a href="https://wa.me/?text=Awesome%20Blog!%5Cn%20blog.shahednasser.com"  class="text-success" style="padding-left: 5px">
                     <i class="fa fa-whatsapp"></i>
                 </a>
-                <a href="https://t.me/share/url?url={{ route('site.single.message', $message->message_id) }}&text={{ \Illuminate\Support\Str::limit($message->body,'100','...')  }}"
-                   style="padding-left: 5px; padding-right: 5px" class="text-info">
-                    <i class="fa fa-telegram"></i>
-                </a>
+{{--                <a href="https://t.me/share/url?url={{ route('site.single.message', $message->message_id) }}&text={{ \Illuminate\Support\Str::limit($message->body,'100','...')  }}"--}}
+{{--                   style="padding-left: 5px; padding-right: 5px" class="text-info">--}}
+{{--                    <i class="fa fa-telegram"></i>--}}
+{{--                </a>--}}
             </div>
 
             <a id="btn_share_message" class="btn text-secondary" share-id="{{ $message->id }}{{ $message->author }}"

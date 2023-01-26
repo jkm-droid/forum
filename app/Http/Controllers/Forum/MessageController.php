@@ -25,8 +25,16 @@ class MessageController extends Controller
 
     public function __construct(MessageService $messageService)
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except('getSingleMessage');
         $this->_messageService = $messageService;
+    }
+
+    /**
+     * get a single message alongside its comments
+     */
+    public function getSingleMessage($message_id)
+    {
+        return $this->_messageService->getSingleMessage($message_id);
     }
 
     /**
