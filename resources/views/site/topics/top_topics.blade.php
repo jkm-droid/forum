@@ -62,14 +62,20 @@
                                             Level: {{ $top->user->level  }}
                                             Messages:  {{ $top->user->messages->count() }}
                                             ">
-                                        <strong>{{ $top->author }}</strong>
+                                            <strong><small>
+                                                @if(\Illuminate\Support\Str::contains($top->author,'.'))
+                                                 {{ strtok($top->author,'.') }}
+                                                @else
+                                                 {{ $top->author }}
+                                                @endif
+                                            </small></strong>
                                     </a>
                                     </span><br>
-                                        <span class="text-secondary">
+                                    <span class="text-secondary">
                                         <button style="padding: 0" class="btn text-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom"
                                                 title="{{ \Carbon\Carbon::parse($top->created_at)->format('j M, Y@H:m') }}">
                                             <small>{{ \Carbon\Carbon::parse($top->created_at )->format('j M, `y')}}</small>
-                                    </button>
+                                        </button>
                                     </span>
                                     </div>
                                     <div class="col-md-2 text-start">
