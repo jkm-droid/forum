@@ -43,19 +43,19 @@
                 <span style="margin-left: 5px;" class="topic-text"> {{  \Carbon\Carbon::parse($topic->created_at)->format('j M, y') }}</span>
 
                 <span style="padding: 0 0 0 2px" class="btn topic-text">
-                                    <i class="fa fa-thumbs-up ml-2"></i> {{ \App\Models\Category::thousandsCurrencyFormat($topic->messages->sum('likes') )}}
-                                    <i class="fa fa-comments ml-2"></i> {{ $topic->messages->count() }}
-                                </span>
-
+                    <i class="fa fa-thumbs-up ml-2"></i> {{ \App\Models\Category::thousandsCurrencyFormat($topic->messages->sum('likes') )}}
+                    <i class="fa fa-comments ml-2"></i> {{ $topic->messages->count() }}
+                </span>
             </h6>
+
             @if($topic->tags->count() > 0)
                 <span class="latest-topic-content" style="margin-left: 20px;">
-                                    @foreach($topic->tags as $topic_tag)
+                    @foreach($topic->tags as $topic_tag)
                         <small>
-                                            <span class="badge bg-success" style="padding: 3px;">{{ $topic_tag->title }}</span>
-                                        </small>
+                            <span class="badge bg-success" style="padding: 3px;">{{ $topic_tag->title }}</span>
+                        </small>
                     @endforeach
-                                </span>
+                </span>
             @endif
 
             @if(\Illuminate\Support\Facades\Auth::check())
