@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Member\Forum;
+namespace App\Http\Controllers\Forum;
 
-use App\Helpers\HelperService;
-use App\Http\Controllers\Admin\Member\Controller;
+use App\Http\Controllers\Controller;
 use App\Services\Forum\BookmarkService;
 use Illuminate\Http\Request;
 

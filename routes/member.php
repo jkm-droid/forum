@@ -1,7 +1,7 @@
 <?php
 
 
-use App\Http\Controllers\Admin\Member\Forum\BookMarkController;
+use App\Http\Controllers\Forum\BookMarkController;
 use App\Http\Controllers\Member\NotificationController;
 use App\Http\Controllers\Member\ProfileController;
 use App\Http\Controllers\Member\SystemLogsController;

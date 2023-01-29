@@ -6,13 +6,13 @@
         <ol class="breadcrumb" >
             <li class="breadcrumb-item"><a href="/">Portal</a></li>
             <li class="breadcrumb-item"><a href="">User</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Bookmarks</li>
+            <li class="breadcrumb-item active" aria-current="page">Activity Logs</li>
         </ol>
     </nav>
     <div class="row col-md-12">
         <div class="col-md-2" style="margin-right: 0;">
 
-           @include('includes.profile.picture')
+            @include('includes.profile.picture')
 
         </div>
 
@@ -20,7 +20,7 @@
 
             @include('includes.profile.description')
 
-            @include('member.bookmark.partials.bookmarks_section')
+            @include('includes.logs')
 
         </div>
 
