@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Member;
 
-use App\Events\HelperEvent;
+use App\Events\AppHelperEvent;
 use App\Helpers\GetRepetitiveItems;
-use App\Helpers\HelperService;
+use App\Helpers\AppHelperService;
 use App\Models\BookMark;
 use App\Models\Country;
 use App\Models\Message;

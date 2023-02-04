@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Forum;
 
-use App\Events\AdminEvent;
-use App\Events\HelperEvent;
+use App\Events\SendAdminEmailEvent;
+use App\Events\AppHelperEvent;
 use App\Helpers\GetRepetitiveItems;
-use App\Helpers\HelperService;
+use App\Helpers\AppHelperService;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\Tag;

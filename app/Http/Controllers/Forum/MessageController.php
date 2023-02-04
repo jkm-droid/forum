@@ -2,18 +2,9 @@
 
 namespace App\Http\Controllers\Forum;
 
-use App\Events\ContentCreationEvent;
-use App\Events\HelperEvent;
 use App\Http\Controllers\Controller;
-use App\Models\Comment;
-use App\Models\Message;
-use App\Notifications\CommentNotification;
 use App\Services\Forum\MessageService;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 class MessageController extends Controller
 {

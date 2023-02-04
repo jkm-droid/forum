@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\ProcessUserPost;
+use App\Events\ProcessUserPostEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class ProcessUserPostListener implements ShouldQueue
@@ -27,7 +27,7 @@ class ProcessUserPostListener implements ShouldQueue
      *
      * @var int
      */
-    public $delay = 240;
+    public $delay = 20;
 
     /**
      * Create the event listener.
@@ -42,10 +42,10 @@ class ProcessUserPostListener implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  ProcessUserPost  $event
+     * @param  ProcessUserPostEvent  $event
      * @return void
      */
-    public function handle(ProcessUserPost $event)
+    public function handle(ProcessUserPostEvent $event)
     {
         $listenerDetails = $event->eventDetails;
     }

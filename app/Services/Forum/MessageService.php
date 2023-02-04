@@ -2,10 +2,10 @@
 
 namespace App\Services\Forum;
 
-use App\Events\ContentCreationEvent;
-use App\Events\HelperEvent;
+use App\Events\ContentCreationNotificationEvent;
+use App\Events\AppHelperEvent;
 use App\Helpers\GetRepetitiveItems;
-use App\Helpers\HelperService;
+use App\Helpers\AppHelperService;
 use App\Models\Comment;
 use App\Models\Message;
 use App\Models\Topic;
@@ -22,11 +22,11 @@ class MessageService
 {
     use GetRepetitiveItems;
     /**
-     * @var HelperService
+     * @var AppHelperService
      */
     private $_helperService;
 
-    public function __construct(HelperService $helperService){
+    public function __construct(AppHelperService $helperService){
         $this->_helperService = $helperService;
     }
 
@@ -66,7 +66,7 @@ class MessageService
                 $activityDetails = [
                     'activity_body'=>'<strong>'.$user->username.'</strong>'." reacted to ".'<strong>'.$topic->author.'</strong>'." post ".'<strong>'.$topic->title.'</strong>',
                 ];
-                HelperEvent::dispatch($activityDetails);
+                AppHelperEvent::dispatch($activityDetails);
 
                 $details = [
                     'topic' => $topic,
@@ -75,7 +75,7 @@ class MessageService
                 ];
 
                 //send email notification to the topic's author
-                ContentCreationEvent::dispatch($details);
+                ContentCreationNotificationEvent::dispatch($details);
 
                 //send in-app notification
                 Notification::send($topic->user, new MessageNotification([
@@ -131,7 +131,7 @@ class MessageService
         $activityDetails = [
             'activity_body'=>'<strong>'.$user->username.'</strong>'." updated message ".'<strong>'.$message->message_id.'</strong>',
         ];
-        HelperEvent::dispatch($activityDetails);
+        AppHelperEvent::dispatch($activityDetails);
 
         return redirect()->route('profile.view',$user->user_id)->with('success','message updated successfully');
     }
@@ -150,7 +150,7 @@ class MessageService
                     'activity_body'=>'<strong>'.$user->username.'</strong>'." deleted the reaction ".'<strong>'.$message->body.'</strong>',
                 ];
 
-                HelperEvent::dispatch($activityDetails);
+                AppHelperEvent::dispatch($activityDetails);
 
             }else
                 $status = 201;
@@ -179,7 +179,7 @@ class MessageService
         $activityDetails = [
             'activity_body'=>'<strong>'.$user->username.'</strong>'." deleted message ".'<strong>'.$message->message_id.'</strong>',
         ];
-        HelperEvent::dispatch($activityDetails);
+        AppHelperEvent::dispatch($activityDetails);
 
         return Redirect::back()->with('info', 'message deleted successfully');
     }

@@ -2,44 +2,70 @@
 
 namespace App\Helpers;
 
+use App\Mail\AdminSendMail;
+use App\Mail\MemberSendEmail;
 use App\Models\Activity;
+use App\Models\Admin;
 use App\Models\Country;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
-class HelperService
+class AppHelperService
 {
+    public function sendNewMessageNotification($event)
+    {
+        $details = $event->eventDetails;
+        $email = new MemberSendEmail('joshwriter53@gmail.com', $details);
+        Mail::to($details['recipient_email'])->send($email);
+    }
+
+    public function SendAdminEmail($event)
+    {
+        $topicDetails = $event->details;
+        $admins = Admin::get();
+
+        foreach ($admins as $admin){
+            $emailInfo = [
+                'admin_username'=>$admin->username,
+                'admin_email'=>$admin->email,
+                'subject'=>"New Topic Creation Notification",
+                'title'=>$topicDetails->title,
+                'author'=>$topicDetails->author,
+            ];
+
+            $mail = new AdminSendMail($emailInfo);
+            Mail::to($admin->email)->send($mail);
+        }
+    }
+
+    public function SendMemberEmail($event)
+    {
+        $details = $event->eventDetails;
+
+        Log::channel('daily')->info("member listener");
+        Log::channel('daily')->info(implode('',$details));
+
+        $email = new MemberSendEmail($details);
+        Mail::to($details['receiver'])->send($email);
+    }
+
     /**
      * get logged user details
      */
     public function get_logged_user_details(){
-        return User::where('id',Auth::user()->id)->first();
+        return User::where('id',Auth::user()->getAuthIdentifier())->first();
     }
 
     /**
      * get logged admin details
      */
-    public function get_logged_admin_details(): ?\Illuminate\Contracts\Auth\Authenticatable
+    public function get_logged_admin_details()
     {
         return Auth::guard('admin')->user();
-    }
-
-    /**
-     * get the country
-     */
-    public function get_country($user){
-        //get the country
-        $countries = Country::get();
-        $c = "";
-        foreach ($countries as $country){
-            if ($country->iso == $user){
-                $c = $country->name;
-            }
-        }
-
-        return $c;
     }
 
     /**

@@ -2,9 +2,9 @@
 
 namespace App\Services\Forum;
 
-use App\Events\ContentCreationEvent;
-use App\Events\HelperEvent;
-use App\Helpers\HelperService;
+use App\Events\ContentCreationNotificationEvent;
+use App\Events\AppHelperEvent;
+use App\Helpers\AppHelperService;
 use App\Models\Comment;
 use App\Models\Message;
 use App\Notifications\CommentNotification;
@@ -16,11 +16,11 @@ use Illuminate\Support\Str;
 class CommentService
 {
     /**
-     * @var HelperService
+     * @var AppHelperService
      */
     private $_helperService;
 
-    public function __construct(HelperService $helperService)
+    public function __construct(AppHelperService $helperService)
     {
         $this->_helperService = $helperService;
     }
@@ -48,7 +48,7 @@ class CommentService
                 $activityDetails = [
                     'activity_body'=>'<strong>'.$user->username.'</strong>'." reacted to ".'<strong>'.$message->author.'</strong>'."post",
                 ];
-                HelperEvent::dispatch($activityDetails);
+                AppHelperEvent::dispatch($activityDetails);
 
                 $details = [
                     'message' => $message,
@@ -57,7 +57,7 @@ class CommentService
                 ];
 
                 //send email notification to the topic's author
-                ContentCreationEvent::dispatch($details);
+                ContentCreationNotificationEvent::dispatch($details);
 
                 //send in-app notification
                 Notification::send($message->user,new CommentNotification([
@@ -112,7 +112,7 @@ class CommentService
             'activity_body'=>'<strong>'.$user->username.'</strong>'." updated comment ".'<strong>'.$comment->comment_id,
         ];
 
-        HelperEvent::dispatch($activityDetails);
+        AppHelperEvent::dispatch($activityDetails);
 
         return redirect()->route('site.single.topic', $comment->message->topic->slug)->with('success', 'comment updated successfully');
     }
@@ -131,7 +131,7 @@ class CommentService
                     'activity_body'=>'<strong>'.$user->username.'</strong>'." deleted the comment to ".'<strong>'.$comment->message->author."'s".'</strong> message',
                 ];
 
-                HelperEvent::dispatch($activityDetails);
+                AppHelperEvent::dispatch($activityDetails);
 
             }else
                 $status = 201;

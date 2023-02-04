@@ -2,14 +2,14 @@
 
 namespace App\Providers;
 
-use App\Events\AdminEvent;
-use App\Events\ContentCreationEvent;
-use App\Events\HelperEvent;
-use App\Events\MemberEvent;
-use App\Events\ProcessUserPost;
-use App\Listeners\AdminListener;
-use App\Listeners\ContentCreationListener;
-use App\Listeners\MemberListener;
+use App\Events\SendAdminEmailEvent;
+use App\Events\ContentCreationNotificationEvent;
+use App\Events\AppHelperEvent;
+use App\Events\SendMemberEmailEvent;
+use App\Events\ProcessUserPostEvent;
+use App\Listeners\SendAdminEmailListener;
+use App\Listeners\ContentCreationNotificationListener;
+use App\Listeners\SendMemberEmailListener;
 use App\Listeners\ProcessUserPostListener;
 use App\Listeners\SaveActivityListener;
 use Illuminate\Auth\Events\Registered;
@@ -29,24 +29,24 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
 
-        HelperEvent::class => [
+        AppHelperEvent::class => [
             SaveActivityListener::class,
         ],
 
-        AdminEvent::class => [
-            AdminListener::class,
+        SendAdminEmailEvent::class => [
+            SendAdminEmailListener::class,
         ],
 
-        MemberEvent::class => [
-            MemberListener::class,
+        SendMemberEmailEvent::class => [
+            SendMemberEmailListener::class,
         ],
 
-        ProcessUserPost::class => [
+        ProcessUserPostEvent::class => [
             ProcessUserPostListener::class,
         ],
 
-        ContentCreationEvent::class => [
-            ContentCreationListener::class,
+        ContentCreationNotificationEvent::class => [
+            ContentCreationNotificationListener::class,
         ]
     ];
 
@@ -58,5 +58,15 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         //
+    }
+
+    /**
+     * Determine if events and listeners should be automatically discovered.
+     *
+     * @return bool
+     */
+    public function shouldDiscoverEvents()
+    {
+        return true;
     }
 }

@@ -2,9 +2,9 @@
 
 namespace App\Services\Member;
 
-use App\Events\HelperEvent;
+use App\Events\AppHelperEvent;
 use App\Helpers\GetRepetitiveItems;
-use App\Helpers\HelperService;
+use App\Helpers\AppHelperService;
 use App\Models\Country;
 use App\Models\Profile;
 use App\Models\User;
@@ -17,11 +17,11 @@ class ProfileService
 {
     use GetRepetitiveItems;
     /**
-     * @var HelperService
+     * @var AppHelperService
      */
     private $_helperService;
 
-    public function __construct(HelperService $helperService)
+    public function __construct(AppHelperService $helperService)
     {
         $this->_helperService = $helperService;
     }
@@ -70,7 +70,7 @@ class ProfileService
             'activity_body'=>'<strong>'.$user->username.'</strong>'." updated the profile image ",
         ];
 
-        HelperEvent::dispatch($activityDetails);
+        AppHelperEvent::dispatch($activityDetails);
 
         return redirect()->route('member.profile.view', $user_id)->with('success', 'Profile updated successfully');
     }
@@ -140,7 +140,7 @@ class ProfileService
             'activity_body'=>'<strong>'.$user->username.'</strong>'." added additional profile details ",
         ];
 
-        HelperEvent::dispatch($activityDetails);
+        AppHelperEvent::dispatch($activityDetails);
 
         return redirect()->route('profile.settings',$user->user_id)->with('info','Profile Updated Successfully');
     }

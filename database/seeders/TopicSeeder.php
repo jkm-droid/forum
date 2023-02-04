@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Helpers\HelperService;
+use App\Helpers\AppHelperService;
 use App\Models\Admin;
 use App\Models\Category;
 use App\Models\Message;
@@ -22,7 +22,7 @@ class TopicSeeder extends Seeder
      */
     public function run()
     {
-        $helper = new HelperService();
+        $helper = new AppHelperService();
 //        $faker = Faker::create('App\Topic');
 //        for ($i = 1; $i <= 600; $i++) {
 //            $title = str_replace(".", " ", $faker->sentence(8));

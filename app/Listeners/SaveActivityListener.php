@@ -2,48 +2,49 @@
 
 namespace App\Listeners;
 
-use App\Events\HelperEvent;
-use App\Helpers\HelperService;
+use App\Events\AppHelperEvent;
+use App\Helpers\AppHelperService;
 use App\Models\Activity;
 use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Auth;
 
-class SaveActivityListener
+class SaveActivityListener implements ShouldQueue
 {
-    private $idGenerator;
+    /**
+     * @var AppHelperService
+     */
+    private $_helperService;
 
     /**
      * Create the event listener.
      *
      * @return void
      */
-    public function __construct(HelperService $myHelperClass)
+    public function __construct(AppHelperService $helperService)
     {
-        $this->idGenerator = $myHelperClass;
+        $this->_helperService = $helperService;
     }
 
     /**
      * Handle the event.
      *
-     * @param  HelperEvent  $event
+     * @param  AppHelperEvent  $event
      * @return void
      */
-    public function handle(HelperEvent $event)
+    public function handle(AppHelperEvent $event)
     {
-
         /**
          * save user activities in the system
          */
-        $eventDetails = $event->details;
-        $user = User::where('id',Auth::user()->id)->first();
+        $eventDetails = $event->eventDetails;
+        $user = User::where('id',Auth::user()->getAuthIdentifier())->first();
         $activity = new Activity();
         $activity->user_id = $user->id;
-        $activity->activity_id =  $this->idGenerator->generateUniqueId($user->username,'activities','activity_id');
+        $activity->activity_id =  $this->_helperService->generateUniqueId($user->username,'activities','activity_id');
         $activity->activity_body = $eventDetails['activity_body'];
 
         $activity->save();
-
     }
 }

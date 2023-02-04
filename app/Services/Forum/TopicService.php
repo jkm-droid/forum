@@ -3,10 +3,10 @@
 namespace App\Services\Forum;
 
 use App\Constants\AppConstants;
-use App\Events\AdminEvent;
-use App\Events\HelperEvent;
+use App\Events\SendAdminEmailEvent;
+use App\Events\AppHelperEvent;
 use App\Helpers\GetRepetitiveItems;
-use App\Helpers\HelperService;
+use App\Helpers\AppHelperService;
 use App\Models\Admin;
 use App\Models\Message;
 use App\Models\Tag;
@@ -20,11 +20,11 @@ class TopicService
 {
     use GetRepetitiveItems;
     /**
-     * @var HelperService
+     * @var AppHelperService
      */
     private $_helperService;
 
-    public function __construct(HelperService $helperService)
+    public function __construct(AppHelperService $helperService)
     {
         $this->_helperService = $helperService;
     }
@@ -65,7 +65,7 @@ class TopicService
             'activity_body'=>'<strong>'.$user->username.'</strong>'." created a new post ".'<strong>'.$topic_info['title'].'</strong>',
         ];
 
-        HelperEvent::dispatch($activityDetails);
+        AppHelperEvent::dispatch($activityDetails);
 
         if ($request->has('tags')  && $request->tags != null) {
             $tags = $request->tags;
@@ -90,7 +90,7 @@ class TopicService
         Notification::send($admins, new AdminNotification($topic));
 
         //send mail notifications
-        AdminEvent::dispatch($topic);
+        SendAdminEmailEvent::dispatch($topic);
 
         return redirect()->route('site.home')->with('success', 'Topic created successfully. Awaiting moderator approval');
     }
@@ -129,7 +129,7 @@ class TopicService
         $activityDetails = [
             'activity_body'=>'<strong>'.$user->username.'</strong>'." edited topic ".'<strong>'.$topic_info['title'].'</strong>',
         ];
-        HelperEvent::dispatch($activityDetails);
+        AppHelperEvent::dispatch($activityDetails);
 
         $old_tags = array();
         if ($request->has('tags') && $request->tags != null) {
@@ -175,7 +175,7 @@ class TopicService
                 $activityDetails = [
                     'activity_body'=>'<strong>'.$user->username.'</strong>'." the post ".'<strong>'.$topic->title.'</strong>',
                 ];
-                HelperEvent::dispatch($activityDetails);
+                AppHelperEvent::dispatch($activityDetails);
 
             }else
                 $status = 201;

@@ -2,9 +2,9 @@
 
 namespace App\Services\Forum;
 
-use App\Events\HelperEvent;
+use App\Events\AppHelperEvent;
 use App\Helpers\GetRepetitiveItems;
-use App\Helpers\HelperService;
+use App\Helpers\AppHelperService;
 use App\Models\BookMark;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -13,11 +13,11 @@ class BookmarkService
 {
     use GetRepetitiveItems;
     /**
-     * @var HelperService
+     * @var AppHelperService
      */
     private $_helperService;
 
-    public function __construct(HelperService $helperService)
+    public function __construct(AppHelperService $helperService)
     {
         $this->_helperService = $helperService;
     }
@@ -55,7 +55,7 @@ class BookmarkService
                     'activity_body'=>'<strong>'.$user->username.'</strong>'." bookmarked a <strong>".$role."</strong> successfully",
                 ];
 
-                HelperEvent::dispatch($activityDetails);
+                AppHelperEvent::dispatch($activityDetails);
 
             }else
                 $status = 201;

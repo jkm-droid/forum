@@ -2,13 +2,13 @@
 
 namespace App\Listeners;
 
-use App\Events\MemberEvent;
-use App\Jobs\MemberJob;
+use App\Events\SendMemberEmailEvent;
+use App\Mail\MemberSendEmail;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
-class MemberListener
+class SendMemberEmailListener implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -23,15 +23,17 @@ class MemberListener
     /**
      * Handle the event.
      *
-     * @param  MemberEvent  $event
+     * @param  SendMemberEmailEvent  $event
      * @return void
      */
-    public function handle(MemberEvent $event)
+    public function handle(SendMemberEmailEvent $event)
     {
         $details = $event->eventDetails;
-//        $name = $details['name'];
+
         Log::channel('daily')->info("member listener");
         Log::channel('daily')->info(implode('',$details));
-        MemberJob::dispatch($event->eventDetails);
+
+        $email = new MemberSendEmail($details);
+        Mail::to($details['receiver'])->send($email);
     }
 }

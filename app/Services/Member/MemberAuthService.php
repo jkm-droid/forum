@@ -2,9 +2,10 @@
 
 namespace App\Services\Member;
 
+use App\Events\EmailVerificationEvent;
 use App\Helpers\GetRepetitiveItems;
 use App\Helpers\MakeAvatars;
-use App\Helpers\HelperService;
+use App\Helpers\AppHelperService;
 use App\Jobs\EmailVerificationJob;
 use App\Models\User;
 use App\Models\UserVerification;
@@ -18,11 +19,11 @@ class MemberAuthService
     use GetRepetitiveItems;
 
     /**
-     * @var HelperService
+     * @var AppHelperService
      */
     private $_helperService;
 
-    public function __construct(HelperService $helperService)
+    public function __construct(AppHelperService $helperService)
     {
         $this->_helperService = $helperService;
     }
@@ -90,12 +91,13 @@ class MemberAuthService
             'token'=>$token
         ]);
         $details = [
+            'recipient_email' => $user_data['email'],
             'username'=>$user_data['username'],
             'token'=> $token,
         ];
 
         //send the email
-        EmailVerificationJob::dispatch($user_data['email'], $details);
+        EmailVerificationEvent::dispatch($details);
 
         return redirect()->route('show.login')
             ->with('success', 'Registered successfully. An email verification link has been sent to '.$user_data['email']);

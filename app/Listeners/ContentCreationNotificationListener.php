@@ -2,14 +2,14 @@
 
 namespace App\Listeners;
 
-use App\Events\ContentCreationEvent;
-use App\Jobs\HelperJob;
+use App\Events\ContentCreationNotificationEvent;
+use App\Mail\HelperMail;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
-class ContentCreationListener implements ShouldQueue
+class ContentCreationNotificationListener implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -24,13 +24,14 @@ class ContentCreationListener implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  ContentCreationEvent  $event
+     * @param  ContentCreationNotificationEvent  $event
      * @return void
      */
-    public function handle(ContentCreationEvent $event)
+    public function handle(ContentCreationNotificationEvent $event)
     {
         $eventDetails = $event->_eventDetails;
         $sender = $eventDetails['user']->username;
+        $details = [];
 
         if ($eventDetails['purpose'] == "message"){
             //notify to both author and admin
@@ -41,8 +42,6 @@ class ContentCreationListener implements ShouldQueue
                 'username' => $eventDetails['topic']->user->username,
                 'purpose' => 'message'
             ];
-
-            HelperJob::dispatch($details);
         }
 
         if ($eventDetails['purpose'] == "comment"){
@@ -56,7 +55,9 @@ class ContentCreationListener implements ShouldQueue
             ];
             Log::channel('daily')->info(implode('',$details));
 
-            HelperJob::dispatch($details);
         }
+
+        $email = new HelperMail($details);
+        Mail::to($details['recipient_email'])->send($email);
     }
 }

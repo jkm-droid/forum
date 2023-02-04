@@ -2,14 +2,13 @@
 
 namespace App\Listeners;
 
-use App\Events\AdminEvent;
-use App\Events\HelperEvent;
-use App\Jobs\AdminJob;
+use App\Events\SendAdminEmailEvent;
+use App\Mail\AdminSendMail;
 use App\Models\Admin;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Mail;
 
-class AdminListener
+class SendAdminEmailListener implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -24,10 +23,10 @@ class AdminListener
     /**
      * Handle the event.
      *
-     * @param  AdminEvent  $event
+     * @param  SendAdminEmailEvent  $event
      * @return void
      */
-    public function handle(AdminEvent $event)
+    public function handle(SendAdminEmailEvent $event)
     {
         $topicDetails = $event->details;
         $admins = Admin::get();
@@ -41,7 +40,8 @@ class AdminListener
                 'author'=>$topicDetails->author,
             ];
 
-            AdminJob::dispatch($emailInfo);
+            $mail = new AdminSendMail($emailInfo);
+            Mail::to($admin->email)->send($mail);
         }
     }
 }

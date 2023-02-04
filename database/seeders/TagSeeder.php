@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Helpers\HelperService;
+use App\Helpers\AppHelperService;
 use App\Models\Topic;
 use App\Models\User;
 use Carbon\Carbon;
@@ -20,7 +20,7 @@ class TagSeeder extends Seeder
      */
     public function run()
     {
-        $helper = new HelperService();
+        $helper = new AppHelperService();
 
         $faker = Faker::create('App\Tag');
         for ($i = 1; $i <= 10000; $i++) {

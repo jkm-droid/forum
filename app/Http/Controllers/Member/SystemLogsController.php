@@ -3,30 +3,29 @@
 namespace App\Http\Controllers\Member;
 
 use App\Helpers\GetRepetitiveItems;
-use App\Helpers\HelperService;
+use App\Helpers\AppHelperService;
 use App\Models\Activity;
 use App\Http\Controllers\Controller;
+use App\Services\Member\SystemLogsService;
 use Illuminate\Http\Request;
 
 class SystemLogsController extends Controller
 {
-    use GetRepetitiveItems;
-    private $userDetails, $activity;
+    /**
+     * @var SystemLogsService
+     */
+    private $_systemLogsService;
 
-    public function __construct(HelperService $myHelperClass){
+    public function __construct(SystemLogsService $systemLogsService)
+    {
         $this->middleware('auth');
-        $this->userDetails = $myHelperClass;
-        $this->activity = $myHelperClass;
+        $this->_systemLogsService = $systemLogsService;
     }
     /**
      * view the various activities within the system
      */
-    public function view_system_activities(){
-        $user = $this->userDetails->get_logged_user_details();
-        $activities = Activity::where('user_id',$user->id)->orderBy('created_at', 'desc')->get();
-
-        return view('member.profile.activity_logs', compact('activities'))
-            ->with('forum_list',$this->get_forum_list())
-            ->with('user', $user);
+    public function view_system_activities()
+    {
+       return $this->_systemLogsService->systemActivities();
     }
 }
