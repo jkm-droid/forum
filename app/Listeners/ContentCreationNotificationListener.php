@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\ContentCreationNotificationEvent;
-use App\Mail\HelperMail;
+use App\Mail\AppHelperMail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -57,7 +57,7 @@ class ContentCreationNotificationListener implements ShouldQueue
 
         }
 
-        $email = new HelperMail($details);
+        $email = new AppHelperMail($details);
         Mail::to($details['recipient_email'])->send($email);
     }
 }

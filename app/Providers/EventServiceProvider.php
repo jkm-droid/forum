@@ -7,6 +7,7 @@ use App\Events\ContentCreationNotificationEvent;
 use App\Events\AppHelperEvent;
 use App\Events\SendMemberEmailEvent;
 use App\Events\ProcessUserPostEvent;
+use App\Listeners\AppHelperListener;
 use App\Listeners\SendAdminEmailListener;
 use App\Listeners\ContentCreationNotificationListener;
 use App\Listeners\SendMemberEmailListener;
@@ -30,15 +31,7 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         AppHelperEvent::class => [
-            SaveActivityListener::class,
-        ],
-
-        SendAdminEmailEvent::class => [
-            SendAdminEmailListener::class,
-        ],
-
-        SendMemberEmailEvent::class => [
-            SendMemberEmailListener::class,
+            AppHelperListener::class,
         ],
 
         ProcessUserPostEvent::class => [

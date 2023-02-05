@@ -8,6 +8,12 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
+/**
+ * This event class performs three function
+ * 1. Sending various email to admins
+ * 2. Sending various emails to members
+ * 3. Saving system logs
+ */
 class AppHelperEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;

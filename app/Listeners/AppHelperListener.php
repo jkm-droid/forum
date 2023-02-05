@@ -3,8 +3,10 @@
 namespace App\Listeners;
 
 use App\Constants\AppConstants;
+use App\Events\AppHelperEvent;
+use App\Helpers\AppHelperEventsService;
 use App\Helpers\AppHelperService;
-use App\Mail\MemberSendEmail;
+use App\Mail\MemberSendMail;
 use App\Services\Member\SystemLogsService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -25,7 +27,7 @@ class AppHelperListener
      *
      * @return void
      */
-    public function __construct(AppHelperService $helperService, SystemLogsService $systemLogsService)
+    public function __construct(AppHelperEventsService $helperService, SystemLogsService $systemLogsService)
     {
         $this->_helperService = $helperService;
         $this->_systemLogsService = $systemLogsService;
@@ -34,13 +36,13 @@ class AppHelperListener
     /**
      * Handle the event.
      *
-     * @param  object  $event
+     * @param AppHelperEvent $event
      * @return void
      */
-    public function handle($event)
+    public function handle(AppHelperEvent $event)
     {
         $event_category = $event->eventDetails;
-        switch ($event_category)
+        switch ($event_category['event'])
         {
             case AppConstants::$events['admin_email']:
                 $this->_helperService->SendAdminEmail($event);
@@ -48,11 +50,14 @@ class AppHelperListener
             case AppConstants::$events['member_email']:
                 $this->_helperService->SendMemberEmail($event);
                 break;
-            case AppConstants::$events['system_logs']:
+            case AppConstants::$events['new_message']:
                 $this->_helperService->sendNewMessageNotification($event);
                 break;
+            case AppConstants::$events['system_logs']:
+                $this->_systemLogsService->saveSystemActivities($event);
+                break;
             default:
-                throw new BadRequestException("Event {$event_category} not supported");
+                throw new BadRequestException("Event {$event_category['event']} not supported");
         }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Services\Forum;
 
+use App\Constants\AppConstants;
 use App\Events\ContentCreationNotificationEvent;
 use App\Events\AppHelperEvent;
 use App\Helpers\GetRepetitiveItems;
@@ -64,6 +65,7 @@ class MessageService
 
                 //save user activity to logs
                 $activityDetails = [
+                    'event' => AppConstants::$events['systems_logs'],
                     'activity_body'=>'<strong>'.$user->username.'</strong>'." reacted to ".'<strong>'.$topic->author.'</strong>'." post ".'<strong>'.$topic->title.'</strong>',
                 ];
                 AppHelperEvent::dispatch($activityDetails);
@@ -129,6 +131,7 @@ class MessageService
         $message->update();
 
         $activityDetails = [
+            'event' => AppConstants::$events['systems_logs'],
             'activity_body'=>'<strong>'.$user->username.'</strong>'." updated message ".'<strong>'.$message->message_id.'</strong>',
         ];
         AppHelperEvent::dispatch($activityDetails);
@@ -147,6 +150,7 @@ class MessageService
                 $status = 200;
                 //save user activity to logs
                 $activityDetails = [
+                    'event' => AppConstants::$events['systems_logs'],
                     'activity_body'=>'<strong>'.$user->username.'</strong>'." deleted the reaction ".'<strong>'.$message->body.'</strong>',
                 ];
 
@@ -177,6 +181,7 @@ class MessageService
 
         //save user activity to logs
         $activityDetails = [
+            'event' => AppConstants::$events['systems_logs'],
             'activity_body'=>'<strong>'.$user->username.'</strong>'." deleted message ".'<strong>'.$message->message_id.'</strong>',
         ];
         AppHelperEvent::dispatch($activityDetails);

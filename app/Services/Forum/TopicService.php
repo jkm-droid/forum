@@ -62,6 +62,7 @@ class TopicService
 
         //save user activity to logs
         $activityDetails = [
+            'event' => AppConstants::$events['systems_logs'],
             'activity_body'=>'<strong>'.$user->username.'</strong>'." created a new post ".'<strong>'.$topic_info['title'].'</strong>',
         ];
 
@@ -89,8 +90,10 @@ class TopicService
         $admins  = Admin::get();
         Notification::send($admins, new AdminNotification($topic));
 
-        //send mail notifications
-        SendAdminEmailEvent::dispatch($topic);
+        //send admin mail notifications
+        AppHelperEvent::dispatch(array(
+            'event' => AppConstants::$events['admin_email'],
+            'topic' => $topic));
 
         return redirect()->route('site.home')->with('success', 'Topic created successfully. Awaiting moderator approval');
     }

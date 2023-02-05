@@ -6,9 +6,8 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
-class MemberSendEmail extends Mailable
+class AppHelperMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -19,9 +18,9 @@ class MemberSendEmail extends Mailable
      *
      * @return void
      */
-    public function __construct($details)
+    public function __construct($_details)
     {
-        $this->details = $details;
+        $this->details = $_details;
     }
 
     /**
@@ -31,14 +30,11 @@ class MemberSendEmail extends Mailable
      */
     public function build()
     {
-        Log::channel('daily')->info("member mail");
-        Log::channel('daily')->info(implode('',$this->details));
-
-        return $this->markdown('mail.member')
+        return $this->view('mail.content_creation')
             ->from('no-reply@industrialisingafrica.com','The Forum')
             ->subject($this->details['subject'])
             ->with([
-                'email'=>strstr($this->details['receiver'], '@',true),
+                'email'=>strstr($this->details['recipient_email'], '@',true),
                 'details'=>$this->details,
             ]);
     }

@@ -2,9 +2,11 @@
 
 namespace App\Services\Forum;
 
+use App\Constants\AppConstants;
 use App\Events\ContentCreationNotificationEvent;
 use App\Events\AppHelperEvent;
 use App\Helpers\AppHelperService;
+use App\Helpers\GetRepetitiveItems;
 use App\Models\Comment;
 use App\Models\Message;
 use App\Notifications\CommentNotification;
@@ -15,6 +17,7 @@ use Illuminate\Support\Str;
 
 class CommentService
 {
+    use GetRepetitiveItems;
     /**
      * @var AppHelperService
      */
@@ -46,6 +49,7 @@ class CommentService
                 $status = 200;
                 //save user activity to logs
                 $activityDetails = [
+                    'event' => AppConstants::$events['systems_logs'],
                     'activity_body'=>'<strong>'.$user->username.'</strong>'." reacted to ".'<strong>'.$message->author.'</strong>'."post",
                 ];
                 AppHelperEvent::dispatch($activityDetails);
@@ -109,6 +113,7 @@ class CommentService
         $comment->update();
 
         $activityDetails = [
+            'event' => AppConstants::$events['systems_logs'],
             'activity_body'=>'<strong>'.$user->username.'</strong>'." updated comment ".'<strong>'.$comment->comment_id,
         ];
 
@@ -128,6 +133,7 @@ class CommentService
                 $status = 200;
                 //save user activity to logs
                 $activityDetails = [
+                    'event' => AppConstants::$events['systems_logs'],
                     'activity_body'=>'<strong>'.$user->username.'</strong>'." deleted the comment to ".'<strong>'.$comment->message->author."'s".'</strong> message',
                 ];
 

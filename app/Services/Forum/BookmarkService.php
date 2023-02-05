@@ -2,6 +2,7 @@
 
 namespace App\Services\Forum;
 
+use App\Constants\AppConstants;
 use App\Events\AppHelperEvent;
 use App\Helpers\GetRepetitiveItems;
 use App\Helpers\AppHelperService;
@@ -52,6 +53,7 @@ class BookmarkService
                 $status = 200;
                 //save user activity to logs
                 $activityDetails = [
+                    'event' => AppConstants::$events['systems_logs'],
                     'activity_body'=>'<strong>'.$user->username.'</strong>'." bookmarked a <strong>".$role."</strong> successfully",
                 ];
 
